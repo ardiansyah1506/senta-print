@@ -51,6 +51,11 @@ class CategoryController extends Controller
     public function syncSizes(Request $request, string $id) {
         $category = Category::findOrFail($id);
         $category->sizes()->sync($request->sizes ?? []);
+        
+        if ($request->wantsJson()) {
+            return response()->json(['status' => 'success', 'message' => 'Ukuran diperbarui via AJAX.']);
+        }
+
         return back()->with('success', 'Ukuran kategori diperbarui.');
     }
 
@@ -67,5 +72,43 @@ class CategoryController extends Controller
         $category = Category::findOrFail($id);
         $category->addons()->detach($addon_id);
         return back()->with('success', 'Add On dihapus dari kategori.');
+    }
+
+    public function uploadSizeChart(Request $request, string $id) {
+        $category = Category::findOrFail($id);
+        $request->validate(['size_chart' => 'required|image|mimes:jpg,jpeg,png|max:2048']);
+        if ($request->hasFile('size_chart')) {
+            $path = $request->file('size_chart')->store('size_charts', 'public');
+            $category->update(['size_chart' => $path]);
+        }
+        return back()->with('success', 'Size chart berhasil diunggah.');
+    }
+
+    public function addProduct(Request $request, string $id) {
+        $category = Category::findOrFail($id);
+        $validated = $request->validate([
+            'product_name' => 'required|string|max:255',
+            'product_code' => 'required|string|max:50',
+            'base_price' => 'required|numeric|min:0'
+        ]);
+        
+        $product = $category->products()->create([
+            'product_code' => $validated['product_code'],
+            'product_name' => $validated['product_name']
+        ]);
+        
+        $product->prices()->create([
+            'min_qty' => 1,
+            'max_qty' => 999999,
+            'price' => $validated['base_price']
+        ]);
+
+        return back()->with('success', 'Produk ditambahkan.');
+    }
+
+    public function removeProduct(string $id, string $product_id) {
+        $category = Category::findOrFail($id);
+        $category->products()->findOrFail($product_id)->delete();
+        return back()->with('success', 'Produk dihapus.');
     }
 }

@@ -32,8 +32,11 @@ Route::middleware('auth')->group(function () {
     Route::prefix('admin')->name('admin.')->group(function () {
         Route::resource('master-kategori', CategoryController::class)->parameters(['master-kategori' => 'category']);
         Route::post('master-kategori/{category}/sync-sizes', [CategoryController::class, 'syncSizes'])->name('master-kategori.syncSizes');
+        Route::post('master-kategori/{category}/size-chart', [CategoryController::class, 'uploadSizeChart'])->name('master-kategori.uploadSizeChart');
         Route::post('master-kategori/{category}/addons', [CategoryController::class, 'addAddon'])->name('master-kategori.addAddon');
         Route::delete('master-kategori/{category}/addons/{addon_id}', [CategoryController::class, 'removeAddon'])->name('master-kategori.removeAddon');
+        Route::post('master-kategori/{category}/products', [CategoryController::class, 'addProduct'])->name('master-kategori.addProduct');
+        Route::delete('master-kategori/{category}/products/{product_id}', [CategoryController::class, 'removeProduct'])->name('master-kategori.removeProduct');
         Route::resource('data-master', AddonController::class)->parameters(['data-master' => 'addon']);
         Route::resource('ukuran', SizeController::class);
         
