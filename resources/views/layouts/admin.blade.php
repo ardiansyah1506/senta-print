@@ -7,6 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <script>
         tailwind.config = {
             theme: {
@@ -67,11 +68,11 @@
             <a href="{{ route('admin.report.index') }}" class="flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg hover:bg-sidebarhover hover:text-white transition">
                 <i class="fa-solid fa-file-lines w-5 text-center"></i> Laporan
             </a>
-            <a href="{{ route('admin.master-kategori.index') }}" class="flex items-center gap-3 px-4 py-3 text-sm font-bold rounded-lg bg-brand-yellow text-gray-900 shadow-sm transition">
+            <a href="{{ route('admin.master-kategori.index') }}" class="flex items-center gap-3 px-4 py-3 text-sm font-bold rounded-lg hover:bg-brand-yellow hover:text-gray-900 shadow-sm transition">
                 <i class="fa-solid fa-database w-5 text-center"></i> Data Master
             </a>
-            <a href="#" class="flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg hover:bg-sidebarhover hover:text-white transition">
-                <i class="fa-solid fa-bullseye w-5 text-center"></i> Pengaturan Target
+            <a href="{{ route('admin.manajemen-user.index') }}" class="flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg hover:bg-sidebarhover hover:text-white transition">
+                <i class="fa-solid fa-users-gear w-5 text-center"></i> Manajemen User
             </a>
         </nav>
 
@@ -125,5 +126,22 @@
 </div>
         </div>
     </main>
+
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script>
+        toastr.options = { 
+            "closeButton": true, "progressBar": true, "positionClass": "toast-top-right", 
+            "timeOut": "3000", "showEasing": "swing", "hideEasing": "linear", 
+            "showMethod": "fadeIn", "hideMethod": "fadeOut" 
+        };
+        @if(session('success')) toastr.success("{{ session('success') }}"); @endif
+        @if(session('error')) toastr.error("{{ session('error') }}"); @endif
+        @if($errors->any())
+            @foreach($errors->all() as $error)
+                toastr.error("{{ $error }}");
+            @endforeach
+        @endif
+    </script>
 </body>
 </html>

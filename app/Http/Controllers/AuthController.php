@@ -11,6 +11,35 @@ class AuthController extends Controller
         return view('login');
     }
 
+    public function showRegisterForm() {
+        return view('register');
+    }
+
+    public function register(Request $request) {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'phone' => 'required|string|max:20|unique:users',
+            'password' => 'required|string|min:6|confirmed',
+        ]);
+
+        $user = \App\Models\User::create([
+            'name' => $validated['name'],
+            'phone' => $validated['phone'],
+            'email' => $validated['phone'] . '@example.com', // dummy email if required by schema
+            'password' => \Illuminate\Support\Facades\Hash::make($validated['password']),
+        ]);
+
+        Auth::login($user);
+        
+        if ($user->role === 'admin') {
+            return redirect()->intended('/admin/data-master');
+        } elseif ($user->role === 'operator') {
+            return redirect()->intended('/operator/kelolaproduksi');
+        } else {
+            return redirect()->intended('/user/buat-pesanan');
+        }
+    }
+
     public function login(Request $request) {
         $credentials = $request->validate([
             'phone' => 'required',
@@ -19,7 +48,15 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
-            return redirect()->intended('/admin/data-master');
+            
+            $user = Auth::user();
+            if ($user->role === 'admin') {
+                return redirect()->intended('/admin/data-master');
+            } elseif ($user->role === 'operator') {
+                return redirect()->intended('/operator/kelolaproduksi');
+            } else {
+                return redirect()->intended('/user/buat-pesanan');
+            }
         }
 
         return back()->withErrors([

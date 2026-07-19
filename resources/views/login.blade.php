@@ -7,6 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <script>
         tailwind.config = {
             theme: {
@@ -76,10 +77,30 @@
                 <a href="#" class="text-sm font-bold text-brand-blue hover:text-indigo-800 transition">Forgot Password?</a>
             </div>
 
-            <button type="submit" class="w-full bg-brand-blue text-white py-3.5 rounded-xl font-bold shadow-lg shadow-indigo-500/30 hover:bg-indigo-700 hover:shadow-indigo-500/40 transition">
+            <button type="submit" class="w-full bg-brand-blue text-white py-3.5 rounded-xl font-bold shadow-lg shadow-indigo-500/30 hover:bg-indigo-700 hover:shadow-indigo-500/40 transition mt-2">
                 Sign In
             </button>
+            <p class="text-center text-sm text-gray-500 mt-6 pt-6 border-t border-gray-100">
+                Belum punya akun? <a href="{{ route('register') }}" class="font-bold text-brand-blue hover:text-indigo-800 transition">Daftar Sekarang</a>
+            </p>
         </form>
     </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script>
+        toastr.options = { 
+            "closeButton": true, "progressBar": true, "positionClass": "toast-top-right", 
+            "timeOut": "3000", "showEasing": "swing", "hideEasing": "linear", 
+            "showMethod": "fadeIn", "hideMethod": "fadeOut" 
+        };
+        @if(session('success')) toastr.success("{{ session('success') }}"); @endif
+        @if(session('error')) toastr.error("{{ session('error') }}"); @endif
+        @if($errors->any())
+            @foreach($errors->all() as $error)
+                toastr.error("{{ $error }}");
+            @endforeach
+        @endif
+    </script>
 </body>
 </html>

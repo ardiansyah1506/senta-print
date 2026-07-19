@@ -17,11 +17,14 @@ Route::get('/', [PublicPageController::class, 'index'])->name('home');
 // Auth Routes
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
+Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
+Route::post('/register', [AuthController::class, 'register'])->name('register.post');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // User/Customer Routes
-Route::prefix('user')->name('user.')->group(function () {
+Route::middleware(['auth', \App\Http\Middleware\CheckRole::class . ':customer,admin'])->prefix('user')->name('user.')->group(function () {
     Route::get('/buat-pesanan', [CustomerPortalController::class, 'createOrder'])->name('order.create');
+    Route::post('/buat-pesanan', [CustomerPortalController::class, 'storeOrder'])->name('order.store');
     Route::get('/lacak-pesanan', [CustomerPortalController::class, 'trackOrder'])->name('order.track');
     Route::get('/riwayat-pesanan', [CustomerPortalController::class, 'orderHistory'])->name('order.history');
 });
@@ -29,7 +32,7 @@ Route::prefix('user')->name('user.')->group(function () {
 // Protected Admin & Operator Routes
 Route::middleware('auth')->group(function () {
     // Admin Routes
-    Route::prefix('admin')->name('admin.')->group(function () {
+    Route::middleware([\App\Http\Middleware\CheckRole::class . ':admin'])->prefix('admin')->name('admin.')->group(function () {
         Route::resource('master-kategori', CategoryController::class)->parameters(['master-kategori' => 'category']);
         Route::post('master-kategori/{category}/sync-sizes', [CategoryController::class, 'syncSizes'])->name('master-kategori.syncSizes');
         Route::post('master-kategori/{category}/size-chart', [CategoryController::class, 'uploadSizeChart'])->name('master-kategori.uploadSizeChart');
@@ -40,13 +43,14 @@ Route::middleware('auth')->group(function () {
         Route::delete('master-kategori/{category}/products/{product_id}', [CategoryController::class, 'removeProduct'])->name('master-kategori.removeProduct');
         Route::resource('data-master', AddonController::class)->parameters(['data-master' => 'addon']);
         Route::resource('ukuran', SizeController::class);
+        Route::resource('manajemen-user', \App\Http\Controllers\Admin\UserController::class)->except(['create', 'show', 'edit', 'update']);
         
         Route::resource('kelola-pesanan', OrderController::class)->parameters(['kelola-pesanan' => 'order'])->names('order');
         Route::get('/laporan', [ReportController::class, 'index'])->name('report.index');
     });
 
     // Operator Routes
-    Route::prefix('operator')->name('operator.')->group(function () {
+    Route::middleware([\App\Http\Middleware\CheckRole::class . ':operator,admin'])->prefix('operator')->name('operator.')->group(function () {
         Route::get('/kelolaproduksi', [ProductionController::class, 'index'])->name('production.index');
         Route::get('/tracking/{id}', [ProductionController::class, 'tracking'])->name('tracking');
         Route::post('/tracking/{id}', [ProductionController::class, 'storeLog'])->name('tracking.store');
