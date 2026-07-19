@@ -17,7 +17,7 @@
                     <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between">
                         <div>
                             <p class="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1">Jumlah Produk</p>
-                            <p class="text-3xl font-extrabold text-gray-900">0</p>
+                            <p class="text-3xl font-extrabold text-gray-900">{{ $category->products->count() }}</p>
                         </div>
                         <div class="w-12 h-12 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center">
                             <i class="fa-solid fa-cart-shopping text-xl"></i>
@@ -27,7 +27,7 @@
                     <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between">
                         <div>
                             <p class="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1">Jumlah Add On</p>
-                            <p class="text-3xl font-extrabold text-gray-900">0</p>
+                            <p class="text-3xl font-extrabold text-gray-900">{{ $category->addons->count() }}</p>
                         </div>
                         <div class="w-12 h-12 rounded-xl bg-amber-50 text-amber-500 flex items-center justify-center">
                             <i class="fa-solid fa-puzzle-piece text-xl"></i>
@@ -37,7 +37,7 @@
                     <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between">
                         <div>
                             <p class="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1">Jumlah Ukuran</p>
-                            <p class="text-3xl font-extrabold text-gray-900">0</p>
+                            <p class="text-3xl font-extrabold text-gray-900">{{ $category->sizes->count() }}</p>
                         </div>
                         <div class="w-12 h-12 rounded-xl bg-green-50 text-green-500 flex items-center justify-center">
                             <i class="fa-solid fa-ruler-combined text-xl"></i>
