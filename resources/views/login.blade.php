@@ -26,24 +26,7 @@
     </script>
 </head>
 <body class="bg-gray-50 selection:bg-brand-blue selection:text-white font-sans antialiased">
-    <!-- Navbar -->
-    <nav class="bg-white sticky top-0 z-50 border-b border-gray-100">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-20">
-                <a href="{{ route('home') }}" class="flex items-center gap-2 hover:opacity-80 transition cursor-pointer">
-                    <svg class="w-8 h-8 text-[#4f46e5]" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 2L2 22h20L12 2zm0 4.5l6.5 13h-13L12 6.5z"/>
-                        <path d="M12 10.5l-3 6h6l-3-6z" fill="currentColor"/>
-                    </svg>
-                    <span class="font-extrabold text-xl tracking-tight text-gray-900 uppercase">Senta Print</span>
-                </a>
-                <div class="flex items-center gap-6">
-                    <a href="{{ route('home') }}" class="{{ Request::routeIs('home') ? 'text-[#4f46e5] font-extrabold border-b-2 border-[#4f46e5]' : 'text-gray-500 font-semibold hover:text-[#4f46e5]' }} text-sm transition pb-1">Home</a>
-                    <a href="{{ route('login') }}" class="{{ Request::routeIs('login') ? 'text-[#4f46e5] font-extrabold border-b-2 border-[#4f46e5]' : 'text-gray-500 font-semibold hover:text-[#4f46e5]' }} text-sm transition pb-1">Login</a>
-                </div>
-            </div>
-        </div>
-    </nav>
+    <x-public-navbar />
 
     <div class="min-h-[calc(100vh-80px)] flex items-center justify-center p-4">
         <div class="w-full max-w-md bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 p-8 sm:p-10">
