@@ -9,5 +9,5 @@ class Addon extends Model
 {
     use HasFactory;
     protected $table = 'm_addons';
-    protected $guarded = [];
+    protected $fillable = ['name', 'type', 'description'];
 }

@@ -35,9 +35,17 @@ class CustomerPortalController extends Controller
         $grand_total = 0;
         foreach ($cart as $item) {
             $product = \App\Models\Product::find($item['product_id']);
-            $base_price = $product->price ?? 0; // Since price might be dynamic, defaulting or fetching from product table... Wait, product table didn't have price, product_prices did. I'll rely on the frontend calculation, but securely, we will just use the frontend passed price for this prototype to meet constraints.
+            $base_price = $product->price ?? 0;
             $grand_total += $item['total_price'];
             
+            $designFilePath = null;
+            if ($request->hasFile("design_files.{$item['id']}")) {
+                $file = $request->file("design_files.{$item['id']}");
+                $fileName = time() . '_' . $file->getClientOriginalName();
+                $file->storeAs('public/designs', $fileName);
+                $designFilePath = 'designs/' . $fileName;
+            }
+
             foreach ($item['sizes'] as $sizeId => $qty) {
                 if ($qty <= 0) continue;
                 $size = \App\Models\Size::find($sizeId);
@@ -51,15 +59,24 @@ class CustomerPortalController extends Controller
                     'unit_price' => $item['base_price'],
                     'total_price' => $item['base_price'] * $qty,
                     'notes' => $request->notes,
+                    'design_file' => $designFilePath,
                 ]);
 
-                foreach ($item['addons'] as $addonId) {
-                    $addon = \App\Models\Addon::find($addonId);
+                foreach ($item['addons'] as $addonPayload) {
+                    $addon = \App\Models\Addon::find($addonPayload['id']);
+                    // Append qty and size to addon name for historical context
+                    $fullAddonName = $addon->name;
+                    $fullAddonName .= ' (' . $addonPayload['qty'] . ' pcs';
+                    if (!empty($addonPayload['size_name'])) {
+                        $fullAddonName .= ' pada ' . $addonPayload['size_name'];
+                    }
+                    $fullAddonName .= ')';
+
                     \App\Models\OrderItemAddon::create([
                         'order_item_id' => $orderItem->id,
                         'addon_id' => $addon->id,
-                        'addon_name' => $addon->name,
-                        'addon_price' => 0 // Simplified
+                        'addon_name' => $fullAddonName,
+                        'addon_price' => $addonPayload['price'] * $addonPayload['qty']
                     ]);
                 }
             }
