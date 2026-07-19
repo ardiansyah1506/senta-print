@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Senta Print - Cek Status Pesanan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            blue: '#4f46e5', // Indigo 600
+                            bluelight: '#e0e7ff',
+                            lightest: '#eff6ff',
+                            yellow: '#facc15',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-[#fafcff] text-gray-800 antialiased font-sans selection:bg-brand-blue selection:text-white min-h-screen flex flex-col">
+
+    <!-- Top Navigation (Public) -->
+    <header class="bg-white border-b border-gray-100 sticky top-0 z-50 shadow-sm">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            <!-- Logo -->
+            <a href="index.html" class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-gray-900 rounded-lg flex items-center justify-center">
+                    <svg class="w-6 h-6 text-white" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2L2 22h20L12 2zm0 4.5l6.5 13h-13L12 6.5z"/>
+                        <path d="M12 10.5l-3 6h6l-3-6z" fill="currentColor"/>
+                    </svg>
+                </div>
+                <span class="font-extrabold text-xl tracking-wider text-gray-900 uppercase">Senta Print</span>
+            </a>
+
+            <!-- Right Buttons -->
+            <div class="flex items-center gap-4">
+                <a href="#" class="px-5 py-2.5 rounded-full text-sm font-bold text-gray-600 hover:text-gray-900 transition">
+                    Masuk
+                </a>
+                <a href="#" class="px-6 py-2.5 rounded-full text-sm font-bold bg-gray-100 text-gray-800 hover:bg-gray-200 transition">
+                    Daftar
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Tracking -->
+    <main class="flex-1 py-12 px-6">
+        <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            
+            <!-- LEFT COLUMN -->
+            <div class="lg:col-span-8 flex flex-col gap-8">
+                
+                <!-- Box 1: Timeline Proses -->
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 pt-7">
+                    <h2 class="text-xl font-extrabold text-gray-900 mb-10">Proses Pengiriman</h2>
+                    
+                    <!-- Horizontal Steps -->
+                    <div class="mb-14 px-4 overflow-x-auto pb-4">
+                        <div class="flex items-center justify-between min-w-[600px] relative">
+                            <!-- Background connecting line -->
+                            <div class="absolute left-6 right-6 top-6 h-[2px] bg-gray-100 -z-0"></div>
+                            
+                            <!-- Step 1 -->
+                            <div class="flex flex-col items-center gap-3 relative z-10 w-24 text-center">
+                                <div class="w-12 h-12 rounded-full border-2 border-brand-blue bg-white text-brand-blue flex items-center justify-center mb-1">
+                                    <i class="fa-solid fa-scissors"></i>
+                                </div>
+                                <span class="text-[10px] font-extrabold text-gray-600 uppercase">1. Pemotongan</span>
+                            </div>
+                            <!-- Step 2 -->
+                            <div class="flex flex-col items-center gap-3 relative z-10 w-24 text-center">
+                                <div class="w-12 h-12 rounded-full border-2 border-brand-blue bg-white text-brand-blue flex items-center justify-center mb-1">
+                                    <i class="fa-solid fa-shirt"></i>
+                                </div>
+                                <span class="text-[10px] font-extrabold text-gray-600 uppercase">2. Penjahitan</span>
+                            </div>
+                            <!-- Step 3 -->
+                            <div class="flex flex-col items-center gap-3 relative z-10 w-24 text-center">
+                                <div class="w-12 h-12 rounded-full border-2 border-brand-blue bg-white text-brand-blue flex items-center justify-center mb-1">
+                                    <i class="fa-solid fa-palette"></i>
+                                </div>
+                                <span class="text-[10px] font-extrabold text-gray-600 uppercase">3. Sablon</span>
+                            </div>
+                            <!-- Step 4 -->
+                            <div class="flex flex-col items-center gap-3 relative z-10 w-24 text-center">
+                                <div class="w-12 h-12 rounded-full border-2 border-brand-blue bg-white text-brand-blue flex items-center justify-center mb-1">
+                                    <i class="fa-solid fa-check-double"></i>
+                                </div>
+                                <span class="text-[10px] font-extrabold text-gray-600 uppercase">4. Finishing</span>
+                            </div>
+                            <!-- Step 5 (Current) -->
+                            <div class="flex flex-col items-center gap-3 relative z-10 w-24 text-center">
+                                <div class="w-12 h-12 rounded-full border-2 border-brand-blue bg-brand-lightest text-brand-blue shadow-[0_0_0_4px_rgba(79,70,229,0.1)] flex items-center justify-center mb-1">
+                                    <i class="fa-solid fa-clipboard-check text-lg"></i>
+                                </div>
+                                <span class="text-[10px] font-extrabold text-brand-blue uppercase bg-brand-lightest px-2 py-0.5 rounded-full">5. QC</span>
+                            </div>
+                            <!-- Step 6 (Upcoming) -->
+                            <div class="flex flex-col items-center gap-3 relative z-10 w-24 text-center opacity-40 grayscale">
+                                <div class="w-12 h-12 rounded-full border-2 border-gray-300 bg-white text-gray-400 flex items-center justify-center mb-1">
+                                    <i class="fa-solid fa-box-open"></i>
+                                </div>
+                                <span class="text-[10px] font-extrabold text-gray-400 uppercase">6. Packaging</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Vertical Detailed Timeline Logs -->
+                    <div class="pl-16 pr-8 relative">
+                        <!-- Line connecting dots -->
+                        <div class="absolute w-[2px] bg-gray-100 left-[93px] top-4 bottom-4"></div>
+                        
+                        <!-- Log Item 1 -->
+                        <div class="flex items-start gap-8 mb-8 relative">
+                            <div class="w-24 text-right pt-0.5 shrink-0">
+                                <p class="text-sm font-extrabold text-gray-900">14:20:39</p>
+                                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wide">10 Jul 2026</p>
+                            </div>
+                            <div class="w-4 h-4 rounded-full bg-gray-200 border-2 border-white shadow-sm mt-1 shrink-0 z-10 relative"></div>
+                            <div class="flex-1 pt-1 text-sm font-semibold text-gray-600">
+                                Pesanan masuk tahap Packaging.
+                            </div>
+                        </div>
+                        
+                        <!-- Log Item 2 -->
+                        <div class="flex items-start gap-8 mb-8 relative">
+                            <div class="w-24 text-right pt-0.5 shrink-0">
+                                <p class="text-sm font-extrabold text-gray-900">11:15:37</p>
+                                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wide">10 Jul 2026</p>
+                            </div>
+                            <div class="w-4 h-4 rounded-full bg-gray-200 border-2 border-white shadow-sm mt-1 shrink-0 z-10 relative"></div>
+                            <div class="flex-1 pt-1 text-sm font-semibold text-gray-600">
+                                Quality Control selesai, produk siap dikemas.
+                            </div>
+                        </div>
+                        
+                        <!-- Log Item 3 -->
+                        <div class="flex items-start gap-8 mb-8 relative">
+                            <div class="w-24 text-right pt-0.5 shrink-0">
+                                <p class="text-sm font-extrabold text-gray-900">09:28:55</p>
+                                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wide">10 Jul 2026</p>
+                            </div>
+                            <div class="w-4 h-4 rounded-full bg-gray-200 border-2 border-white shadow-sm mt-1 shrink-0 z-10 relative"></div>
+                            <div class="flex-1 pt-1 text-sm font-semibold text-gray-600">
+                                Tahap Finishing (pembersihan sisa benang dan uap).
+                            </div>
+                        </div>
+                        
+                        <!-- Log Item 4 -->
+                        <div class="flex items-start gap-8 mb-8 relative">
+                            <div class="w-24 text-right pt-0.5 shrink-0">
+                                <p class="text-sm font-extrabold text-gray-900">07:33:27</p>
+                                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wide">10 Jul 2026</p>
+                            </div>
+                            <div class="w-4 h-4 rounded-full bg-gray-200 border-2 border-white shadow-sm mt-1 shrink-0 z-10 relative"></div>
+                            <div class="flex-1 pt-1 text-sm font-semibold text-gray-600">
+                                Proses Sablon / Bordir telah selesai.
+                            </div>
+                        </div>
+                        
+                        <!-- Log Item 5 -->
+                        <div class="flex items-start gap-8 mb-8 relative">
+                            <div class="w-24 text-right pt-0.5 shrink-0">
+                                <p class="text-sm font-extrabold text-gray-900">21:35:22</p>
+                                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wide">09 Jul 2026</p>
+                            </div>
+                            <div class="w-4 h-4 rounded-full bg-gray-200 border-2 border-white shadow-sm mt-1 shrink-0 z-10 relative"></div>
+                            <div class="flex-1 pt-1 text-sm font-semibold text-gray-600">
+                                Pesanan masuk tahap Penjahitan.
+                            </div>
+                        </div>
+                        
+                        <!-- Log Item 6 -->
+                        <div class="flex items-start gap-8 relative">
+                            <div class="w-24 text-right pt-0.5 shrink-0">
+                                <p class="text-sm font-extrabold text-gray-900">18:20:00</p>
+                                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wide">09 Jul 2026</p>
+                            </div>
+                            <div class="w-4 h-4 rounded-full bg-gray-200 border-2 border-white shadow-sm mt-1 shrink-0 z-10 relative"></div>
+                            <div class="flex-1 pt-1 text-sm font-semibold text-gray-600">
+                                Pemotongan bahan selesai dilakukan.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Box 2: Visual Konfirmasi Produksi -->
+                <div class="bg-[#e9f2ff] rounded-2xl p-8 border border-blue-100 flex flex-col md:flex-row gap-8">
+                    <!-- Image -->
+                    <div class="w-full md:w-64 h-48 rounded-xl overflow-hidden shrink-0 relative shadow-sm group">
+                        <img src="https://images.unsplash.com/photo-1626786638890-413cdbede412?auto=format&fit=crop&q=80&w=400&h=300" alt="Proses Sablon" class="w-full h-full object-cover transform group-hover:scale-105 transition duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-gray-900/80 to-transparent"></div>
+                        <div class="absolute bottom-4 left-4 right-4">
+                            <p class="text-white text-xs font-bold leading-tight">Tahap: Proses Sablon Manual (Rubber Premium)</p>
+                        </div>
+                        <div class="absolute top-4 left-4 bg-brand-blue/90 backdrop-blur text-white text-[10px] font-extrabold px-2 py-1 rounded flex items-center gap-1.5 shadow-sm">
+                            <i class="fa-solid fa-camera"></i> LIVE
+                        </div>
+                    </div>
+                    
+                    <!-- Texts -->
+                    <div class="flex-1">
+                        <div class="flex items-center gap-2 text-brand-blue text-sm font-extrabold mb-3">
+                            <i class="fa-solid fa-camera-viewfinder"></i> Visual Konfirmasi Produksi
+                        </div>
+                        <h3 class="text-xl font-extrabold text-gray-900 mb-2">Presisi Tinggi & Kualitas Terjamin</h3>
+                        <p class="text-gray-600 text-sm font-medium leading-relaxed mb-6">
+                            Tim ahli kami sedang mengerjakan detail sablon pada pesanan. Anda menggunakan tinta rubber premium untuk hasil yang elastis dan tahan lama.
+                        </p>
+                        <!-- Badges -->
+                        <div class="flex flex-wrap gap-2">
+                            <div class="px-3 py-1.5 bg-white rounded-lg text-xs font-bold text-gray-700 border border-blue-100 shadow-sm flex items-center gap-1.5">
+                                <i class="fa-solid fa-fill-drip text-brand-blue"></i> Ink: Rubber
+                            </div>
+                            <div class="px-3 py-1.5 bg-white rounded-lg text-xs font-bold text-gray-700 border border-blue-100 shadow-sm flex items-center gap-1.5">
+                                <i class="fa-solid fa-check-double text-brand-blue"></i> QC Passed
+                            </div>
+                            <div class="px-3 py-1.5 bg-white rounded-lg text-xs font-bold text-gray-700 border border-blue-100 shadow-sm flex items-center gap-1.5">
+                                <i class="fa-solid fa-shirt text-brand-blue"></i> Combed 30s
+                            </div>
+                            <div class="px-3 py-1.5 bg-white rounded-lg text-xs font-bold text-gray-700 border border-blue-100 shadow-sm flex items-center gap-1.5">
+                                <i class="fa-solid fa-temperature-arrow-up text-brand-blue"></i> Heatpress
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- RIGHT COLUMN (Summary) -->
+            <div class="lg:col-span-4 flex flex-col gap-6">
+                
+                <!-- Box 1: Ringkasan Pesanan -->
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                    <div class="p-6 border-b border-gray-100 flex items-center gap-3">
+                        <i class="fa-solid fa-receipt text-gray-500"></i>
+                        <h2 class="text-base font-extrabold text-gray-900">Ringkasan Pesanan</h2>
+                    </div>
+                    
+                    <div class="p-6 space-y-6">
+                        <div class="flex justify-between items-start gap-4 pb-4 border-b border-gray-50">
+                            <span class="text-sm font-semibold text-gray-500 w-24 shrink-0">Pelanggan</span>
+                            <span class="text-sm font-bold text-gray-900 text-right">Budi Santoso</span>
+                        </div>
+                        <div class="flex justify-between items-start gap-4 pb-4 border-b border-gray-50">
+                            <span class="text-sm font-semibold text-gray-500 w-24 shrink-0">Instansi</span>
+                            <span class="text-sm font-bold text-gray-900 text-right">PT. Maju Jaya</span>
+                        </div>
+                        <div class="flex justify-between items-start gap-4 pb-4 border-b border-gray-50">
+                            <span class="text-sm font-semibold text-gray-500 w-24 shrink-0">Produk</span>
+                            <span class="text-sm font-bold text-gray-900 text-right leading-tight">Kaos Cotton Combed 30s</span>
+                        </div>
+                        <div class="flex justify-between items-start gap-4 pb-4 border-b border-gray-50">
+                            <span class="text-sm font-semibold text-gray-500 w-24 shrink-0">Total Qty</span>
+                            <span class="text-sm font-bold text-gray-900 text-right">150 Pcs</span>
+                        </div>
+                        
+                        <div>
+                            <span class="block text-[10px] font-extrabold text-gray-400 uppercase tracking-widest mb-3">Rincian Ukuran</span>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="px-2.5 py-1 bg-brand-lightest text-brand-blue font-bold text-xs rounded border border-indigo-100">S: 30</span>
+                                <span class="px-2.5 py-1 bg-brand-lightest text-brand-blue font-bold text-xs rounded border border-indigo-100">M: 50</span>
+                                <span class="px-2.5 py-1 bg-brand-lightest text-brand-blue font-bold text-xs rounded border border-indigo-100">L: 50</span>
+                                <span class="px-2.5 py-1 bg-gray-100 text-gray-600 font-bold text-xs rounded border border-gray-200">XL: 20</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Footer Blue Estimation -->
+                    <div class="bg-brand-lightest p-6 border-t border-indigo-100 flex justify-between items-center">
+                        <span class="text-[10px] font-extrabold text-gray-500 uppercase tracking-widest">Estimasi Selesai</span>
+                        <span class="text-lg font-extrabold text-brand-blue">28 Feb 2024</span>
+                    </div>
+                </div>
+
+                <!-- Box 2: Bantuan Widget -->
+                <div class="bg-gradient-to-br from-[#e0edff] to-[#f0f6ff] rounded-2xl p-6 border border-blue-100 shadow-sm relative overflow-hidden">
+                    <i class="fa-solid fa-headset text-brand-blue/10 text-8xl absolute -right-6 -bottom-6 pointer-events-none transform -rotate-12"></i>
+                    
+                    <div class="relative z-10">
+                        <h3 class="text-lg font-extrabold text-gray-900 mb-2">Butuh Bantuan?</h3>
+                        <p class="text-gray-600 text-sm font-medium leading-relaxed mb-6">
+                            Ada kendala atau ingin mengubah detail pesanan? Admin kami siap merespon pertanyaan Anda dengan cepat.
+                        </p>
+                        
+                        <a href="#" class="w-full bg-[#10b981] hover:bg-[#059669] text-white flex justify-center items-center gap-2 py-3.5 rounded-xl font-bold shadow-md transition-colors text-sm">
+                            <i class="fa-brands fa-whatsapp text-lg"></i> Hubungi Admin via WA
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </main>
+</body>
+</html>

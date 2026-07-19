@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Senta Print - Buat Pesanan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        sidebar: '#1a2234',
+                        sidebarhover: '#252e42',
+                        brand: {
+                            blue: '#4f46e5', // Indigo 600
+                            bluelight: '#e0e7ff',
+                            yellow: '#facc15', // Yellow 400
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-[#f4f7f9] text-gray-800 antialiased flex h-screen overflow-hidden selection:bg-brand-blue selection:text-white relative">
+
+    <!-- Sidebar -->
+    <aside class="w-64 bg-sidebar text-gray-300 flex flex-col h-full shrink-0 border-r border-gray-800 z-10 relative">
+        <!-- Logo -->
+        <div class="h-20 flex items-center px-6 border-b border-gray-800/50">
+            <div class="flex items-center gap-3">
+                <svg class="w-8 h-8 text-white" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2L2 22h20L12 2zm0 4.5l6.5 13h-13L12 6.5z"/>
+                    <path d="M12 10.5l-3 6h6l-3-6z" fill="currentColor"/>
+                </svg>
+                <span class="font-extrabold text-lg tracking-wider text-white uppercase">Senta Print</span>
+            </div>
+        </div>
+
+        <!-- User Profile (Customer) -->
+        <div class="px-4 py-6">
+            <div class="bg-sidebarhover rounded-xl p-4 flex items-center gap-3 border border-gray-700/50">
+                <div class="w-10 h-10 rounded-lg bg-gray-600 flex items-center justify-center text-white font-bold shadow-inner">
+                    <i class="fa-solid fa-user"></i>
+                </div>
+                <div class="flex-1 overflow-hidden">
+                    <div class="text-white text-sm font-bold truncate">Budi Santoso</div>
+                    <div class="text-[10px] font-bold bg-emerald-900/60 text-emerald-400 px-2 py-0.5 rounded uppercase inline-block mt-0.5 tracking-wide">CUSTOMER</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <nav class="flex-1 px-4 space-y-1 overflow-y-auto">
+            <a href="buat-pesanan.html" class="flex items-center gap-3 px-4 py-3 text-sm font-bold rounded-lg bg-brand-yellow text-gray-900 shadow-sm transition">
+                <i class="fa-solid fa-cart-arrow-down w-5 text-center"></i> Buat Pesanan
+            </a>
+            <a href="lacak-pesanan.html" class="flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg hover:bg-sidebarhover hover:text-white transition">
+                <i class="fa-solid fa-clipboard-list w-5 text-center"></i> Lacak Pesanan
+            </a>
+            <a href="riwayat-pesanan.html" class="flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg hover:bg-sidebarhover hover:text-white transition">
+                <i class="fa-solid fa-clock-rotate-left w-5 text-center"></i> Riwayat Pemesanan
+            </a>
+        </nav>
+
+        <!-- Logout -->
+        <div class="p-4 mt-auto border-t border-gray-800/50">
+            <a href="#" class="flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg hover:bg-sidebarhover hover:text-white transition text-gray-400">
+                <i class="fa-solid fa-arrow-right-from-bracket w-5 text-center"></i> Log out
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col h-full overflow-hidden bg-[#f4f7f9] z-0 relative">
+        <!-- Topbar -->
+        <header class="bg-white h-16 flex items-center justify-between px-8 shrink-0 shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)] relative z-10 border-b border-gray-100">
+            <!-- Breadcrumb -->
+            <div class="flex items-center text-sm font-medium text-gray-500">
+                <span class="hover:text-gray-800 cursor-pointer">Customer</span>
+                <i class="fa-solid fa-chevron-right text-[10px] mx-3"></i>
+                <span class="text-gray-900 font-bold">Buat Pesanan</span>
+            </div>
+
+            <!-- Right Menus -->
+            <div class="flex items-center gap-6">
+                <div class="flex items-center gap-4 text-gray-400">
+                    <button class="hover:text-gray-700 transition relative">
+                        <i class="fa-regular fa-circle-question text-lg"></i>
+                    </button>
+                    <button class="hover:text-gray-700 transition relative">
+                        <i class="fa-regular fa-bell text-lg"></i>
+                        <span class="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full border border-white"></span>
+                    </button>
+                </div>
+                <div class="h-6 w-px bg-gray-200"></div>
+                <div class="flex items-center gap-3 cursor-pointer group">
+                    <div class="w-8 h-8 rounded-full bg-indigo-100 text-brand-blue flex items-center justify-center font-bold text-sm shadow-inner">
+                        B
+                    </div>
+                    <div class="text-sm font-semibold text-gray-700 group-hover:text-brand-blue transition">Budi</div>
+                    <i class="fa-solid fa-chevron-down text-[10px] text-gray-400"></i>
+                </div>
+            </div>
+        </header>
+
+        <!-- Content Area -->
+        <div class="flex-1 overflow-y-auto p-8">
+            <div class="max-w-7xl mx-auto">
+                
+                <!-- Page Header -->
+                <div class="mb-6">
+                    <h1 class="text-3xl font-extrabold text-gray-900 mb-1">Buat Pesanan Baru</h1>
+                    <p class="text-gray-500 text-sm font-medium">Isi detail pesanan konveksi Anda</p>
+                </div>
+
+                <!-- Form & Summary Layout -->
+                <div class="flex flex-col lg:flex-row gap-8 items-start">
+                    
+                    <!-- Left Form Area -->
+                    <div class="w-full lg:flex-1 space-y-6">
+                        
+                        <!-- Box 1: Product & Size Details -->
+                        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 pt-7">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                                <!-- Kategori -->
+                                <div>
+                                    <label class="block text-xs font-bold text-gray-700 mb-2">Kategori</label>
+                                    <div class="relative">
+                                        <select class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm font-semibold text-gray-700 outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue appearance-none transition bg-white">
+                                            <option>Pilih Kategori</option>
+                                            <option>Polo Shirt</option>
+                                            <option>Kaos Sablon</option>
+                                        </select>
+                                        <i class="fa-solid fa-chevron-down text-gray-400 text-xs absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+                                    </div>
+                                </div>
+                                <!-- Produk -->
+                                <div>
+                                    <label class="block text-xs font-bold text-gray-700 mb-2">Produk</label>
+                                    <div class="relative">
+                                        <select class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm font-semibold text-gray-700 outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue appearance-none transition bg-white">
+                                            <option>Pilih Produk</option>
+                                        </select>
+                                        <i class="fa-solid fa-chevron-down text-gray-400 text-xs absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Ukuran -->
+                            <div class="mb-6">
+                                <label class="block text-xs font-bold text-gray-700 mb-3">Distribusi Ukuran</label>
+                                <div class="grid grid-cols-5 md:grid-cols-9 gap-3">
+                                    <!-- Size Item -->
+                                    <div class="text-center">
+                                        <div class="text-[10px] font-extrabold text-gray-900 mb-1">XS</div>
+                                        <input type="text" value="0" class="w-full text-center border border-gray-200 rounded-xl py-2.5 text-sm font-semibold text-gray-400 outline-none focus:border-brand-blue focus:text-gray-800 transition shadow-sm">
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="text-[10px] font-extrabold text-gray-900 mb-1">S</div>
+                                        <input type="text" value="0" class="w-full text-center border border-gray-200 rounded-xl py-2.5 text-sm font-semibold text-gray-400 outline-none focus:border-brand-blue focus:text-gray-800 transition shadow-sm">
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="text-[10px] font-extrabold text-gray-900 mb-1">M</div>
+                                        <input type="text" value="0" class="w-full text-center border border-gray-200 rounded-xl py-2.5 text-sm font-semibold text-gray-400 outline-none focus:border-brand-blue focus:text-gray-800 transition shadow-sm">
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="text-[10px] font-extrabold text-gray-900 mb-1">L</div>
+                                        <input type="text" value="0" class="w-full text-center border border-gray-200 rounded-xl py-2.5 text-sm font-semibold text-gray-400 outline-none focus:border-brand-blue focus:text-gray-800 transition shadow-sm">
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="text-[10px] font-extrabold text-gray-900 mb-1">XL</div>
+                                        <input type="text" value="0" class="w-full text-center border border-gray-200 rounded-xl py-2.5 text-sm font-semibold text-gray-400 outline-none focus:border-brand-blue focus:text-gray-800 transition shadow-sm">
+                                    </div>
+                                    
+                                    <div class="text-center">
+                                        <div class="text-[10px] font-extrabold text-gray-900 mb-1">2XL</div>
+                                        <input type="text" value="0" class="w-full text-center border border-gray-200 rounded-xl py-2.5 text-sm font-semibold text-gray-400 outline-none focus:border-brand-blue focus:text-gray-800 transition shadow-sm">
+                                        <div class="text-[9px] font-extrabold text-brand-blue mt-1">+5k</div>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="text-[10px] font-extrabold text-gray-900 mb-1">3XL</div>
+                                        <input type="text" value="0" class="w-full text-center border border-gray-200 rounded-xl py-2.5 text-sm font-semibold text-gray-400 outline-none focus:border-brand-blue focus:text-gray-800 transition shadow-sm">
+                                        <div class="text-[9px] font-extrabold text-brand-blue mt-1">+10k</div>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="text-[10px] font-extrabold text-gray-900 mb-1">4XL</div>
+                                        <input type="text" value="0" class="w-full text-center border border-gray-200 rounded-xl py-2.5 text-sm font-semibold text-gray-400 outline-none focus:border-brand-blue focus:text-gray-800 transition shadow-sm">
+                                        <div class="text-[9px] font-extrabold text-brand-blue mt-1">+15k</div>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="text-[10px] font-extrabold text-gray-900 mb-1">5XL</div>
+                                        <input type="text" value="0" class="w-full text-center border border-gray-200 rounded-xl py-2.5 text-sm font-semibold text-gray-400 outline-none focus:border-brand-blue focus:text-gray-800 transition shadow-sm">
+                                        <div class="text-[9px] font-extrabold text-brand-blue mt-1">+20k</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Add on -->
+                            <button class="w-full flex justify-between items-center px-5 py-3.5 border border-gray-200 rounded-xl text-sm font-medium text-gray-500 hover:border-gray-300 transition shadow-sm cursor-pointer hover:bg-gray-50">
+                                <span>Tambah Add On</span>
+                                <i class="fa-solid fa-plus text-gray-400"></i>
+                            </button>
+                        </div>
+                        
+                        <!-- Divider Line -->
+                        <div class="relative py-2">
+                            <div class="absolute inset-0 flex items-center">
+                                <div class="w-full border-t border-dashed border-gray-300"></div>
+                            </div>
+                            <div class="relative flex justify-center">
+                                <span class="bg-[#f4f7f9] px-4 text-sm font-bold text-gray-500 flex items-center gap-1.5 cursor-pointer hover:text-gray-700 transition">
+                                    Tambah Pesanan <i class="fa-solid fa-circle-plus"></i>
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Box 2: Upload Design -->
+                        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+                            <h2 class="text-lg font-extrabold text-gray-900 mb-4">Upload Design</h2>
+                            <div class="w-full border-2 border-dashed border-gray-200 rounded-2xl p-10 flex flex-col items-center justify-center text-center bg-gray-50/50 hover:bg-gray-50 transition cursor-pointer group">
+                                <div class="w-12 h-12 rounded-full bg-white shadow-sm border border-gray-100 flex items-center justify-center text-gray-400 mb-4 group-hover:text-brand-blue group-hover:border-indigo-100 group-hover:bg-brand-bluelight transition">
+                                    <i class="fa-solid fa-arrow-up-from-bracket text-lg"></i>
+                                </div>
+                                <h4 class="font-extrabold text-gray-800 mb-1.5 text-[15px]">Upload Desain (mock)</h4>
+                                <p class="text-xs text-gray-400 font-bold tracking-wide">PNG, JPG, AI, PSD &mdash; MAX 10MB</p>
+                            </div>
+                        </div>
+
+                        <!-- Box 3: Deadline & Catatan -->
+                        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+                            <h2 class="text-lg font-extrabold text-gray-900 mb-6">Deadline & Catatan</h2>
+                            
+                            <div class="space-y-6">
+                                <div>
+                                    <label class="block text-xs font-bold text-gray-700 mb-2">Estimasi Deadline</label>
+                                    <div class="relative">
+                                        <input type="text" placeholder="Pilih Estimasi Deadline" class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm font-medium text-gray-700 outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition">
+                                        <i class="fa-regular fa-calendar text-gray-400 text-sm absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-gray-700 mb-2">Catatan / Instruksi Khusus</label>
+                                    <textarea rows="4" placeholder="Detail sablon, bordir, desain file, dll..." class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm font-medium text-gray-700 outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition resize-none"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Summary Stick Area -->
+                    <div class="w-full lg:w-96 shrink-0 relative">
+                        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 sticky top-0">
+                            <h2 class="text-lg font-extrabold text-gray-900 mb-6">Ringkasan Pesanan</h2>
+                            
+                            <div class="space-y-5 text-sm font-semibold mb-6">
+                                <div class="flex justify-between items-center text-gray-500">
+                                    <span>Produk Base</span>
+                                    <span class="text-gray-900 font-bold">Rp 97.000 / pcs</span>
+                                </div>
+                                <div class="flex justify-between items-center text-gray-500">
+                                    <span>Total Kuantitas</span>
+                                    <span class="text-gray-900 font-bold">36 pcs</span>
+                                </div>
+                                <div class="flex justify-between items-center text-gray-500">
+                                    <span>Biaya Material (PQ 30s)</span>
+                                    <span class="text-gray-900 font-bold">+Rp 144.000</span>
+                                </div>
+                                <div class="flex justify-between items-center text-gray-500">
+                                    <span>Biaya Ukuran (XL+)</span>
+                                    <span class="text-gray-900 font-bold">+Rp 0</span>
+                                </div>
+                            </div>
+                            
+                            <div class="border-t border-gray-100 py-6 mb-2">
+                                <div class="flex justify-between items-center">
+                                    <span class="font-extrabold text-gray-900 tracking-wide text-xs uppercase">Estimasi Total</span>
+                                    <span class="font-extrabold text-brand-blue text-xl">Rp 3.636.000</span>
+                                </div>
+                            </div>
+                            
+                            <button class="w-full bg-brand-blue text-white rounded-xl py-4 font-bold hover:bg-indigo-700 transition shadow-[0_6px_16px_-6px_rgba(79,70,229,0.5)] flex items-center justify-center gap-2 mb-4">
+                                Pesan Sekarang <i class="fa-solid fa-arrow-right text-xs"></i>
+                            </button>
+                            
+                            <p class="text-[10px] text-gray-400 leading-tight font-medium">
+                                Dengan menekan tombol di atas, tim Senta Print akan segera menghubungi Anda untuk konfirmasi desain dan pembayaran.
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </main>
+</body>
+</html>
