@@ -55,178 +55,56 @@
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-100 font-semibold text-gray-700 bg-white">
-                                <tr class="hover:bg-gray-50/50 transition">
-                                    <td class="py-4 px-6 font-extrabold text-brand-blue">ORD-001</td>
-                                    <td class="py-4 px-6">Budi Santoso</td>
-                                    <td class="py-4 px-6 text-gray-500">Kaos Sablon</td>
-                                    <td class="py-4 px-6">100 pcs</td>
-                                    <td class="py-4 px-6 font-bold text-gray-900">Rp 6.500.000</td>
-                                    <td class="py-4 px-6">
-                                        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-600 text-xs font-bold border border-emerald-100">
-                                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Completed
-                                        </div>
-                                    </td>
-                                    <td class="py-4 px-6 text-gray-500">20 Jul 2026</td>
-                                    <td class="py-4 px-6 text-center">
-                                        <button onclick="openPopup()" class="w-8 h-8 rounded-full border border-gray-200 text-gray-400 hover:text-brand-blue hover:bg-brand-bluelight transition inline-flex items-center justify-center">
-                                            <i class="fa-regular fa-eye"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr class="hover:bg-gray-50/50 transition">
-                                    <td class="py-4 px-6 font-extrabold text-brand-blue">ORD-002</td>
-                                    <td class="py-4 px-6">Siti Rahayu</td>
-                                    <td class="py-4 px-6 text-gray-500">Polo Shirt</td>
-                                    <td class="py-4 px-6">50 pcs</td>
-                                    <td class="py-4 px-6 font-bold text-gray-900">Rp 4.250.000</td>
-                                    <td class="py-4 px-6">
-                                        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-600 text-xs font-bold border border-emerald-100">
-                                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Completed
-                                        </div>
-                                    </td>
-                                    <td class="py-4 px-6 text-gray-500">25 Jul 2026</td>
-                                    <td class="py-4 px-6 text-center">
-                                        <button onclick="openPopup()" class="w-8 h-8 rounded-full border border-gray-200 text-gray-400 hover:text-brand-blue hover:bg-brand-bluelight transition inline-flex items-center justify-center">
-                                            <i class="fa-regular fa-eye"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr class="hover:bg-gray-50/50 transition">
-                                    <td class="py-4 px-6 font-extrabold text-brand-blue">ORD-003</td>
-                                    <td class="py-4 px-6">Budi Santoso</td>
-                                    <td class="py-4 px-6 text-gray-500">Jaket Hoodie</td>
-                                    <td class="py-4 px-6">30 pcs</td>
-                                    <td class="py-4 px-6 font-bold text-gray-900">Rp 3.600.000</td>
-                                    <td class="py-4 px-6">
-                                        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50 text-amber-600 text-xs font-bold border border-amber-100">
-                                            <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span> Pending
-                                        </div>
-                                    </td>
-                                    <td class="py-4 px-6 text-gray-500">30 Jul 2026</td>
-                                    <td class="py-4 px-6 text-center">
-                                        <button onclick="openPopup()" class="w-8 h-8 rounded-full border border-gray-200 text-gray-400 hover:text-brand-blue hover:bg-brand-bluelight transition inline-flex items-center justify-center">
-                                            <i class="fa-regular fa-eye"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr class="hover:bg-gray-50/50 transition">
-                                    <td class="py-4 px-6 font-extrabold text-brand-blue">ORD-004</td>
-                                    <td class="py-4 px-6">Andi Pratama</td>
-                                    <td class="py-4 px-6 text-gray-500">Kemeja Kerja</td>
-                                    <td class="py-4 px-6">200 pcs</td>
-                                    <td class="py-4 px-6 font-bold text-gray-900">Rp 19.000.000</td>
-                                    <td class="py-4 px-6">
-                                        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-50 text-brand-blue text-xs font-bold border border-indigo-100">
-                                            <span class="w-1.5 h-1.5 rounded-full bg-brand-blue"></span> Production
-                                        </div>
-                                    </td>
-                                    <td class="py-4 px-6 text-gray-500">10 Agu 2026</td>
-                                    <td class="py-4 px-6 text-center">
-                                        <button onclick="openPopup()" class="w-8 h-8 rounded-full border border-gray-200 text-gray-400 hover:text-brand-blue hover:bg-brand-bluelight transition inline-flex items-center justify-center">
-                                            <i class="fa-regular fa-eye"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr class="hover:bg-gray-50/50 transition">
-                                    <td class="py-4 px-6 font-extrabold text-brand-blue">ORD-005</td>
-                                    <td class="py-4 px-6">Siti Rahayu</td>
-                                    <td class="py-4 px-6 text-gray-500">Jersey Olahraga</td>
-                                    <td class="py-4 px-6">25 pcs</td>
-                                    <td class="py-4 px-6 font-bold text-gray-900">Rp 2.250.000</td>
-                                    <td class="py-4 px-6">
-                                        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-50 text-brand-blue text-xs font-bold border border-indigo-100">
-                                            <span class="w-1.5 h-1.5 rounded-full bg-brand-blue"></span> Production
-                                        </div>
-                                    </td>
-                                    <td class="py-4 px-6 text-gray-500">15 Jul 2026</td>
-                                    <td class="py-4 px-6 text-center">
-                                        <button onclick="openPopup()" class="w-8 h-8 rounded-full border border-gray-200 text-gray-400 hover:text-brand-blue hover:bg-brand-bluelight transition inline-flex items-center justify-center">
-                                            <i class="fa-regular fa-eye"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr class="hover:bg-gray-50/50 transition">
-                                    <td class="py-4 px-6 font-extrabold text-brand-blue">ORD-006</td>
-                                    <td class="py-4 px-6">Andi Pratama</td>
-                                    <td class="py-4 px-6 text-gray-500">Kaos Polos</td>
-                                    <td class="py-4 px-6">500 pcs</td>
-                                    <td class="py-4 px-6 font-bold text-gray-900">Rp 22.500.000</td>
-                                    <td class="py-4 px-6">
-                                        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-600 text-xs font-bold border border-emerald-100">
-                                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Completed
-                                        </div>
-                                    </td>
-                                    <td class="py-4 px-6 text-gray-500">12 Jul 2026</td>
-                                    <td class="py-4 px-6 text-center">
-                                        <button onclick="openPopup()" class="w-8 h-8 rounded-full border border-gray-200 text-gray-400 hover:text-brand-blue hover:bg-brand-bluelight transition inline-flex items-center justify-center">
-                                            <i class="fa-regular fa-eye"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr class="hover:bg-gray-50/50 transition">
-                                    <td class="py-4 px-6 font-extrabold text-brand-blue">ORD-007</td>
-                                    <td class="py-4 px-6">Budi Santoso</td>
-                                    <td class="py-4 px-6 text-gray-500">Seragam Sekolah</td>
-                                    <td class="py-4 px-6">150 pcs</td>
-                                    <td class="py-4 px-6 font-bold text-gray-900">Rp 11.250.000</td>
-                                    <td class="py-4 px-6">
-                                        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-600 text-xs font-bold border border-emerald-100">
-                                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Shipped
-                                        </div>
-                                    </td>
-                                    <td class="py-4 px-6 text-gray-500">1 Agu 2026</td>
-                                    <td class="py-4 px-6 text-center">
-                                        <button onclick="openPopup()" class="w-8 h-8 rounded-full border border-gray-200 text-gray-400 hover:text-brand-blue hover:bg-brand-bluelight transition inline-flex items-center justify-center">
-                                            <i class="fa-regular fa-eye"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr class="hover:bg-gray-50/50 transition">
-                                    <td class="py-4 px-6 font-extrabold text-brand-blue">ORD-008</td>
-                                    <td class="py-4 px-6">Siti Rahayu</td>
-                                    <td class="py-4 px-6 text-gray-500">Topi Custom</td>
-                                    <td class="py-4 px-6">80 pcs</td>
-                                    <td class="py-4 px-6 font-bold text-gray-900">Rp 2.800.000</td>
-                                    <td class="py-4 px-6">
-                                        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-50 text-red-600 text-xs font-bold border border-red-100">
-                                            <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span> Rejected
-                                        </div>
-                                    </td>
-                                    <td class="py-4 px-6 text-gray-500">18 Jul 2026</td>
-                                    <td class="py-4 px-6 text-center">
-                                        <button onclick="openPopup()" class="w-8 h-8 rounded-full border border-gray-200 text-gray-400 hover:text-brand-blue hover:bg-brand-bluelight transition inline-flex items-center justify-center">
-                                            <i class="fa-regular fa-eye"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr class="hover:bg-gray-50/50 transition">
-                                    <td class="py-4 px-6 font-extrabold text-brand-blue">ORD-009</td>
-                                    <td class="py-4 px-6">Budi Santoso</td>
-                                    <td class="py-4 px-6 text-gray-500">Polo Shirt</td>
-                                    <td class="py-4 px-6">6 pcs</td>
-                                    <td class="py-4 px-6 font-bold text-gray-900">Rp 510.000</td>
-                                    <td class="py-4 px-6">
-                                        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50 text-amber-600 text-xs font-bold border border-amber-100">
-                                            <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span> Pending
-                                        </div>
-                                    </td>
-                                    <td class="py-4 px-6 text-gray-500">31 Jul 2026</td>
-                                    <td class="py-4 px-6 text-center">
-                                        <button onclick="openPopup()" class="w-8 h-8 rounded-full border border-gray-200 text-gray-400 hover:text-brand-blue hover:bg-brand-bluelight transition inline-flex items-center justify-center">
-                                            <i class="fa-regular fa-eye"></i>
-                                        </button>
-                                    </td>
-                                </tr>
+                                        @forelse($orders as $order)
+                                        <tr class="hover:bg-gray-50/50 transition">
+                                            <td class="py-4 px-6 font-extrabold text-brand-blue">{{ $order->invoice_no }}</td>
+                                            <td class="py-4 px-6">{{ $order->customer->name ?? '-' }}</td>
+                                            <td class="py-4 px-6 text-gray-500">{{ $order->items->first()->product->name ?? 'Produk' }}</td>
+                                            <td class="py-4 px-6">{{ $order->items->sum('qty') }} pcs</td>
+                                            <td class="py-4 px-6 font-bold text-gray-900">Rp {{ number_format($order->grand_total, 0, ',', '.') }}</td>
+                                            <td class="py-4 px-6">
+                                                @php
+                                                    $statusColors = [
+                                                        'pending' => 'bg-amber-50 text-amber-600 border-amber-100',
+                                                        'production' => 'bg-indigo-50 text-brand-blue border-indigo-100',
+                                                        'completed' => 'bg-emerald-50 text-emerald-600 border-emerald-100',
+                                                        'shipped' => 'bg-emerald-50 text-emerald-600 border-emerald-100',
+                                                        'rejected' => 'bg-red-50 text-red-600 border-red-100',
+                                                    ];
+                                                    $dotColors = [
+                                                        'pending' => 'bg-amber-500',
+                                                        'production' => 'bg-brand-blue',
+                                                        'completed' => 'bg-emerald-500',
+                                                        'shipped' => 'bg-emerald-500',
+                                                        'rejected' => 'bg-red-500',
+                                                    ];
+                                                    $status = strtolower($order->status ?? 'pending');
+                                                    $badgeColor = $statusColors[$status] ?? $statusColors['pending'];
+                                                    $dotColor = $dotColors[$status] ?? $dotColors['pending'];
+                                                @endphp
+                                                <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold border {{ $badgeColor }}">
+                                                    <span class="w-1.5 h-1.5 rounded-full {{ $dotColor }}"></span> {{ ucfirst($status) }}
+                                                </div>
+                                            </td>
+                                            <td class="py-4 px-6 text-gray-500">{{ $order->deadline ? \Carbon\Carbon::parse($order->deadline)->format('d M Y') : '-' }}</td>
+                                            <td class="py-4 px-6 text-center text-xs flex gap-2 justify-center">
+                                                <button onclick="openPopup({{ $order->id }})" class="w-8 h-8 rounded-full border border-gray-200 text-gray-400 hover:text-brand-blue hover:bg-brand-bluelight transition inline-flex items-center justify-center">
+                                                    <i class="fa-regular fa-eye"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        @empty
+                                        <tr>
+                                            <td colspan="8" class="py-8 text-center text-gray-400 font-semibold text-xs">Belum ada data pesanan.</td>
+                                        </tr>
+                                        @endforelse
                             </tbody>
                         </table>
                     </div>
                     <!-- Pagination -->
                     <div class="px-6 py-4 border-t border-gray-100 flex items-center justify-between text-xs font-bold">
-                        <div class="text-gray-400">Menampilkan <span class="text-gray-700">9</span> dari <span class="text-gray-700">9</span> pesanan</div>
-                        <div class="flex items-center gap-2">
-                            <button class="w-7 h-7 flex items-center justify-center border border-gray-200 text-gray-400 hover:bg-gray-50 rounded bg-white transition"><i class="fa-solid fa-chevron-left text-[10px]"></i></button>
-                            <span class="text-gray-500 px-2">Hal 1 dari 4 Hal</span>
-                            <button class="w-7 h-7 flex items-center justify-center border border-gray-200 text-gray-400 hover:bg-gray-50 rounded bg-white transition"><i class="fa-solid fa-chevron-right text-[10px]"></i></button>
+                        <div class="w-full">
+                            {{ $orders->links() }}
                         </div>
                     </div>
                 </div>

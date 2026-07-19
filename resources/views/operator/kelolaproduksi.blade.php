@@ -32,18 +32,22 @@
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-100 font-semibold text-gray-700 bg-white">
-                                <!-- Row 1 -->
+                                @forelse($orders as $order)
+                                @php
+                                    $completedSteps = $order->production ? $order->production->logs->unique('production_step_id')->count() : 0;
+                                    $progressPercent = $totalSteps > 0 ? ($completedSteps / $totalSteps) * 100 : 0;
+                                @endphp
                                 <tr class="hover:bg-gray-50/50 transition">
-                                    <td class="py-5 px-6 font-extrabold text-brand-blue">ORD-039</td>
-                                    <td class="py-5 px-6 text-gray-600">Polo Shirt</td>
-                                    <td class="py-5 px-6 text-gray-600">Budi Santoso</td>
-                                    <td class="py-5 px-6 text-gray-600">10 Agu 2026</td>
+                                    <td class="py-5 px-6 font-extrabold text-brand-blue">{{ $order->invoice_no }}</td>
+                                    <td class="py-5 px-6 text-gray-600">{{ $order->items->first()->product->name ?? 'Produk' }}</td>
+                                    <td class="py-5 px-6 text-gray-600">{{ $order->customer->name ?? '-' }}</td>
+                                    <td class="py-5 px-6 text-gray-600">{{ $order->deadline ? \Carbon\Carbon::parse($order->deadline)->format('d M Y') : '-' }}</td>
                                     <td class="py-5 px-6">
                                         <div class="flex items-center gap-3">
                                             <div class="w-32 bg-gray-200 rounded-full h-1.5 overflow-hidden">
-                                                <div class="bg-brand-blue h-1.5 rounded-full" style="width: 83.33%"></div>
+                                                <div class="bg-brand-blue h-1.5 rounded-full" style="width: {{ $progressPercent }}%"></div>
                                             </div>
-                                            <span class="text-xs text-brand-blue font-extrabold">5/6</span>
+                                            <span class="text-xs text-brand-blue font-extrabold">{{ $completedSteps }}/{{ $totalSteps }}</span>
                                         </div>
                                     </td>
                                     <td class="py-5 px-6">
@@ -52,48 +56,24 @@
                                         </div>
                                     </td>
                                     <td class="py-5 px-6 text-center">
-                                        <button onclick="openPopup()" class="px-4 py-1.5 rounded-lg border border-brand-blue text-brand-blue hover:bg-brand-bluelight transition inline-flex items-center justify-center gap-2 text-[11px] font-extrabold tracking-wide uppercase">
+                                        <a href="{{ route('operator.tracking', $order->id) }}" class="px-4 py-1.5 rounded-lg border border-brand-blue text-brand-blue hover:bg-brand-bluelight transition inline-flex items-center justify-center gap-2 text-[11px] font-extrabold tracking-wide uppercase">
                                             <i class="fa-regular fa-eye mt-px"></i> Update
-                                        </button>
+                                        </a>
                                     </td>
                                 </tr>
-                                
-                                <!-- Row 2 -->
-                                <tr class="hover:bg-gray-50/50 transition">
-                                    <td class="py-5 px-6 font-extrabold text-brand-blue">ORD-053</td>
-                                    <td class="py-5 px-6 text-gray-600">Topi Custom</td>
-                                    <td class="py-5 px-6 text-gray-600">Siti Rahayu</td>
-                                    <td class="py-5 px-6 text-gray-600">15 Jul 2026</td>
-                                    <td class="py-5 px-6">
-                                        <div class="flex items-center gap-3">
-                                            <div class="w-32 bg-gray-200 rounded-full h-1.5 overflow-hidden">
-                                                <div class="bg-brand-blue h-1.5 rounded-full" style="width: 33.33%"></div>
-                                            </div>
-                                            <span class="text-xs text-brand-blue font-extrabold">2/6</span>
-                                        </div>
-                                    </td>
-                                    <td class="py-5 px-6">
-                                        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-50/80 text-brand-blue text-[11px] font-bold border border-indigo-100">
-                                            <span class="w-1.5 h-1.5 rounded-full bg-brand-blue"></span> Produksi
-                                        </div>
-                                    </td>
-                                    <td class="py-5 px-6 text-center">
-                                        <button onclick="openPopup()" class="px-4 py-1.5 rounded-lg border border-brand-blue text-brand-blue hover:bg-brand-bluelight transition inline-flex items-center justify-center gap-2 text-[11px] font-extrabold tracking-wide uppercase">
-                                            <i class="fa-regular fa-eye mt-px"></i> Update
-                                        </button>
-                                    </td>
+                                @empty
+                                <tr>
+                                    <td colspan="7" class="py-8 text-center text-gray-400 font-semibold text-xs">Belum ada pesanan dalam proses produksi.</td>
                                 </tr>
+                                @endforelse
                             </tbody>
                         </table>
                     </div>
                     
                     <!-- Pagination -->
                     <div class="pt-6 mt-4 border-t border-gray-100 flex items-center justify-between text-xs font-bold pl-1 pr-1">
-                        <div class="text-gray-400">Menampilkan <span class="text-gray-700">2</span> dari <span class="text-gray-700">2</span> pesanan</div>
-                        <div class="flex items-center gap-2">
-                            <button class="w-7 h-7 flex items-center justify-center border border-gray-200 text-gray-400 hover:bg-gray-50 rounded bg-white transition"><i class="fa-solid fa-chevron-left text-[10px]"></i></button>
-                            <span class="text-gray-500 px-2">Hal : 1 dari 2 Hal</span>
-                            <button class="w-7 h-7 flex items-center justify-center border border-gray-200 text-gray-400 hover:bg-gray-50 rounded bg-white transition"><i class="fa-solid fa-chevron-right text-[10px]"></i></button>
+                        <div class="w-full">
+                            {{ $orders->links() }}
                         </div>
                     </div>
 

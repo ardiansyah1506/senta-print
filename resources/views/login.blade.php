@@ -49,12 +49,12 @@
         <form action="{{ route('login.post') }}" method="POST" class="space-y-5">
             @csrf
             <div>
-                <label for="email" class="block text-sm font-bold text-gray-700 mb-2">Email Address</label>
+                <label for="phone" class="block text-sm font-bold text-gray-700 mb-2">No. WhatsApp</label>
                 <div class="relative">
                     <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400">
-                        <i class="fa-regular fa-envelope"></i>
+                        <i class="fa-solid fa-phone"></i>
                     </div>
-                    <input type="email" name="email" id="email" required value="{{ old('email') }}" class="w-full pl-11 pr-4 py-3.5 border border-gray-200 rounded-xl text-sm outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition bg-gray-50/50 text-gray-800" placeholder="admin@sentaprint.com">
+                    <input type="text" name="phone" id="phone" required value="{{ old('phone') }}" class="w-full pl-11 pr-4 py-3.5 border border-gray-200 rounded-xl text-sm outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition bg-gray-50/50 text-gray-800" placeholder="081234567890">
                 </div>
             </div>
 

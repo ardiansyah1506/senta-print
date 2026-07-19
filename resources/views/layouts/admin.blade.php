@@ -61,13 +61,13 @@
             <a href="#" class="flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg hover:bg-sidebarhover hover:text-white transition">
                 <i class="fa-solid fa-border-all w-5 text-center"></i> Dashboard
             </a>
-            <a href="#" class="flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg hover:bg-sidebarhover hover:text-white transition">
+            <a href="{{ route('admin.order.index') }}" class="flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg hover:bg-sidebarhover hover:text-white transition">
                 <i class="fa-solid fa-clipboard-list w-5 text-center"></i> Kelola Pesanan
             </a>
-            <a href="#" class="flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg hover:bg-sidebarhover hover:text-white transition">
+            <a href="{{ route('admin.report.index') }}" class="flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg hover:bg-sidebarhover hover:text-white transition">
                 <i class="fa-solid fa-file-lines w-5 text-center"></i> Laporan
             </a>
-            <a href="#" class="flex items-center gap-3 px-4 py-3 text-sm font-bold rounded-lg bg-brand-yellow text-gray-900 shadow-sm transition">
+            <a href="{{ route('admin.master-kategori.index') }}" class="flex items-center gap-3 px-4 py-3 text-sm font-bold rounded-lg bg-brand-yellow text-gray-900 shadow-sm transition">
                 <i class="fa-solid fa-database w-5 text-center"></i> Data Master
             </a>
             <a href="#" class="flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg hover:bg-sidebarhover hover:text-white transition">
@@ -77,9 +77,12 @@
 
         <!-- Logout -->
         <div class="p-4 mt-auto border-t border-gray-800/50">
-            <a href="#" class="flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg hover:bg-sidebarhover hover:text-white transition text-gray-400">
-                <i class="fa-solid fa-arrow-right-from-bracket w-5 text-center"></i> Log out
-            </a>
+            <form action="{{ route('logout') }}" method="POST">
+                @csrf
+                <button type="submit" class="w-full flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg hover:bg-sidebarhover hover:text-white transition text-gray-400">
+                    <i class="fa-solid fa-arrow-right-from-bracket w-5 text-center"></i> Log out
+                </button>
+            </form>
         </div>
     </aside>
 

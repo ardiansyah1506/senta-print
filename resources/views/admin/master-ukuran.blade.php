@@ -16,7 +16,7 @@
                         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4">
                             <ul class="space-y-1">
                                 <li>
-                                    <a href="{{ route('admin.master-kategori.index') }}" class="block px-5 py-3.5 text-sm font-bold text-brand-blue bg-brand-bluelight rounded-xl transition shadow-sm border border-indigo-50/50">
+                                    <a href="{{ route('admin.master-kategori.index') }}" class="block px-5 py-3.5 text-sm font-semibold text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded-xl transition">
                                         Master Kategori
                                     </a>
                                 </li>
@@ -26,7 +26,7 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="{{ route('admin.ukuran.index') }}" class="block px-5 py-3.5 text-sm font-semibold text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded-xl transition">
+                                    <a href="{{ route('admin.ukuran.index') }}" class="block px-5 py-3.5 text-sm font-bold text-brand-blue bg-brand-bluelight rounded-xl transition shadow-sm border border-indigo-50/50">
                                         Master Ukuran
                                     </a>
                                 </li>
@@ -40,11 +40,11 @@
                         <!-- Box 1: Tambah Data Baru -->
                         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
                             <h2 class="text-xl font-extrabold text-gray-900 mb-6">Tambah Data Baru</h2>
-                            <form action="{{ route('admin.master-kategori.store') }}" method="POST" class="space-y-5">
+                            <form action="{{ route('admin.ukuran.store') }}" method="POST" class="space-y-5">
                                 @csrf
                                 <div>
-                                    <label class="block text-xs font-bold text-gray-700 mb-2">Nama Kategori</label>
-                                    <input type="text" name="name" required placeholder="Masukkan Kategori..." class="w-full border border-gray-200 rounded-xl px-4 py-3.5 text-sm outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition bg-gray-50/50 text-gray-800">
+                                    <label class="block text-xs font-bold text-gray-700 mb-2">Nama Ukuran</label>
+                                    <input type="text" name="name" required placeholder="Masukkan Ukuran..." class="w-full border border-gray-200 rounded-xl px-4 py-3.5 text-sm outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition bg-gray-50/50 text-gray-800">
                                 </div>
                                 <div class="flex justify-end pt-2">
                                     <button type="submit" class="bg-brand-blue text-white px-6 py-2.5 rounded-xl text-sm font-bold hover:bg-indigo-700 transition flex items-center justify-center gap-2 shadow-[0_4px_12px_-4px_rgba(79,70,229,0.5)]">
@@ -57,7 +57,7 @@
                         <!-- Box 2: Daftar Add On -->
                         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden text-sm flex flex-col">
                             <div class="p-8 border-b border-gray-100 flex justify-between items-center bg-white">
-                                <h2 class="text-xl font-extrabold text-gray-900">Daftar Kategori</h2>
+                                <h2 class="text-xl font-extrabold text-gray-900">Daftar Ukuran</h2>
                                 <a href="#" class="text-brand-blue font-bold text-sm hover:text-indigo-800 transition flex items-center gap-2">
                                     Lihat Semua <i class="fa-solid fa-arrow-right text-[10px]"></i>
                                 </a>
@@ -72,13 +72,12 @@
                                         </tr>
                                     </thead>
                                     <tbody class="divide-y divide-gray-100 font-semibold text-gray-800 bg-white">
-                                        @forelse($categories as $category)
+                                        @forelse($sizes as $size)
                                         <tr class="hover:bg-gray-50/50 transition">
-                                            <td class="py-4 px-8 font-bold text-gray-900">{{ $category->name }}</td>
+                                            <td class="py-4 px-8 font-bold text-gray-900">{{ $size->name }}</td>
                                             <td class="py-4 px-8 text-right space-x-2 flex justify-end">
-                                                <a href="{{ route('admin.master-kategori.show', $category->id) }}" title="Kelola Item" class="inline-flex items-center justify-center text-brand-blue hover:text-white hover:bg-brand-blue transition w-8 h-8 rounded-md bg-brand-bluelight"><i class="fa-solid fa-eye text-xs"></i></a>
                                                 <button class="text-gray-400 hover:text-brand-blue transition w-8 h-8 rounded-md hover:bg-gray-100 inline-flex items-center justify-center"><i class="fa-regular fa-pen-to-square"></i></button>
-                                                <form action="{{ route('admin.master-kategori.destroy', $category->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Hapus data ini?');">
+                                                <form action="{{ route('admin.ukuran.destroy', $size->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Hapus data ini?');">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="text-gray-400 hover:text-red-500 transition w-8 h-8 rounded-md hover:bg-red-50 inline-flex items-center justify-center"><i class="fa-regular fa-trash-can"></i></button>
@@ -87,7 +86,7 @@
                                         </tr>
                                         @empty
                                         <tr>
-                                            <td colspan="2" class="py-8 text-center text-gray-500">Belum ada Kategori yang ditambahkan.</td>
+                                            <td colspan="2" class="py-8 text-center text-gray-500">Belum ada Ukuran yang ditambahkan.</td>
                                         </tr>
                                         @endforelse
                                     </tbody>
@@ -96,7 +95,7 @@
                             
                             <!-- Pagination -->
                             <div class="px-8 py-5 border-t border-gray-100 flex items-center justify-center text-xs font-bold">
-                                {{ $categories->links() }}
+                                {{ $sizes->links() }}
                             </div>
                         </div>
 

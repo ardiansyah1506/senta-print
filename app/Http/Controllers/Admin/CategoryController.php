@@ -33,7 +33,10 @@ class CategoryController extends Controller
      */
     public function show(string $id)
     {
-        return view('admin.show-master-kategori');
+        $category = Category::with(['sizes', 'addons', 'products'])->findOrFail($id);
+        $allSizes = \App\Models\Size::all();
+        $allAddons = \App\Models\Addon::all();
+        return view('admin.show-master-kategori', compact('category', 'allSizes', 'allAddons'));
     }
 
     /**
@@ -45,8 +48,24 @@ class CategoryController extends Controller
         return back()->with('success', 'Kategori dihapus!');
     }
 
-    // Unused methods
-    public function create() {}
-    public function edit(string $id) {}
-    public function update(Request $request, string $id) {}
+    public function syncSizes(Request $request, string $id) {
+        $category = Category::findOrFail($id);
+        $category->sizes()->sync($request->sizes ?? []);
+        return back()->with('success', 'Ukuran kategori diperbarui.');
+    }
+
+    public function addAddon(Request $request, string $id) {
+        $category = Category::findOrFail($id);
+        $category->addons()->attach($request->addon_id, [
+            'price' => $request->price ?? 0,
+            'display_order' => 0
+        ]);
+        return back()->with('success', 'Add On ditambahkan ke kategori ini.');
+    }
+
+    public function removeAddon(string $id, string $addon_id) {
+        $category = Category::findOrFail($id);
+        $category->addons()->detach($addon_id);
+        return back()->with('success', 'Add On dihapus dari kategori.');
+    }
 }

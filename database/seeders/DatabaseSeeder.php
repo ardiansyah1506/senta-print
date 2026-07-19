@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
         User::updateOrCreate(
             ['email' => 'admin@sentaprint.com'],
             [
+                'phone' => '081234567890',
                 'name' => 'Admin Senta Print',
                 'password' => bcrypt('password'),
             ]
