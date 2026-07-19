@@ -45,6 +45,21 @@
                     
                     <div class="mb-6">
                         <label class="block text-xs font-bold text-gray-700 mb-3">Distribusi Ukuran <span class="text-gray-400 font-normal">(Isi jumlah barang per ukuran)</span></label>
+                        
+                        <!-- Mini Size Chart Box -->
+                        <a id="inlineSizeChartBox" href="#" target="_blank" class="hidden mb-4 p-2 bg-indigo-50/50 border border-indigo-100 rounded-xl items-center gap-3 hover:bg-indigo-50 transition group cursor-pointer" title="Klik untuk memperbesar gambar Size Chart di Tab Baru">
+                            <div class="w-12 h-12 rounded-lg overflow-hidden bg-white border border-indigo-200 shrink-0 relative">
+                                <div class="absolute inset-0 bg-black/30 hidden group-hover:flex items-center justify-center transition">
+                                    <i class="fa-solid fa-expand text-white text-[10px]"></i>
+                                </div>
+                                <img id="inlineSizeChartImg" src="" class="w-full h-full object-cover">
+                            </div>
+                            <div>
+                                <h4 class="text-xs font-bold text-brand-blue flex items-center gap-1.5"><i class="fa-solid fa-ruler-combined"></i> Panduan Ukuran</h4>
+                                <p class="text-[10px] text-gray-500 font-medium tracking-wide">Klik untuk melihat detail ukuran</p>
+                            </div>
+                        </a>
+
                         <div id="sizesGrid" class="grid grid-cols-4 md:grid-cols-8 gap-3">
                             <div class="text-[10px] text-gray-400 col-span-full">Pilih kategori untuk melihat ukuran yang tersedia.</div>
                         </div>
@@ -87,34 +102,12 @@
                     </div>
                 </div>
 
-                <!-- Box 3: Deadline & Catatan -->
+                <!-- Box 3: Catatan -->
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
-                    <h2 class="text-lg font-extrabold text-gray-900 mb-6">Deadline & Catatan Akhir</h2>
-                    
-                    <div class="space-y-6">
-                        <div class="md:col-span-2">
-                            <label class="block text-xs font-bold text-gray-700 mb-3">Distribusi Ukuran (Pcs)</label>
-                            
-                            <!-- Inline Size Chart Box -->
-                            <div id="inlineSizeChartBox" class="hidden w-full mb-5 rounded-2xl border border-indigo-100 overflow-hidden shadow-sm">
-                                <div class="bg-indigo-50/50 px-4 py-2.5 border-b border-indigo-100 flex items-center gap-2">
-                                    <i class="fa-solid fa-ruler-combined text-brand-blue text-sm"></i>
-                                    <span class="text-xs font-bold text-brand-blue">Panduan Size Chart Kategori Ini</span>
-                                </div>
-                                <div class="p-2 bg-white flex justify-center">
-                                    <img id="inlineSizeChartImg" src="" class="max-w-full h-auto max-h-[300px] object-contain rounded-xl">
-                                </div>
-                            </div>
-
-                            <div class="flex items-center justify-between mb-2">
-                                <label class="block text-xs font-bold text-gray-700">Estimasi Deadline</label>
-                            </div>
-                            <input type="date" name="deadline" class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm font-semibold text-gray-700 outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition bg-white">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold text-gray-700 mb-2">Catatan Pesanan Secara Keseluruhan</label>
-                            <textarea name="notes" rows="3" placeholder="Instruksi pengiriman, kontak referensi, atau custom sablon..." class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm font-semibold text-gray-700 outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition resize-none"></textarea>
-                        </div>
+                    <h2 class="text-lg font-extrabold text-gray-900 mb-6">Catatan Akhir</h2>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 mb-2">Catatan Pesanan Secara Keseluruhan</label>
+                        <textarea name="notes" rows="3" placeholder="Instruksi pengiriman, kontak referensi, atau custom sablon..." class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm font-semibold text-gray-700 outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition resize-none"></textarea>
                     </div>
                 </div>
             </div>
@@ -242,15 +235,20 @@
             let scBox = document.getElementById('inlineSizeChartBox');
             let scImg = document.getElementById('inlineSizeChartImg');
             if(category.size_chart) {
-                scImg.src = '/storage/' + category.size_chart;
+                let scUrl = '/storage/' + category.size_chart;
+                scBox.href = scUrl;
+                scImg.src = scUrl;
                 scBox.classList.remove('hidden');
+                scBox.classList.add('flex');
             } else {
+                scBox.classList.remove('flex');
                 scBox.classList.add('hidden');
             }
 
             category.products.forEach(p => {
-                // Note: generating generic base UI pricing if unspecified by complex price tables
-                productSelect.innerHTML += `<option value="${p.id}" data-price="75000">${p.product_name}</option>`; 
+                // Determine baseline price (fallbacks to generic if dynamic table isn't fully scoped)
+                let actualPrice = p.price || 75000;
+                productSelect.innerHTML += `<option value="${p.id}" data-price="${actualPrice}">${p.product_name} - ${formatRupiah(actualPrice)}</option>`; 
             });
             productSelect.disabled = false;
 
