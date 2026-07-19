@@ -299,10 +299,10 @@
             </p>
             <div class="flex flex-col sm:flex-row justify-center items-center gap-4">
                 <a href="{{ route('public.order') }}" class="w-full sm:w-auto px-8 py-3.5 bg-brand-600 text-white rounded-full font-semibold hover:bg-brand-500 transition shadow-lg shadow-brand-900/50 flex items-center justify-center gap-2">
-                    <i class="fa-brands fa-whatsapp"></i> Pesan Sekarang
+                    Pesan Sekarang <i class="fa-solid fa-arrow-right text-sm"></i>
                 </a>
-                <a href="#" class="w-full sm:w-auto px-8 py-3.5 bg-transparent text-white border-2 border-gray-600 rounded-full font-semibold hover:border-gray-400 hover:bg-gray-800 transition flex items-center justify-center">
-                    Hubungi Kami
+                <a href="https://wa.me/6281234567890" target="_blank" class="w-full sm:w-auto px-8 py-3.5 bg-transparent text-white border-2 border-gray-600 rounded-full font-semibold hover:border-gray-400 hover:bg-gray-800 transition flex items-center justify-center gap-2">
+                    <i class="fa-brands fa-whatsapp text-lg"></i> Hubungi Kami
                 </a>
             </div>
         </div>

@@ -16,17 +16,17 @@
                         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4">
                             <ul class="space-y-1">
                                 <li>
-                                    <a href="{{ route('admin.master-kategori.index') }}" class="block px-5 py-3.5 text-sm font-bold text-brand-blue bg-brand-bluelight rounded-xl transition shadow-sm border border-indigo-50/50">
+                                    <a href="{{ route('admin.master-kategori.index') }}" class="block px-5 py-3.5 text-sm rounded-xl transition {{ Request::routeIs('admin.master-kategori.*') ? 'font-bold text-brand-blue bg-brand-bluelight shadow-sm border border-indigo-50/50' : 'font-semibold text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}">
                                         Master Kategori
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="{{ route('admin.data-master.index') }}" class="block px-5 py-3.5 text-sm font-semibold text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded-xl transition">
+                                    <a href="{{ route('admin.data-master.index') }}" class="block px-5 py-3.5 text-sm rounded-xl transition {{ Request::routeIs('admin.data-master.*') ? 'font-bold text-brand-blue bg-brand-bluelight shadow-sm border border-indigo-50/50' : 'font-semibold text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}">
                                         Master Add On
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="{{ route('admin.ukuran.index') }}" class="block px-5 py-3.5 text-sm font-semibold text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded-xl transition">
+                                    <a href="{{ route('admin.ukuran.index') }}" class="block px-5 py-3.5 text-sm rounded-xl transition {{ Request::routeIs('admin.ukuran.*') ? 'font-bold text-brand-blue bg-brand-bluelight shadow-sm border border-indigo-50/50' : 'font-semibold text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}">
                                         Master Ukuran
                                     </a>
                                 </li>
