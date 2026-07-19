@@ -2,9 +2,12 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class ProductionStep extends Model
 {
-    //
+    use HasFactory;
+    protected $table = 'm_production_steps';
+    protected $guarded = [];
 }
