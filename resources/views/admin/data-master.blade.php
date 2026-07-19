@@ -40,8 +40,7 @@
                         <!-- Box 1: Tambah Data Baru -->
                         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
                             <h2 class="text-xl font-extrabold text-gray-900 mb-6">Tambah Data Baru</h2>
-                            
-                            <form action="{{ route('admin.addon.store') }}" method="POST" class="space-y-5">
+                            <form action="{{ route('admin.data-master.store') }}" method="POST" class="space-y-5">
                                 @csrf
                                 <div>
                                     <label class="block text-xs font-bold text-gray-700 mb-2">Nama Add On</label>
@@ -78,7 +77,7 @@
                                             <td class="py-4 px-8 font-bold text-gray-900">{{ $addon->name }}</td>
                                             <td class="py-4 px-8 text-right space-x-2 flex justify-end">
                                                 <button class="text-gray-400 hover:text-brand-blue transition w-8 h-8 rounded-md hover:bg-gray-100 inline-flex items-center justify-center"><i class="fa-regular fa-pen-to-square"></i></button>
-                                                <form action="{{ route('admin.addon.destroy', $addon->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Hapus data ini?');">
+                                                <form action="{{ route('admin.data-master.destroy', $addon->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Hapus data ini?');">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="text-gray-400 hover:text-red-500 transition w-8 h-8 rounded-md hover:bg-red-50 inline-flex items-center justify-center"><i class="fa-regular fa-trash-can"></i></button>

@@ -73,7 +73,7 @@
                                     <td class="py-4 px-6 text-right space-x-2 flex justify-end">
                                         <a href="#" title="Kelola Item" class="inline-flex items-center justify-center text-brand-blue hover:text-white hover:bg-brand-blue transition w-8 h-8 rounded-md bg-brand-bluelight"><i class="fa-solid fa-eye text-xs"></i></a>
                                         <button class="text-gray-400 hover:text-brand-yellow transition w-8 h-8 rounded-md hover:bg-yellow-50"><i class="fa-regular fa-pen-to-square"></i></button>
-                                        <form action="#" method="POST" class="inline-block" onsubmit="return confirm('Hapus kategori ini?');">
+                                        <form action="{{ route('admin.master-kategori.destroy', $category->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Hapus kategori ini?');">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="text-gray-400 hover:text-red-500 transition w-8 h-8 rounded-md hover:bg-red-50 inline-flex items-center justify-center"><i class="fa-regular fa-trash-can"></i></button>
