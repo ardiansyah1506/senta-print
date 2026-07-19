@@ -67,7 +67,7 @@
 
         <!-- Navigation -->
         <nav class="flex-1 px-4 space-y-1 overflow-y-auto">
-            <a href="kelolaproduksi.html" class="flex items-center gap-3 px-4 py-3 text-sm font-bold rounded-lg bg-brand-yellow text-gray-900 shadow-sm transition">
+            <a href="{{ route('operator.production.index') }}" class="flex items-center gap-3 px-4 py-3 text-sm rounded-lg transition {{ Request::routeIs('operator.production.*', 'operator.tracking*') ? 'font-bold bg-brand-yellow text-gray-900 shadow-sm' : 'font-medium hover:bg-sidebarhover hover:text-white' }}">
                 <i class="fa-solid fa-clipboard-list w-5 text-center"></i> Kelola Produksi
             </a>
         </nav>

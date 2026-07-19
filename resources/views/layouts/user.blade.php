@@ -59,13 +59,13 @@
 
         <!-- Navigation -->
         <nav class="flex-1 px-4 space-y-1 overflow-y-auto">
-            <a href="buat-pesanan.html" class="flex items-center gap-3 px-4 py-3 text-sm font-bold rounded-lg bg-brand-yellow text-gray-900 shadow-sm transition">
+            <a href="{{ route('user.order.create') }}" class="flex items-center gap-3 px-4 py-3 text-sm rounded-lg transition {{ Request::routeIs('user.order.create') ? 'font-bold bg-brand-yellow text-gray-900 shadow-sm' : 'font-medium hover:bg-sidebarhover hover:text-white' }}">
                 <i class="fa-solid fa-cart-arrow-down w-5 text-center"></i> Buat Pesanan
             </a>
-            <a href="lacak-pesanan.html" class="flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg hover:bg-sidebarhover hover:text-white transition">
+            <a href="{{ route('user.order.track') }}" class="flex items-center gap-3 px-4 py-3 text-sm rounded-lg transition {{ Request::routeIs('user.order.track') ? 'font-bold bg-brand-yellow text-gray-900 shadow-sm' : 'font-medium hover:bg-sidebarhover hover:text-white' }}">
                 <i class="fa-solid fa-clipboard-list w-5 text-center"></i> Lacak Pesanan
             </a>
-            <a href="riwayat-pesanan.html" class="flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg hover:bg-sidebarhover hover:text-white transition">
+            <a href="{{ route('user.order.history') }}" class="flex items-center gap-3 px-4 py-3 text-sm rounded-lg transition {{ Request::routeIs('user.order.history') ? 'font-bold bg-brand-yellow text-gray-900 shadow-sm' : 'font-medium hover:bg-sidebarhover hover:text-white' }}">
                 <i class="fa-solid fa-clock-rotate-left w-5 text-center"></i> Riwayat Pemesanan
             </a>
         </nav>

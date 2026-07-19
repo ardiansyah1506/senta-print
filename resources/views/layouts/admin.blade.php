@@ -59,19 +59,19 @@
 
         <!-- Navigation -->
         <nav class="flex-1 px-4 space-y-1 overflow-y-auto">
-            <a href="#" class="flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg hover:bg-sidebarhover hover:text-white transition">
+            <a href="#" class="flex items-center gap-3 px-4 py-3 text-sm rounded-lg transition {{ request()->is('admin/dashboard') ? 'font-bold bg-brand-yellow text-gray-900 shadow-sm' : 'font-medium hover:bg-sidebarhover hover:text-white' }}">
                 <i class="fa-solid fa-border-all w-5 text-center"></i> Dashboard
             </a>
-            <a href="{{ route('admin.order.index') }}" class="flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg hover:bg-sidebarhover hover:text-white transition">
+            <a href="{{ route('admin.order.index') }}" class="flex items-center gap-3 px-4 py-3 text-sm rounded-lg transition {{ Request::routeIs('admin.order.*') ? 'font-bold bg-brand-yellow text-gray-900 shadow-sm' : 'font-medium hover:bg-sidebarhover hover:text-white' }}">
                 <i class="fa-solid fa-clipboard-list w-5 text-center"></i> Kelola Pesanan
             </a>
-            <a href="{{ route('admin.report.index') }}" class="flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg hover:bg-sidebarhover hover:text-white transition">
+            <a href="{{ route('admin.report.index') }}" class="flex items-center gap-3 px-4 py-3 text-sm rounded-lg transition {{ Request::routeIs('admin.report.*') ? 'font-bold bg-brand-yellow text-gray-900 shadow-sm' : 'font-medium hover:bg-sidebarhover hover:text-white' }}">
                 <i class="fa-solid fa-file-lines w-5 text-center"></i> Laporan
             </a>
-            <a href="{{ route('admin.master-kategori.index') }}" class="flex items-center gap-3 px-4 py-3 text-sm font-bold rounded-lg hover:bg-brand-yellow hover:text-gray-900 shadow-sm transition">
+            <a href="{{ route('admin.master-kategori.index') }}" class="flex items-center gap-3 px-4 py-3 text-sm rounded-lg transition {{ Request::routeIs('admin.master-kategori.*', 'admin.data-master.*', 'admin.ukuran.*') ? 'font-bold bg-brand-yellow text-gray-900 shadow-sm' : 'font-medium hover:bg-sidebarhover hover:text-white' }}">
                 <i class="fa-solid fa-database w-5 text-center"></i> Data Master
             </a>
-            <a href="{{ route('admin.manajemen-user.index') }}" class="flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg hover:bg-sidebarhover hover:text-white transition">
+            <a href="{{ route('admin.manajemen-user.index') }}" class="flex items-center gap-3 px-4 py-3 text-sm rounded-lg transition {{ Request::routeIs('admin.manajemen-user.*') ? 'font-bold bg-brand-yellow text-gray-900 shadow-sm' : 'font-medium hover:bg-sidebarhover hover:text-white' }}">
                 <i class="fa-solid fa-users-gear w-5 text-center"></i> Manajemen User
             </a>
         </nav>
