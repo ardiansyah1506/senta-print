@@ -7,7 +7,7 @@
         <p class="text-gray-500 text-sm font-medium">Isi detail pesanan konveksi Anda</p>
     </div>
 
-    <form id="orderForm" action="{{ route('user.order.store') }}" method="POST" enctype="multipart/form-data">
+    <form id="orderForm" action="{{ route('user.order.store') }}" method="POST" enctype="multipart/form-data" onsubmit="return window.processCheckout(event)">
         @csrf
         <input type="hidden" name="cart" id="cartPayload" value="[]">
         <div id="hiddenFilesContainer" class="hidden"></div>
@@ -127,7 +127,7 @@
                         </div>
                     </div>
                     
-                    <button type="submit" class="w-full bg-brand-blue text-white rounded-xl py-4 font-bold hover:bg-indigo-700 transition shadow-[0_6px_16px_-6px_rgba(79,70,229,0.5)] flex items-center justify-center gap-2 mb-4" onclick="return window.cart.length > 0 ? true : (toastr.error('Keranjang masih kosong, tambahkan pesanan terlebih dahulu!'), false)">
+                    <button type="submit" class="w-full bg-brand-blue text-white rounded-xl py-4 font-bold hover:bg-indigo-700 transition shadow-[0_6px_16px_-6px_rgba(79,70,229,0.5)] flex items-center justify-center gap-2 mb-4">
                         Kirim Pesanan Sekarang <i class="fa-solid fa-paper-plane text-xs"></i>
                     </button>
                     
@@ -145,8 +145,68 @@
 <script>
     window.dbCategories = @json($categories);
     window.cart = [];
+    window.liveDraft = null;
 
     function formatRupiah(amount) { return 'Rp ' + amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."); }
+
+    // Bind real-time tracking
+    document.addEventListener('DOMContentLoaded', () => {
+        document.getElementById('entryBox').addEventListener('change', window.syncDraft);
+        document.getElementById('entryBox').addEventListener('input', window.syncDraft);
+        const designFileInput = document.getElementById('designFile');
+        if(designFileInput) designFileInput.addEventListener('change', window.syncDraft);
+    });
+
+    window.syncDraft = function() {
+        const catSelect = document.getElementById('categorySelect');
+        const prodSelect = document.getElementById('productSelect');
+        
+        if(!catSelect.value || !prodSelect.value) {
+            window.liveDraft = null;
+            window.renderCart();
+            return;
+        }
+
+        const selProdOpt = prodSelect.options[prodSelect.selectedIndex];
+        const basePrice = parseInt(selProdOpt.getAttribute('data-price') || 75000);
+        
+        let totalQty = 0;
+        document.querySelectorAll('.size-input').forEach(el => totalQty += parseInt(el.value || 0));
+
+        let addonsData = [];
+        document.querySelectorAll('.addon-checkbox:checked').forEach(el => {
+            let addonId = el.value;
+            let qty = document.getElementById('addon_qty_' + addonId).value || 1;
+            let szEl = document.getElementById('addon_size_' + addonId);
+            let szName = (szEl && szEl.value) ? szEl.options[szEl.selectedIndex].text : '';
+            addonsData.push({
+                name: el.getAttribute('data-name'),
+                qty: parseInt(qty),
+                size_name: szName,
+                price: parseInt(el.getAttribute('data-price') || 0)
+            });
+        });
+
+        let itemTotal = basePrice * totalQty;
+        addonsData.forEach(a => itemTotal += (a.price * a.qty));
+
+        const fileInput = document.getElementById('designFile');
+        const fileLabel = fileInput.files.length > 0 ? fileInput.files[0].name : '(Belum ada file desain)';
+        const fileUrl = fileInput.files.length > 0 ? URL.createObjectURL(fileInput.files[0]) : null;
+
+        window.liveDraft = {
+            product_name: selProdOpt.text + " (Draft)",
+            total_qty: totalQty,
+            addons: addonsData,
+            base_price: basePrice,
+            total_price: itemTotal,
+            design_file_name: fileLabel,
+            design_file_url: fileUrl,
+            is_draft: true
+        };
+
+        window.renderCart();
+    };
 
     window.updateProducts = function() {
         const catId = document.getElementById('categorySelect').value;
@@ -223,23 +283,33 @@
                 addonsGrid.innerHTML = '<div class="text-xs text-gray-400">Tidak ada addons untuk Kategori ini.</div>';
             }
         }
+        
+        // Provide an onchange fallback bindings for dynamically spawned sizes & checkboxes
+        document.querySelectorAll('.size-input, .addon-checkbox').forEach(i => i.addEventListener('change', window.syncDraft));
+        document.querySelectorAll('.size-input').forEach(i => i.addEventListener('input', window.syncDraft));
+        
+        window.syncDraft();
     };
 
-    window.addToCart = function() {
+    window.addToCart = function(silent = false) {
         const catSelect = document.getElementById('categorySelect');
         const prodSelect = document.getElementById('productSelect');
         
         if(!catSelect.value || !prodSelect.value) {
-            if(typeof toastr !== 'undefined') toastr.warning('Silakan pilih Kategori dan Produk terlebih dahulu.');
-            else alert('Silakan pilih Kategori dan Produk terlebih dahulu.');
-            return;
+            if(!silent) {
+                if(typeof toastr !== 'undefined') toastr.warning('Silakan pilih Kategori dan Produk terlebih dahulu.');
+                else alert('Silakan pilih Kategori dan Produk terlebih dahulu.');
+            }
+            return false;
         }
 
         const fileInput = document.getElementById('designFile');
         if(fileInput.files.length === 0) {
-            if(typeof toastr !== 'undefined') toastr.warning('Silakan upload file desain produk Anda terlebih dahulu (Wajib)!');
-            else alert('Silakan upload file desain terlebih dahulu (Wajib)!');
-            return;
+            if(!silent) {
+                if(typeof toastr !== 'undefined') toastr.warning('Silakan upload file desain produk Anda terlebih dahulu (Wajib)!');
+                else alert('Silakan upload file desain terlebih dahulu (Wajib)!');
+            }
+            return false;
         }
 
         const selProdOpt = prodSelect.options[prodSelect.selectedIndex];
@@ -257,9 +327,11 @@
         });
 
         if(totalQty === 0) {
-            if(typeof toastr !== 'undefined') toastr.warning('Tentukan setidaknya 1 kuantitas ukuran (contoh: 1 S, 1 M) sebelum Tambah Pesanan!');
-            else alert('Tentukan setidaknya 1 kuantitas ukuran (contoh: 1 S, 1 M) sebelum Tambah Pesanan!');
-            return;
+            if(!silent) {
+                if(typeof toastr !== 'undefined') toastr.warning('Tentukan setidaknya 1 kuantitas ukuran sebelum Tambah Pesanan!');
+                else alert('Tentukan setidaknya 1 kuantitas ukuran sebelum Tambah Pesanan!');
+            }
+            return false;
         }
 
         const addonsData = [];
@@ -322,9 +394,13 @@
         });
 
         prodSelect.value = "";
+        window.liveDraft = null;
         window.renderCart();
-        if(typeof toastr !== 'undefined') toastr.success('Item berhasil ditambahkan ke Keranjang');
-        else alert('Item berhasil ditambahkan ke Keranjang');
+        if(!silent) {
+            if(typeof toastr !== 'undefined') toastr.success('Item berhasil ditambahkan ke Keranjang');
+            else alert('Item berhasil ditambahkan ke Keranjang');
+        }
+        return true;
     };
 
     window.removeFromCart = function(id) {
@@ -342,7 +418,10 @@
         const cont = document.getElementById('cartItemsContainer');
         document.getElementById('cartPayload').value = JSON.stringify(window.cart);
         
-        if(window.cart.length === 0) {
+        const itemsToRender = [...window.cart];
+        if (window.liveDraft) itemsToRender.push(window.liveDraft);
+
+        if(itemsToRender.length === 0) {
             cont.innerHTML = '<div class="text-sm text-gray-400 font-medium text-center py-6 border-2 border-dashed border-gray-100 rounded-xl">Keranjang Kosong</div>';
             document.getElementById('grandTotalPrice').innerText = "Rp 0";
             document.getElementById('grandTotalQty').innerText = "0 pcs";
@@ -353,7 +432,7 @@
         let bigTotal = 0;
         let bigQty = 0;
 
-        window.cart.forEach(item => {
+        itemsToRender.forEach(item => {
             bigTotal += item.total_price;
             bigQty += item.total_qty;
             
@@ -361,24 +440,31 @@
                 ? item.addons.map(a => `${a.name} (${a.qty}pcs${a.size_name ? ' uk:'+a.size_name : ''})`).join(', ') 
                 : 'Tidak ada add-ons';
 
+            let draftClass = item.is_draft ? "border-2 border-brand-blue border-dashed bg-blue-50/30" : "border border-gray-100 bg-gray-50/50";
+            
             html += `
-                <div class="p-4 border border-gray-100 rounded-xl bg-gray-50/50 relative">
-                    <div class="flex justify-between items-start mb-2">
+                <div class="p-4 rounded-xl relative overflow-hidden ${draftClass}">
+                    ${item.is_draft ? '<div class="absolute top-0 right-0 bg-brand-blue text-white text-[8px] px-2 py-0.5 rounded-bl tracking-widest font-bold uppercase shadow-sm">DRAFT PENGISIAN LIVE</div>' : ''}
+                    <div class="flex justify-between items-start mb-2 ${item.is_draft ? 'mt-1' : ''}">
                         <div class="max-w-[70%]">
                             <h4 class="font-extrabold text-sm text-gray-900 truncate">${item.product_name}</h4>
                             <p class="text-[10px] text-gray-500 uppercase font-bold mt-0.5">${item.total_qty} PCS &bull; ${item.addons.length} ADD-ONS</p>
                             <p class="text-[9px] text-gray-400 mt-1 truncate" title="${addonsDesc}">${addonsDesc}</p>
-                            <a href="${item.design_file_url}" target="_blank" class="text-[10px] text-brand-blue mt-1.5 font-bold truncate hover:underline inline-block" title="Lihat Foto / Desain">
+                            ${item.design_file_url ? 
+                            `<a href="${item.design_file_url}" target="_blank" class="text-[10px] text-brand-blue mt-1.5 font-bold truncate hover:underline inline-block" title="Lihat Foto / Desain">
                                 <i class="fa-solid fa-file-image mr-1"></i> ${item.design_file_name}
-                            </a>
+                            </a>` : 
+                            `<p class="text-[10px] text-red-500 mt-1.5 font-bold truncate"><i class="fa-solid fa-triangle-exclamation mr-1"></i> ${item.design_file_name}</p>`
+                            }
                         </div>
+                        ${!item.is_draft ? `
                         <button type="button" class="text-red-400 hover:text-red-600 transition" onclick="window.removeFromCart('${item.id}')">
                             <i class="fa-solid fa-trash-can text-sm"></i>
-                        </button>
+                        </button>` : ''}
                     </div>
-                    <div class="flex justify-between items-center mt-3 pt-3 border-t border-gray-200">
-                        <span class="text-xs text-gray-400 font-medium">${formatRupiah(item.base_price)} /pcs</span>
-                        <span class="font-bold text-gray-800 text-sm">${formatRupiah(item.total_price)}</span>
+                    <div class="flex justify-between items-center mt-3 pt-3 border-t ${item.is_draft ? 'border-brand-blue/20' : 'border-gray-200'}">
+                        <span class="text-xs text-gray-500 font-medium">${formatRupiah(item.base_price)} /pcs</span>
+                        <span class="font-bold text-brand-blue text-sm">${formatRupiah(item.total_price)}</span>
                     </div>
                 </div>
             `;
@@ -387,6 +473,26 @@
         cont.innerHTML = html;
         document.getElementById('grandTotalPrice').innerText = formatRupiah(bigTotal);
         document.getElementById('grandTotalQty').innerText = bigQty + " pcs";
+    };
+
+    window.processCheckout = function(e) {
+        e.preventDefault();
+
+        const catSelect = document.getElementById('categorySelect');
+        const prodSelect = document.getElementById('productSelect');
+        
+        // Auto-commit live draft to cart
+        if(catSelect.value && prodSelect.value) {
+            let res = window.addToCart(true); // silent auto-commit
+            if(!res) return false;
+        }
+
+        if(window.cart.length === 0) {
+            if(typeof toastr !== 'undefined') toastr.error('Keranjang masih kosong, lengkapi list pesanan minimal 1!');
+            return false;
+        }
+
+        document.getElementById('orderForm').submit();
     };
 </script>
 @endsection
