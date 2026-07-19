@@ -60,79 +60,37 @@
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-100 text-sm font-medium text-gray-700">
+                                @forelse($categories as $category)
                                 <tr class="hover:bg-gray-50/50 transition">
                                     <td class="py-4 px-6 font-bold text-gray-900 flex items-center gap-3">
-                                        <div class="w-8 h-8 rounded-full bg-brand-bluelight text-brand-blue flex items-center justify-center text-xs"><i class="fa-solid fa-shirt"></i></div>
-                                        Polo Collection
+                                        <div class="w-8 h-8 rounded-full bg-brand-bluelight text-brand-blue flex items-center justify-center text-xs"><i class="fa-solid fa-layer-group"></i></div>
+                                        {{ $category->name }}
                                     </td>
-                                    <td class="py-4 px-6 text-gray-500">Berisi produk polo shirt premium.</td>
+                                    <td class="py-4 px-6 text-gray-500">{{ $category->description ?? '-' }}</td>
                                     <td class="py-4 px-6 text-center">
-                                        <span class="bg-gray-100 text-gray-600 px-2 py-1 rounded-md text-xs font-bold">12 Varian</span>
+                                        <span class="bg-gray-100 text-gray-600 px-2 py-1 rounded-md text-xs font-bold">{{ $category->sizes()->count() }} Varian</span>
                                     </td>
-                                    <td class="py-4 px-6 text-right space-x-2">
-                                        <!-- Ini tombol untuk menuju ke halaman detail sebelumnya (data-master.html) -->
-                                        <a href="data-master.html" title="Kelola Item" class="inline-flex items-center justify-center text-brand-blue hover:text-white hover:bg-brand-blue transition w-8 h-8 rounded-md bg-brand-bluelight"><i class="fa-solid fa-eye text-xs"></i></a>
+                                    <td class="py-4 px-6 text-right space-x-2 flex justify-end">
+                                        <a href="#" title="Kelola Item" class="inline-flex items-center justify-center text-brand-blue hover:text-white hover:bg-brand-blue transition w-8 h-8 rounded-md bg-brand-bluelight"><i class="fa-solid fa-eye text-xs"></i></a>
                                         <button class="text-gray-400 hover:text-brand-yellow transition w-8 h-8 rounded-md hover:bg-yellow-50"><i class="fa-regular fa-pen-to-square"></i></button>
-                                        <button class="text-gray-400 hover:text-red-500 transition w-8 h-8 rounded-md hover:bg-red-50"><i class="fa-regular fa-trash-can"></i></button>
+                                        <form action="#" method="POST" class="inline-block" onsubmit="return confirm('Hapus kategori ini?');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="text-gray-400 hover:text-red-500 transition w-8 h-8 rounded-md hover:bg-red-50 inline-flex items-center justify-center"><i class="fa-regular fa-trash-can"></i></button>
+                                        </form>
                                     </td>
                                 </tr>
-                                <tr class="hover:bg-gray-50/50 transition">
-                                    <td class="py-4 px-6 font-bold text-gray-900 flex items-center gap-3">
-                                        <div class="w-8 h-8 rounded-full bg-indigo-50 text-indigo-500 flex items-center justify-center text-xs"><i class="fa-solid fa-vest"></i></div>
-                                        Kaos Oblong (Sablon)
-                                    </td>
-                                    <td class="py-4 px-6 text-gray-500">Produksi kaos T-Shirt / oblong custom.</td>
-                                    <td class="py-4 px-6 text-center">
-                                        <span class="bg-gray-100 text-gray-600 px-2 py-1 rounded-md text-xs font-bold">8 Varian</span>
-                                    </td>
-                                    <td class="py-4 px-6 text-right space-x-2">
-                                        <a href="#" class="inline-flex items-center justify-center text-brand-blue hover:text-white hover:bg-brand-blue transition w-8 h-8 rounded-md bg-brand-bluelight"><i class="fa-solid fa-eye text-xs"></i></a>
-                                        <button class="text-gray-400 hover:text-brand-yellow transition w-8 h-8 rounded-md hover:bg-yellow-50"><i class="fa-regular fa-pen-to-square"></i></button>
-                                        <button class="text-gray-400 hover:text-red-500 transition w-8 h-8 rounded-md hover:bg-red-50"><i class="fa-regular fa-trash-can"></i></button>
-                                    </td>
+                                @empty
+                                <tr>
+                                    <td colspan="4" class="py-8 text-center text-gray-500 font-semibold">Belum ada Kategori.</td>
                                 </tr>
-                                <tr class="hover:bg-gray-50/50 transition">
-                                    <td class="py-4 px-6 font-bold text-gray-900 flex items-center gap-3">
-                                        <div class="w-8 h-8 rounded-full bg-purple-50 text-purple-500 flex items-center justify-center text-xs"><i class="fa-solid fa-cloud-sun"></i></div>
-                                        Jaket & Hoodie
-                                    </td>
-                                    <td class="py-4 px-6 text-gray-500">Kumpulan variasi jaket, hoodie & sweater.</td>
-                                    <td class="py-4 px-6 text-center">
-                                        <span class="bg-gray-100 text-gray-600 px-2 py-1 rounded-md text-xs font-bold">15 Varian</span>
-                                    </td>
-                                    <td class="py-4 px-6 text-right space-x-2">
-                                        <a href="#" class="inline-flex items-center justify-center text-brand-blue hover:text-white hover:bg-brand-blue transition w-8 h-8 rounded-md bg-brand-bluelight"><i class="fa-solid fa-eye text-xs"></i></a>
-                                        <button class="text-gray-400 hover:text-brand-yellow transition w-8 h-8 rounded-md hover:bg-yellow-50"><i class="fa-regular fa-pen-to-square"></i></button>
-                                        <button class="text-gray-400 hover:text-red-500 transition w-8 h-8 rounded-md hover:bg-red-50"><i class="fa-regular fa-trash-can"></i></button>
-                                    </td>
-                                </tr>
-                                <tr class="hover:bg-gray-50/50 transition">
-                                    <td class="py-4 px-6 font-bold text-gray-900 flex items-center gap-3">
-                                        <div class="w-8 h-8 rounded-full bg-orange-50 text-orange-500 flex items-center justify-center text-xs"><i class="fa-solid fa-user-tie"></i></div>
-                                        Seragam & Kemeja
-                                    </td>
-                                    <td class="py-4 px-6 text-gray-500">Seragam PDH, Kemeja kantoran.</td>
-                                    <td class="py-4 px-6 text-center">
-                                        <span class="bg-gray-100 text-gray-600 px-2 py-1 rounded-md text-xs font-bold">5 Varian</span>
-                                    </td>
-                                    <td class="py-4 px-6 text-right space-x-2">
-                                        <a href="#" class="inline-flex items-center justify-center text-brand-blue hover:text-white hover:bg-brand-blue transition w-8 h-8 rounded-md bg-brand-bluelight"><i class="fa-solid fa-eye text-xs"></i></a>
-                                        <button class="text-gray-400 hover:text-brand-yellow transition w-8 h-8 rounded-md hover:bg-yellow-50"><i class="fa-regular fa-pen-to-square"></i></button>
-                                        <button class="text-gray-400 hover:text-red-500 transition w-8 h-8 rounded-md hover:bg-red-50"><i class="fa-regular fa-trash-can"></i></button>
-                                    </td>
-                                </tr>
+                                @endforelse
                             </tbody>
                         </table>
                     </div>
                     <!-- Pagination -->
-                    <div class="px-6 py-4 border-t border-gray-100 flex items-center justify-between">
-                        <div class="text-xs font-semibold text-gray-500">Menampilkan 4 dari 8 kategori</div>
-                        <div class="flex items-center gap-1 text-sm font-semibold">
-                            <button class="w-8 h-8 flex items-center justify-center text-gray-400 hover:bg-gray-100 rounded-md transition"><i class="fa-solid fa-chevron-left text-xs"></i></button>
-                            <button class="w-8 h-8 flex items-center justify-center bg-brand-blue text-white rounded-md">1</button>
-                            <button class="w-8 h-8 flex items-center justify-center text-gray-500 hover:bg-gray-100 rounded-md transition">2</button>
-                            <button class="w-8 h-8 flex items-center justify-center text-gray-400 hover:bg-gray-100 rounded-md transition"><i class="fa-solid fa-chevron-right text-xs"></i></button>
-                        </div>
+                    <div class="px-6 py-4 border-t border-gray-100 flex items-center justify-center">
+                        {{ $categories->links() }}
                     </div>
                 </div>
 @endsection
