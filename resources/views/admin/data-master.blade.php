@@ -1,0 +1,127 @@
+@extends('layouts.admin')
+@section('content')
+<div class="max-w-6xl mx-auto">
+                
+                <!-- Page Header -->
+                <div class="mb-8">
+                    <h1 class="text-3xl font-extrabold text-gray-900 mb-1">Data Master</h1>
+                    <p class="text-gray-500 text-sm font-medium">Kelola konfigurasi Kategori, Add on, dan Ukuran beserta harganya</p>
+                </div>
+
+                <!-- Main Grid Layout -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                    
+                    <!-- Left Sidebar (Tabs) -->
+                    <div class="lg:col-span-4">
+                        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4">
+                            <ul class="space-y-1">
+                                <li>
+                                    <a href="#" class="block px-5 py-3.5 text-sm font-semibold text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded-xl transition">
+                                        Master Kategori
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="block px-5 py-3.5 text-sm font-bold text-brand-blue bg-brand-bluelight rounded-xl transition shadow-sm border border-indigo-50/50">
+                                        Master Add On
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="block px-5 py-3.5 text-sm font-semibold text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded-xl transition">
+                                        Master Ukuran
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Right Content Area -->
+                    <div class="lg:col-span-8 flex flex-col gap-8">
+                        
+                        <!-- Box 1: Tambah Data Baru -->
+                        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+                            <h2 class="text-xl font-extrabold text-gray-900 mb-6">Tambah Data Baru</h2>
+                            
+                            <form action="#" class="space-y-5">
+                                <div>
+                                    <label class="block text-xs font-bold text-gray-700 mb-2">Nama Add On</label>
+                                    <input type="text" placeholder="Masukkan Add On..." class="w-full border border-gray-200 rounded-xl px-4 py-3.5 text-sm outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition bg-gray-50/50 text-gray-800">
+                                </div>
+                                <div class="flex justify-end pt-2">
+                                    <button type="button" class="bg-brand-blue text-white px-6 py-2.5 rounded-xl text-sm font-bold hover:bg-indigo-700 transition flex items-center justify-center gap-2 shadow-[0_4px_12px_-4px_rgba(79,70,229,0.5)]">
+                                        <i class="fa-solid fa-plus text-xs"></i> Tambah Data
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- Box 2: Daftar Add On -->
+                        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden text-sm flex flex-col">
+                            <div class="p-8 border-b border-gray-100 flex justify-between items-center bg-white">
+                                <h2 class="text-xl font-extrabold text-gray-900">Daftar Add On</h2>
+                                <a href="#" class="text-brand-blue font-bold text-sm hover:text-indigo-800 transition flex items-center gap-2">
+                                    Lihat Semua <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                                </a>
+                            </div>
+                            
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left border-collapse">
+                                    <thead>
+                                        <tr class="bg-white border-b border-gray-100">
+                                            <th class="py-5 px-8 text-[11px] font-extrabold text-gray-400 uppercase tracking-widest w-full">Nama</th>
+                                            <th class="py-5 px-8 text-[11px] font-extrabold text-gray-400 uppercase tracking-widest text-right whitespace-nowrap w-32">Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-gray-100 font-semibold text-gray-800 bg-white">
+                                        <tr class="hover:bg-gray-50/50 transition">
+                                            <td class="py-4 px-8 font-bold text-gray-900">Cotton Combed 30s</td>
+                                            <td class="py-4 px-8 text-right space-x-2">
+                                                <button class="text-gray-400 hover:text-brand-blue transition w-8 h-8 rounded-md hover:bg-gray-100 inline-flex items-center justify-center"><i class="fa-regular fa-pen-to-square"></i></button>
+                                                <button class="text-gray-400 hover:text-red-500 transition w-8 h-8 rounded-md hover:bg-red-50 inline-flex items-center justify-center"><i class="fa-regular fa-trash-can"></i></button>
+                                            </td>
+                                        </tr>
+                                        <tr class="hover:bg-gray-50/50 transition">
+                                            <td class="py-4 px-8 font-bold text-gray-900">Cotton Combed 24s</td>
+                                            <td class="py-4 px-8 text-right space-x-2">
+                                                <button class="text-gray-400 hover:text-brand-blue transition w-8 h-8 rounded-md hover:bg-gray-100 inline-flex items-center justify-center"><i class="fa-regular fa-pen-to-square"></i></button>
+                                                <button class="text-gray-400 hover:text-red-500 transition w-8 h-8 rounded-md hover:bg-red-50 inline-flex items-center justify-center"><i class="fa-regular fa-trash-can"></i></button>
+                                            </td>
+                                        </tr>
+                                        <tr class="hover:bg-gray-50/50 transition">
+                                            <td class="py-4 px-8 font-bold text-gray-900">Cotton Combed 20s</td>
+                                            <td class="py-4 px-8 text-right space-x-2">
+                                                <button class="text-gray-400 hover:text-brand-blue transition w-8 h-8 rounded-md hover:bg-gray-100 inline-flex items-center justify-center"><i class="fa-regular fa-pen-to-square"></i></button>
+                                                <button class="text-gray-400 hover:text-red-500 transition w-8 h-8 rounded-md hover:bg-red-50 inline-flex items-center justify-center"><i class="fa-regular fa-trash-can"></i></button>
+                                            </td>
+                                        </tr>
+                                        <tr class="hover:bg-gray-50/50 transition">
+                                            <td class="py-4 px-8 font-bold text-gray-900">PQ 20s</td>
+                                            <td class="py-4 px-8 text-right space-x-2">
+                                                <button class="text-gray-400 hover:text-brand-blue transition w-8 h-8 rounded-md hover:bg-gray-100 inline-flex items-center justify-center"><i class="fa-regular fa-pen-to-square"></i></button>
+                                                <button class="text-gray-400 hover:text-red-500 transition w-8 h-8 rounded-md hover:bg-red-50 inline-flex items-center justify-center"><i class="fa-regular fa-trash-can"></i></button>
+                                            </td>
+                                        </tr>
+                                        <tr class="hover:bg-gray-50/50 transition">
+                                            <td class="py-4 px-8 font-bold text-gray-900">CVC Poly</td>
+                                            <td class="py-4 px-8 text-right space-x-2">
+                                                <button class="text-gray-400 hover:text-brand-blue transition w-8 h-8 rounded-md hover:bg-gray-100 inline-flex items-center justify-center"><i class="fa-regular fa-pen-to-square"></i></button>
+                                                <button class="text-gray-400 hover:text-red-500 transition w-8 h-8 rounded-md hover:bg-red-50 inline-flex items-center justify-center"><i class="fa-regular fa-trash-can"></i></button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <!-- Pagination -->
+                            <div class="px-8 py-5 border-t border-gray-100 flex items-center justify-between text-xs font-bold">
+                                <div class="text-gray-400">Menampilkan <span class="text-gray-700">5</span> dari <span class="text-gray-700">98</span> add on</div>
+                                <div class="flex items-center gap-2">
+                                    <button class="w-7 h-7 flex items-center justify-center border border-gray-200 text-gray-400 hover:bg-gray-50 rounded bg-white transition"><i class="fa-solid fa-chevron-left text-[10px]"></i></button>
+                                    <span class="text-gray-500 px-2">Hal : 1 dari 9 Hal</span>
+                                    <button class="w-7 h-7 flex items-center justify-center border border-gray-200 text-gray-400 hover:bg-gray-50 rounded bg-white transition"><i class="fa-solid fa-chevron-right text-[10px]"></i></button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+@endsection
