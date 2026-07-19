@@ -49,8 +49,8 @@
                     <span class="font-extrabold text-xl tracking-tight text-brand-900 uppercase">Senta Print</span>
                 </div>
                 <div class="flex items-center gap-4">
-                    <a href="#" class="text-sm font-semibold text-gray-600 hover:text-brand-600 transition">Masuk</a>
-                    <a href="#" class="text-sm font-semibold text-brand-900 border border-gray-200 px-5 py-2.5 rounded-full hover:border-gray-300 hover:bg-gray-50 transition">Daftar</a>
+                    <a href="{{ route('login') }}" class="text-sm font-semibold text-gray-600 hover:text-brand-600 transition">Masuk</a>
+                    <a href="{{ route('register') }}" class="text-sm font-semibold text-brand-900 border border-gray-200 px-5 py-2.5 rounded-full hover:border-gray-300 hover:bg-gray-50 transition">Daftar</a>
                 </div>
             </div>
         </div>
@@ -67,7 +67,7 @@
                 Platform manajemen konveksi modern. Pesan kaos, seragam, jaket, dan produk custom lainnya dengan tracking real-time dan jaminan kualitas.
             </p>
             <div class="flex flex-col sm:flex-row justify-center items-center gap-4 mb-20">
-                <a href="#" class="w-full sm:w-auto px-8 py-3.5 bg-brand-900 text-white rounded-full font-semibold hover:bg-brand-950 transition flex items-center justify-center gap-2 shadow-lg shadow-gray-200">
+                <a href="{{ route('public.order') }}" class="w-full sm:w-auto px-8 py-3.5 bg-brand-900 text-white rounded-full font-semibold hover:bg-brand-950 transition flex items-center justify-center gap-2 shadow-lg shadow-gray-200">
                     Pesan Sekarang <i class="fa-solid fa-arrow-right text-sm"></i>
                 </a>
                 <a href="#" class="w-full sm:w-auto px-8 py-3.5 bg-white text-gray-700 border border-gray-300 rounded-full font-semibold hover:bg-gray-50 transition flex items-center justify-center">
@@ -298,7 +298,7 @@
                 Bergabung dengan ratusan pelanggan puas. Mulai pesanan pertama Anda hari ini.
             </p>
             <div class="flex flex-col sm:flex-row justify-center items-center gap-4">
-                <a href="#" class="w-full sm:w-auto px-8 py-3.5 bg-brand-600 text-white rounded-full font-semibold hover:bg-brand-500 transition shadow-lg shadow-brand-900/50 flex items-center justify-center gap-2">
+                <a href="{{ route('public.order') }}" class="w-full sm:w-auto px-8 py-3.5 bg-brand-600 text-white rounded-full font-semibold hover:bg-brand-500 transition shadow-lg shadow-brand-900/50 flex items-center justify-center gap-2">
                     <i class="fa-brands fa-whatsapp"></i> Pesan Sekarang
                 </a>
                 <a href="#" class="w-full sm:w-auto px-8 py-3.5 bg-transparent text-white border-2 border-gray-600 rounded-full font-semibold hover:border-gray-400 hover:bg-gray-800 transition flex items-center justify-center">
@@ -374,5 +374,13 @@
             </div>
         </div>
     </footer>
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <script>
+        toastr.options = { "positionClass": "toast-top-right", "timeOut": "3000" };
+        @if(session('success')) toastr.success("{{ session('success') }}"); @endif
+        @if(session('error')) toastr.error("{{ session('error') }}"); @endif
+    </script>
 </body>
 </html>

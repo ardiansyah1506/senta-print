@@ -1,22 +1,69 @@
-@extends('layouts.user')
-@section('content')
-<div class="max-w-7xl mx-auto">
-    <!-- Page Header -->
-    <div class="mb-6">
-        <h1 class="text-3xl font-extrabold text-gray-900 mb-1">Buat Pesanan Baru</h1>
-        <p class="text-gray-500 text-sm font-medium">Isi detail pesanan konveksi Anda</p>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Senta Print - Buat Pesanan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <script>
+        tailwind.config = { theme: { extend: { fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'], }, colors: { brand: { blue: '#4f46e5', light: '#eef2ff' } } } } }
+    </script>
+</head>
+<body class="bg-gray-50 text-gray-800 antialiased font-sans">
+    
+    <nav class="bg-white sticky top-0 z-50 border-b border-gray-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <a href="{{ route('home') }}" class="flex items-center gap-2 hover:opacity-80 transition cursor-pointer">
+                    <svg class="w-8 h-8 text-brand-blue" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2L2 22h20L12 2zm0 4.5l6.5 13h-13L12 6.5z"/>
+                        <path d="M12 10.5l-3 6h6l-3-6z" fill="currentColor"/>
+                    </svg>
+                    <span class="font-extrabold text-xl tracking-tight text-gray-900 uppercase">Senta Print</span>
+                </a>
+                <div class="flex items-center gap-4">
+                    <a href="{{ route('login') }}" class="text-sm font-semibold text-gray-600 hover:text-brand-blue transition">Masuk Operator</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="max-w-6xl mx-auto pb-10 px-4 sm:px-6 mt-8">
+    <div class="mb-8">
+        <h1 class="text-2xl font-extrabold text-gray-900 mb-1">Buat Pesanan Custom <span class="bg-brand-blue text-white text-xs px-3 py-1 rounded-full font-bold ml-2">Jalur Public</span></h1>
+        <p class="text-gray-500 text-sm font-medium">Bebas antrian, kustomisasi sebebas mungkin. Langsung terhubung dengan Tim Produksi.</p>
     </div>
 
-    <form id="orderForm" action="{{ route('user.order.store') }}" method="POST" enctype="multipart/form-data" onsubmit="return window.processCheckout(event)">
+    <form id="orderForm" action="{{ route('public.order.store') }}" method="POST" enctype="multipart/form-data" onsubmit="return window.processCheckout(event)">
         @csrf
         <input type="hidden" name="cart" id="cartPayload" value="[]">
         <div id="hiddenFilesContainer" class="hidden"></div>
         
         <div class="flex flex-col lg:flex-row gap-8 items-start">
             
-            <!-- Left Form Area -->
-            <div class="w-full lg:flex-1 space-y-6">
+            <!-- Form Input Sections -->
+            <div class="w-full lg:w-[65%] flex flex-col gap-8">
                 
+                <!-- Box -1: Guest Identitas -->
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+                    <div class="flex items-center gap-3 mb-6 border-b border-gray-100 pb-4">
+                        <h2 class="text-lg font-extrabold text-gray-900">Identitas Pemesan</h2>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-xs font-bold text-gray-700 mb-2">Nama Lengkap</label>
+                            <input type="text" name="nama_pemesan" required placeholder="Budi Santoso" class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm font-semibold outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition bg-gray-50 focus:bg-white text-gray-800">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-700 mb-2">No. WhatsApp <span class="text-red-500">*</span></label>
+                            <input type="text" name="no_whatsapp" required placeholder="081234567890" class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm font-semibold outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition bg-gray-50 focus:bg-white text-gray-800">
+                            <p class="text-[10px] text-gray-400 mt-2 font-medium">Invoice akan dikaitkan dan dikirim ke No. HP ini</p>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Box 1: Product & Size Details -->
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 pt-7" id="entryBox">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
@@ -59,8 +106,6 @@
                     
                 </div>
                 
-                <!-- Divider was here, moved below Box 2 -->
-                
                 <!-- Box 2: Upload Design -->
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
                     <h2 class="text-lg font-extrabold text-gray-900 mb-4">Upload Design File <span class="text-red-500 font-bold ml-1 text-sm">*wajib per list pesanan</span></h2>
@@ -71,11 +116,10 @@
                         <h4 id="fileLabelText" class="font-extrabold text-gray-800 mb-1.5 text-[15px]">Pilih File Desain (klik di sini)</h4>
                         <p class="text-xs text-gray-400 font-bold tracking-wide">PNG, JPG, PDF &mdash; MAX 10MB</p>
                     </div>
-                    <!-- Virtual File input -> Gets cloned and pushed into hiddenFilesContainer on Added format -->
                     <input type="file" id="designFile" class="hidden" accept=".png,.jpg,.jpeg,.pdf" onchange="document.getElementById('fileLabelText').innerText = this.files[0] ? this.files[0].name : 'Pilih File Desain (klik di sini)'">
                 </div>
 
-                <!-- Divider Line (Moved Below Upload Design) -->
+                <!-- Divider Line -->
                 <div class="relative py-2">
                     <div class="absolute inset-0 flex items-center">
                         <div class="w-full border-t border-dashed border-gray-300"></div>
@@ -93,8 +137,6 @@
                     
                     <div class="space-y-6">
                         <div class="md:col-span-2">
-                            <label class="block text-xs font-bold text-gray-700 mb-3">Distribusi Ukuran (Pcs)</label>
-                            
                             <!-- Inline Size Chart Box -->
                             <div id="inlineSizeChartBox" class="hidden w-full mb-5 rounded-2xl border border-indigo-100 overflow-hidden shadow-sm">
                                 <div class="bg-indigo-50/50 px-4 py-2.5 border-b border-indigo-100 flex items-center gap-2">
@@ -105,10 +147,7 @@
                                     <img id="inlineSizeChartImg" src="" class="max-w-full h-auto max-h-[300px] object-contain rounded-xl">
                                 </div>
                             </div>
-
-                            <div class="flex items-center justify-between mb-2">
-                                <label class="block text-xs font-bold text-gray-700">Estimasi Deadline</label>
-                            </div>
+                            <label class="block text-xs font-bold text-gray-700 mb-2">Estimasi Deadline</label>
                             <input type="date" name="deadline" class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm font-semibold text-gray-700 outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition bg-white">
                         </div>
                         <div>
@@ -153,7 +192,6 @@
     </form>
 </div>
 
-<!-- Reactive Script -->
 <script>
     window.dbCategories = @json($categories);
     window.cart = [];
@@ -515,4 +553,12 @@
         document.getElementById('orderForm').submit();
     };
 </script>
-@endsection
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script>
+        toastr.options = { "positionClass": "toast-top-right", "timeOut": "3000" };
+        @if(session('success')) toastr.success("{{ session('success') }}"); @endif
+        @if(session('error')) toastr.error("{{ session('error') }}"); @endif
+    </script>
+</body>
+</html>

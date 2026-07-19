@@ -13,6 +13,8 @@ use App\Http\Controllers\AuthController;
 
 // Public Pages
 Route::get('/', [PublicPageController::class, 'index'])->name('home');
+Route::get('/pesan-sekarang', [PublicPageController::class, 'buatPesanan'])->name('public.order');
+Route::post('/pesan-sekarang', [PublicPageController::class, 'storeOrder'])->name('public.order.store');
 
 // Auth Routes
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
