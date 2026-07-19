@@ -126,27 +126,46 @@
                             </div>
 
                             <!-- Dropzone -->
-                            <form action="{{ route('admin.master-kategori.uploadSizeChart', $category->id) }}" method="POST" enctype="multipart/form-data" class="mt-8 border-t border-gray-100 pt-6">
-                                @csrf
+                            <div class="mt-8 border-t border-gray-100 pt-6">
                                 <label class="block text-xs font-bold text-gray-700 mb-2">Size Chart Kategori <span class="text-gray-400 font-medium">(Opsional)</span></label>
                                 
-                                @if($category->size_chart)
-                                <div class="mb-4">
-                                    <img src="{{ Storage::url($category->size_chart) }}" class="rounded-xl border border-gray-200 max-h-48 object-cover mb-2 shadow-sm" alt="Size Chart">
-                                </div>
-                                @endif
+                                @error('size_chart')
+                                    <div class="text-red-500 text-xs font-bold mb-2">{{ $message }}</div>
+                                @enderror
 
-                                <div class="flex items-center gap-3 w-full border-2 border-dashed border-gray-200 rounded-xl p-4 bg-gray-50/50 hover:bg-gray-50 transition relative overflow-hidden group">
-                                    <input type="file" name="size_chart" onchange="this.form.submit()" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer text-[0]">
-                                    <div class="w-10 h-10 rounded-full bg-white shadow-sm border border-gray-100 flex items-center justify-center text-gray-400 group-hover:text-brand-blue transition">
-                                        <i class="fa-solid fa-arrow-up-from-bracket"></i>
+                                @if($category->size_chart)
+                                    <!-- Jika Foto Ada -->
+                                    <div class="relative group rounded-xl border border-gray-200 overflow-hidden shadow-sm inline-block max-w-[300px]">
+                                        <img src="{{ asset('storage/' . $category->size_chart) }}" class="max-w-full h-auto object-cover" alt="Size Chart">
+                                        
+                                        <!-- Overlay Hapus -->
+                                        <div class="absolute inset-0 bg-gray-900/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                            <form action="{{ route('admin.master-kategori.removeSizeChart', $category->id) }}" method="POST">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-xs font-bold transition flex items-center gap-2" onsubmit="return confirm('Hapus size chart ini?');">
+                                                    <i class="fa-solid fa-trash-can"></i> Hapus Foto
+                                                </button>
+                                            </form>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <h4 class="font-bold text-gray-800 text-sm">Unggah Size Chart Baru (JPG, PNG)</h4>
-                                        <p class="text-[10px] text-gray-500 font-medium pb-0.5">Tarik dan lepas file disini atau klik untuk memilih. File maksimal 2MB.</p>
-                                    </div>
-                                </div>
-                            </form>
+                                @else
+                                    <!-- Jika Belum Ada Foto (Upload Form) -->
+                                    <form action="{{ route('admin.master-kategori.uploadSizeChart', $category->id) }}" method="POST" enctype="multipart/form-data">
+                                        @csrf
+                                        <div class="flex items-center gap-3 w-full border-2 border-dashed border-gray-200 rounded-xl p-4 bg-gray-50/50 hover:bg-gray-50 transition relative overflow-hidden group">
+                                            <input type="file" name="size_chart" onchange="this.form.submit()" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer text-[0]" accept="image/*">
+                                            <div class="w-10 h-10 rounded-full bg-white shadow-sm border border-gray-100 flex items-center justify-center text-gray-400 group-hover:text-brand-blue transition">
+                                                <i class="fa-solid fa-arrow-up-from-bracket"></i>
+                                            </div>
+                                            <div>
+                                                <h4 class="font-bold text-gray-800 text-sm">Unggah Size Chart Baru (JPG, PNG)</h4>
+                                                <p class="text-[10px] text-gray-500 font-medium pb-0.5">Tarik dan lepas file disini atau klik untuk memilih. File maksimal 2MB.</p>
+                                            </div>
+                                        </div>
+                                    </form>
+                                @endif
+                            </div>
 
                         </div>
                     </div>

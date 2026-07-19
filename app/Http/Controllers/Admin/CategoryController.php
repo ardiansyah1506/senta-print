@@ -78,10 +78,23 @@ class CategoryController extends Controller
         $category = Category::findOrFail($id);
         $request->validate(['size_chart' => 'required|image|mimes:jpg,jpeg,png|max:2048']);
         if ($request->hasFile('size_chart')) {
+            // Delete old file if exists
+            if ($category->size_chart) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($category->size_chart);
+            }
             $path = $request->file('size_chart')->store('size_charts', 'public');
             $category->update(['size_chart' => $path]);
         }
         return back()->with('success', 'Size chart berhasil diunggah.');
+    }
+
+    public function removeSizeChart(string $id) {
+        $category = Category::findOrFail($id);
+        if ($category->size_chart) {
+            \Illuminate\Support\Facades\Storage::disk('public')->delete($category->size_chart);
+            $category->update(['size_chart' => null]);
+        }
+        return back()->with('success', 'Size chart berhasil dihapus.');
     }
 
     public function addProduct(Request $request, string $id) {
