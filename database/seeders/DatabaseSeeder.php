@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
                 'phone' => '081234567890',
                 'name' => 'Admin Senta Print',
                 'password' => bcrypt('password'),
+                'role' => 'admin',
             ]
         );
     }
