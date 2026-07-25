@@ -50,6 +50,13 @@ class OrderService
                 $designFilePath = 'designs/' . $fileName;
             }
 
+            // Calculate total quantity for this cart item to determine tiered price
+            $totalItemQty = array_sum($item['sizes']);
+            $unitPrice = $product->getPriceForQty($totalItemQty > 0 ? $totalItemQty : 1);
+            if ($unitPrice <= 0 && isset($item['base_price'])) {
+                $unitPrice = (float) $item['base_price'];
+            }
+
             // Distribute Order items per size explicitly allocated
             foreach ($item['sizes'] as $sizeId => $qty) {
                 if ($qty <= 0) continue;
@@ -57,7 +64,7 @@ class OrderService
                 $size = Size::find($sizeId);
                 if (!$size) continue;
                 
-                $item_total = $item['base_price'] * $qty;
+                $item_total = $unitPrice * $qty;
                 
                 $orderItem = OrderItem::create([
                     'order_id' => $order->id,
@@ -66,7 +73,7 @@ class OrderService
                     'qty' => $qty,
                     'size_id' => $sizeId,
                     'size_name' => $size->name,
-                    'unit_price' => $item['base_price'],
+                    'unit_price' => $unitPrice,
                     'total_price' => $item_total,
                     'notes' => $request->notes ?? '', // 'notes' field mostly used loosely
                     'design_file' => $designFilePath,

@@ -44,6 +44,8 @@ Route::middleware('auth')->group(function () {
         Route::delete('master-kategori/{category}/addons/{addon_id}', [CategoryController::class, 'removeAddon'])->name('master-kategori.removeAddon');
         Route::post('master-kategori/{category}/products', [CategoryController::class, 'addProduct'])->name('master-kategori.addProduct');
         Route::delete('master-kategori/{category}/products/{product_id}', [CategoryController::class, 'removeProduct'])->name('master-kategori.removeProduct');
+        Route::post('master-kategori/{category}/products/{product_id}/prices', [CategoryController::class, 'addProductPrice'])->name('master-kategori.addProductPrice');
+        Route::delete('master-kategori/{category}/products/{product_id}/prices/{price_id}', [CategoryController::class, 'removeProductPrice'])->name('master-kategori.removeProductPrice');
         Route::resource('data-master', AddonController::class)->parameters(['data-master' => 'addon']);
         Route::resource('ukuran', SizeController::class);
         Route::resource('tahap-produksi', ProductionStepController::class);

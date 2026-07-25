@@ -33,7 +33,7 @@ class CategoryController extends Controller
      */
     public function show(string $id)
     {
-        $category = Category::with(['sizes', 'addons', 'products'])->findOrFail($id);
+        $category = Category::with(['sizes', 'addons', 'products.prices'])->findOrFail($id);
         $allSizes = \App\Models\Size::all();
         $allAddons = \App\Models\Addon::all();
         return view('admin.show-master-kategori', compact('category', 'allSizes', 'allAddons'));
@@ -104,26 +104,45 @@ class CategoryController extends Controller
         $validated = $request->validate([
             'product_name' => 'required|string|max:255',
             'product_code' => 'required|string|max:50',
-            'base_price' => 'required|numeric|min:0'
         ]);
         
-        $product = $category->products()->create([
+        $category->products()->create([
             'product_code' => $validated['product_code'],
             'product_name' => $validated['product_name']
         ]);
-        
-        $product->prices()->create([
-            'min_qty' => 1,
-            'max_qty' => 999999,
-            'price' => $validated['base_price']
-        ]);
 
-        return back()->with('success', 'Produk ditambahkan.');
+        return back()->with('success', 'Produk ditambahkan. Silakan atur harga bertingkat untuk produk ini.');
     }
 
     public function removeProduct(string $id, string $product_id) {
         $category = Category::findOrFail($id);
         $category->products()->findOrFail($product_id)->delete();
         return back()->with('success', 'Produk dihapus.');
+    }
+
+    public function addProductPrice(Request $request, string $id, string $product_id) {
+        $category = Category::findOrFail($id);
+        $product = $category->products()->findOrFail($product_id);
+        
+        $validated = $request->validate([
+            'min_qty' => 'required|integer|min:1',
+            'max_qty' => 'nullable|integer|gte:min_qty',
+            'price' => 'required|numeric|min:0'
+        ]);
+
+        $product->prices()->create([
+            'min_qty' => $validated['min_qty'],
+            'max_qty' => $validated['max_qty'] ?? null,
+            'price' => $validated['price']
+        ]);
+
+        return back()->with('success', 'Harga bertingkat berhasil ditambahkan.')->with('open_product_price_modal_id', $product_id);
+    }
+
+    public function removeProductPrice(string $id, string $product_id, string $price_id) {
+        $category = Category::findOrFail($id);
+        $product = $category->products()->findOrFail($product_id);
+        $product->prices()->findOrFail($price_id)->delete();
+        return back()->with('success', 'Harga bertingkat dihapus.')->with('open_product_price_modal_id', $product_id);
     }
 }

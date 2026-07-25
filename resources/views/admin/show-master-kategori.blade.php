@@ -56,7 +56,7 @@
                         <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 mb-6">
                             <form action="{{ route('admin.master-kategori.addProduct', $category->id) }}" method="POST" class="flex flex-col sm:flex-row gap-3 items-end">
                                 @csrf
-                                <div class="w-full sm:w-1/4">
+                                <div class="w-full sm:w-1/3">
                                     <label class="block text-[11px] font-bold text-gray-700 mb-1.5 uppercase tracking-wider">Kode Produk</label>
                                     <input type="text" name="product_code" required placeholder="PRD-01" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm font-semibold outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition shadow-sm">
                                 </div>
@@ -64,12 +64,8 @@
                                     <label class="block text-[11px] font-bold text-gray-700 mb-1.5 uppercase tracking-wider">Nama Produk</label>
                                     <input type="text" name="product_name" required placeholder="Kaos Polos Cotton Combed 30s" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm font-semibold outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition shadow-sm">
                                 </div>
-                                <div class="w-full sm:w-1/4">
-                                    <label class="block text-[11px] font-bold text-gray-700 mb-1.5 uppercase tracking-wider">Harga Dasar (Rp)</label>
-                                    <input type="number" name="base_price" required min="0" placeholder="0" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm font-semibold outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition shadow-sm">
-                                </div>
-                                <button type="submit" class="bg-brand-blue text-white px-5 py-2.5 rounded-lg text-sm font-bold hover:bg-indigo-700 transition shadow-sm w-full sm:w-auto h-10 border border-transparent">
-                                    Tambahkan
+                                <button type="submit" class="bg-brand-blue text-white px-5 py-2.5 rounded-lg text-sm font-bold hover:bg-indigo-700 transition shadow-sm w-full sm:w-auto h-10 border border-transparent whitespace-nowrap">
+                                    <i class="fa-solid fa-plus text-xs mr-1"></i> Tambah Produk
                                 </button>
                             </form>
                         </div>
@@ -80,7 +76,7 @@
                                 <tr class="bg-gray-50/50">
                                     <th class="py-4 px-6 text-xs font-bold text-gray-500 uppercase tracking-wider">Kode</th>
                                     <th class="py-4 px-6 text-xs font-bold text-gray-500 uppercase tracking-wider">Nama Produk</th>
-                                    <th class="py-4 px-6 text-xs font-bold text-gray-500 uppercase tracking-wider">Harga Dasar</th>
+                                    <th class="py-4 px-6 text-xs font-bold text-gray-500 uppercase tracking-wider">Harga Bertingkat (Tier Pricing)</th>
                                     <th class="py-4 px-6 text-xs font-bold text-gray-500 uppercase tracking-wider text-right w-32">Aksi</th>
                                 </tr>
                             </thead>
@@ -89,7 +85,113 @@
                                 <tr class="hover:bg-gray-50/50 transition">
                                     <td class="py-4 px-6 font-bold text-brand-blue">{{ $product->product_code }}</td>
                                     <td class="py-4 px-6 text-gray-900 font-semibold">{{ $product->product_name }}</td>
-                                    <td class="py-4 px-6">Rp {{ number_format($product->prices->first()->price ?? 0, 0, ',', '.') }}</td>
+                                    <td class="py-4 px-6">
+                                        <div class="flex flex-wrap gap-2 items-center">
+                                            @if($product->prices->isNotEmpty())
+                                                @foreach($product->prices as $priceTier)
+                                                    <span class="inline-flex items-center bg-indigo-50 text-brand-blue border border-indigo-100 text-xs px-2.5 py-1 rounded-md font-bold">
+                                                        @if($priceTier->max_qty)
+                                                            {{ $priceTier->min_qty }} - {{ $priceTier->max_qty }} pcs: Rp {{ number_format($priceTier->price, 0, ',', '.') }}
+                                                        @else
+                                                            ≥ {{ $priceTier->min_qty }} pcs: Rp {{ number_format($priceTier->price, 0, ',', '.') }}
+                                                        @endif
+                                                    </span>
+                                                @endforeach
+                                                <button onclick="document.getElementById('modalHargaBertingkat_{{ $product->id }}').classList.remove('hidden')" class="text-xs text-brand-blue hover:text-indigo-800 font-bold underline ml-1 inline-flex items-center gap-1">
+                                                    <i class="fa-solid fa-gear text-[10px]"></i> Kelola
+                                                </button>
+                                            @else
+                                                <button onclick="document.getElementById('modalHargaBertingkat_{{ $product->id }}').classList.remove('hidden')" class="inline-flex items-center gap-1 text-xs font-bold text-amber-700 bg-amber-50 px-2.5 py-1 rounded-md border border-amber-200 hover:bg-amber-100 transition">
+                                                    <i class="fa-solid fa-plus text-[10px]"></i> Set Harga Bertingkat
+                                                </button>
+                                            @endif
+                                        </div>
+
+                                        <!-- Modal Kelola Harga Bertingkat -->
+                                        <div id="modalHargaBertingkat_{{ $product->id }}" class="fixed inset-0 bg-gray-900/50 z-50 flex items-center justify-center hidden opacity-100 transition-opacity backdrop-blur-sm whitespace-normal">
+                                            <div class="bg-white rounded-[24px] shadow-2xl w-full max-w-2xl mx-4 overflow-hidden border border-gray-100 text-left">
+                                                <div class="px-6 py-5 border-b border-gray-100 bg-gray-50/50 flex items-center justify-between">
+                                                    <div>
+                                                        <h3 class="font-extrabold text-gray-900 text-base">Kelola Harga Bertingkat</h3>
+                                                        <p class="text-xs text-gray-400 font-medium">Produk: <span class="text-brand-blue font-bold">{{ $product->product_name }}</span> ({{ $product->product_code }})</p>
+                                                    </div>
+                                                    <button onclick="document.getElementById('modalHargaBertingkat_{{ $product->id }}').classList.add('hidden')" class="text-gray-400 hover:text-gray-900 transition w-8 h-8 rounded-full hover:bg-gray-200 flex items-center justify-center">
+                                                        <i class="fa-solid fa-xmark"></i>
+                                                    </button>
+                                                </div>
+                                                
+                                                <div class="p-6 space-y-6">
+                                                    <!-- Form Tambah Tier Harga -->
+                                                    <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                                                        <h4 class="text-xs font-extrabold text-gray-700 uppercase tracking-wider mb-3">Tambah Rentang Harga Baru</h4>
+                                                        <form action="{{ route('admin.master-kategori.addProductPrice', [$category->id, $product->id]) }}" method="POST" class="grid grid-cols-1 sm:grid-cols-4 gap-3 items-end">
+                                                            @csrf
+                                                            <div>
+                                                                <label class="block text-[10px] font-bold text-gray-600 mb-1 uppercase">Min Qty <span class="text-red-500">*</span></label>
+                                                                <input type="number" name="min_qty" required min="1" placeholder="1" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-xs font-semibold outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue bg-white">
+                                                            </div>
+                                                            <div>
+                                                                <label class="block text-[10px] font-bold text-gray-600 mb-1 uppercase">Max Qty <span class="text-gray-400 font-normal">(Opsional)</span></label>
+                                                                <input type="number" name="max_qty" min="1" placeholder="Bebas" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-xs font-semibold outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue bg-white">
+                                                            </div>
+                                                            <div>
+                                                                <label class="block text-[10px] font-bold text-gray-600 mb-1 uppercase">Harga Satuan (Rp) <span class="text-red-500">*</span></label>
+                                                                <input type="number" name="price" required min="0" placeholder="50000" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-xs font-semibold outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue bg-white">
+                                                            </div>
+                                                            <button type="submit" class="bg-brand-blue text-white px-4 py-2 rounded-lg text-xs font-bold hover:bg-indigo-700 transition shadow-sm h-9 flex items-center justify-center gap-1">
+                                                                <i class="fa-solid fa-plus text-[10px]"></i> Simpan Tier
+                                                            </button>
+                                                        </form>
+                                                    </div>
+
+                                                    <!-- Tabel Daftar Tier Harga Aktif -->
+                                                    <div>
+                                                        <h4 class="text-xs font-extrabold text-gray-700 uppercase tracking-wider mb-3">Daftar Rentang Harga Aktif</h4>
+                                                        <div class="border border-gray-100 rounded-xl overflow-hidden">
+                                                            <table class="w-full text-left border-collapse text-xs">
+                                                                <thead>
+                                                                    <tr class="bg-gray-50 border-b border-gray-100 font-bold text-gray-500 uppercase tracking-wider">
+                                                                        <th class="py-3 px-4">Min Qty</th>
+                                                                        <th class="py-3 px-4">Max Qty</th>
+                                                                        <th class="py-3 px-4">Harga / Pcs</th>
+                                                                        <th class="py-3 px-4 text-right">Aksi</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody class="divide-y divide-gray-100 font-semibold text-gray-700">
+                                                                    @forelse($product->prices as $priceTier)
+                                                                    <tr class="hover:bg-gray-50/50">
+                                                                        <td class="py-3 px-4 font-bold text-gray-900">{{ $priceTier->min_qty }} pcs</td>
+                                                                        <td class="py-3 px-4">{{ $priceTier->max_qty ? $priceTier->max_qty . ' pcs' : 'Tak Terbatas (∞)' }}</td>
+                                                                        <td class="py-3 px-4 font-bold text-brand-blue">Rp {{ number_format($priceTier->price, 0, ',', '.') }}</td>
+                                                                        <td class="py-3 px-4 text-right">
+                                                                            <form action="{{ route('admin.master-kategori.removeProductPrice', [$category->id, $product->id, $priceTier->id]) }}" method="POST" class="inline-block" onsubmit="return confirm('Hapus rentang harga ini?');">
+                                                                                @csrf
+                                                                                @method('DELETE')
+                                                                                <button type="submit" class="text-gray-400 hover:text-red-500 transition w-7 h-7 rounded-md hover:bg-red-50 inline-flex items-center justify-center">
+                                                                                    <i class="fa-regular fa-trash-can text-xs"></i>
+                                                                                </button>
+                                                                            </form>
+                                                                        </td>
+                                                                    </tr>
+                                                                    @empty
+                                                                    <tr>
+                                                                        <td colspan="4" class="py-4 text-center text-gray-400">Belum ada harga bertingkat yang ditambahkan.</td>
+                                                                    </tr>
+                                                                    @endforelse
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="px-6 py-4 bg-gray-50/50 border-t border-gray-100 flex justify-end">
+                                                    <button type="button" onclick="document.getElementById('modalHargaBertingkat_{{ $product->id }}').classList.add('hidden')" class="px-5 py-2 rounded-xl border border-gray-200 text-gray-600 hover:bg-gray-100 transition text-xs font-bold">
+                                                        Tutup
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
                                     <td class="py-4 px-6 text-right">
                                         <form action="{{ route('admin.master-kategori.removeProduct', [$category->id, $product->id]) }}" method="POST" class="inline-block" onsubmit="return confirm('Hapus produk ini?');">
                                             @csrf
@@ -298,4 +400,15 @@
                     });
                 });
             </script>
+            @if(session('open_product_price_modal_id'))
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    const modalId = 'modalHargaBertingkat_' + '{{ session("open_product_price_modal_id") }}';
+                    const modal = document.getElementById(modalId);
+                    if (modal) {
+                        modal.classList.remove('hidden');
+                    }
+                });
+            </script>
+            @endif
 @endsection

@@ -213,6 +213,25 @@
         if(designFileInput) designFileInput.addEventListener('change', window.syncDraft);
     });
 
+    window.getUnitPriceForQty = function(product, qty) {
+        if (!product || !product.prices || product.prices.length === 0) {
+            return 0;
+        }
+        const targetQty = qty > 0 ? qty : 1;
+        const sortedPrices = [...product.prices].sort((a, b) => parseInt(a.min_qty) - parseInt(b.min_qty));
+        for (let tier of sortedPrices) {
+            let min = parseInt(tier.min_qty);
+            let max = tier.max_qty ? parseInt(tier.max_qty) : null;
+            if (targetQty >= min && (max === null || targetQty <= max)) {
+                return parseFloat(tier.price);
+            }
+        }
+        if (targetQty < parseInt(sortedPrices[0].min_qty)) {
+            return parseFloat(sortedPrices[0].price);
+        }
+        return parseFloat(sortedPrices[sortedPrices.length - 1].price);
+    };
+
     window.syncDraft = function() {
         const catSelect = document.getElementById('categorySelect');
         const prodSelect = document.getElementById('productSelect');
@@ -223,8 +242,10 @@
             return;
         }
 
-        const selProdOpt = prodSelect.options[prodSelect.selectedIndex];
-        const basePrice = parseInt(selProdOpt.getAttribute('data-price') || 75000);
+        const catId = catSelect.value;
+        const prodId = prodSelect.value;
+        const category = window.dbCategories.find(c => c.id == catId);
+        const product = category ? category.products.find(p => p.id == prodId) : null;
         
         const sizesData = {};
         let totalQty = 0;
@@ -236,8 +257,10 @@
             totalQty += val;
         });
 
+        const unitPrice = window.getUnitPriceForQty(product, totalQty);
+
         let addonsData = window.draftAddons || []; 
-        let itemTotal = basePrice * totalQty;
+        let itemTotal = unitPrice * totalQty;
         addonsData.forEach(a => {
             let lineCost = a.price * a.qty;
             if (a.type === 'subtract') itemTotal -= lineCost;
@@ -249,6 +272,8 @@
         const fileLabel = fileInput.files.length > 0 ? fileInput.files[0].name : '(Belum ada file desain)';
         const fileUrl = fileInput.files.length > 0 ? URL.createObjectURL(fileInput.files[0]) : null;
 
+        const selProdOpt = prodSelect.options[prodSelect.selectedIndex];
+
         window.liveDraft = {
             id: 'draft',
             category_id: catSelect.value,
@@ -257,7 +282,7 @@
             sizes: sizesData,
             total_qty: totalQty,
             addons: addonsData,
-            base_price: basePrice,
+            base_price: unitPrice,
             total_price: itemTotal,
             design_file_name: fileLabel,
             design_file_url: fileUrl,
@@ -299,9 +324,9 @@
             }
 
             category.products.forEach(p => {
-                // Determine baseline price (fallbacks to generic if dynamic table isn't fully scoped)
-                let actualPrice = p.price || 75000;
-                productSelect.innerHTML += `<option value="${p.id}" data-price="${actualPrice}">${p.product_name} - ${formatRupiah(actualPrice)}</option>`; 
+                let startingPrice = window.getUnitPriceForQty(p, 1);
+                let priceLabel = startingPrice > 0 ? ` - mulai ${formatRupiah(startingPrice)}` : '';
+                productSelect.innerHTML += `<option value="${p.id}">${p.product_name}${priceLabel}</option>`; 
             });
             productSelect.disabled = false;
 

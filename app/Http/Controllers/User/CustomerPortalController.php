@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 class CustomerPortalController extends Controller
 {
     public function createOrder() {
-        $categories = \App\Models\Category::with(['products', 'sizes', 'addons'])->get();
+        $categories = \App\Models\Category::with(['products.prices', 'sizes', 'addons'])->get();
         return view('user.buat-pesanan', compact('categories'));
     }
     

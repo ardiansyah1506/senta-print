@@ -16,7 +16,7 @@ class PublicPageController extends Controller
     }
 
     public function buatPesanan() {
-        $categories = Category::with(['products', 'sizes', 'addons'])->get();
+        $categories = Category::with(['products.prices', 'sizes', 'addons'])->get();
         return view('public-pesan', compact('categories'));
     }
 
