@@ -43,32 +43,40 @@
                         </div>
                     </div>
                     
+                    <!-- Size Breakdown Rows Section -->
                     <div class="mb-6">
-                        <label class="block text-xs font-bold text-gray-700 mb-3">Distribusi Ukuran <span class="text-gray-400 font-normal">(Isi jumlah barang per ukuran)</span></label>
-                        
-                        <!-- Mini Size Chart Box -->
-                        <a id="inlineSizeChartBox" href="#" target="_blank" class="hidden mb-4 p-2 bg-indigo-50/50 border border-indigo-100 rounded-xl items-center gap-3 hover:bg-indigo-50 transition group cursor-pointer" title="Klik untuk memperbesar gambar Size Chart di Tab Baru">
-                            <div class="w-12 h-12 rounded-lg overflow-hidden bg-white border border-indigo-200 shrink-0 relative">
-                                <div class="absolute inset-0 bg-black/30 hidden group-hover:flex items-center justify-center transition">
-                                    <i class="fa-solid fa-expand text-white text-[10px]"></i>
-                                </div>
-                                <img id="inlineSizeChartImg" src="" class="w-full h-full object-cover">
-                            </div>
+                        <div class="flex items-center justify-between mb-3">
                             <div>
-                                <h4 class="text-xs font-bold text-brand-blue flex items-center gap-1.5"><i class="fa-solid fa-ruler-combined"></i> Panduan Ukuran</h4>
-                                <p class="text-[10px] text-gray-500 font-medium tracking-wide">Klik untuk melihat detail ukuran</p>
+                                <label class="block text-xs font-bold text-gray-700 mb-0.5">Rincian Ukuran & Layanan Add-on</label>
+                                <p class="text-[11px] text-gray-400 font-medium">Tentukan rincian ukuran, jumlah, dan layanan Add-on khusus per kelompok baju.</p>
                             </div>
-                        </a>
+                            <a id="inlineSizeChartBox" href="#" target="_blank" class="hidden p-1.5 bg-indigo-50 border border-indigo-100 rounded-xl items-center gap-2 hover:bg-indigo-100 transition group cursor-pointer shrink-0" title="Lihat Size Chart">
+                                <i class="fa-solid fa-ruler-combined text-brand-blue text-xs"></i>
+                                <span class="text-[11px] font-bold text-brand-blue">Size Chart</span>
+                            </a>
+                        </div>
 
-                        <div id="sizesGrid" class="grid grid-cols-4 md:grid-cols-8 gap-3">
-                            <div class="text-[10px] text-gray-400 col-span-full">Pilih kategori untuk melihat ukuran yang tersedia.</div>
+                        <!-- Dynamic Size Rows Container -->
+                        <div id="sizeRowsContainer" class="space-y-3 mb-3">
+                            <div class="text-xs text-gray-400 italic">Pilih kategori untuk mengisi ukuran.</div>
+                        </div>
+
+                        <button type="button" id="btnAddSizeRow" onclick="window.addSizeRow()" class="hidden w-full py-2.5 bg-gray-50 hover:bg-indigo-50/60 border border-dashed border-gray-300 hover:border-brand-blue text-brand-blue rounded-xl text-xs font-extrabold transition flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-plus text-[10px]"></i> Tambah Rincian Ukuran / Variasi Baru
+                        </button>
+                    </div>
+
+                    <!-- Global Addons Section -->
+                    <div class="mt-6 pt-5 border-t border-gray-100" id="globalAddonSection">
+                        <div class="mb-3">
+                            <label class="block text-xs font-bold text-gray-700 mb-0.5">Add-on Global (Opsional)</label>
+                            <p class="text-[11px] text-gray-400 font-medium">Add-on di bawah ini akan otomatis diterapkan ke 100% baju yang Anda pesan (seluruh total pcs).</p>
+                        </div>
+                        <div id="globalAddonList" class="space-y-2">
+                            <div class="text-xs text-gray-400 italic">Pilih kategori untuk melihat Add-on global.</div>
                         </div>
                     </div>
-                    
-
                 </div>
-                
-                <!-- Divider was here, moved below Box 2 -->
                 
                 <!-- Box 2: Upload Design -->
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
@@ -80,11 +88,10 @@
                         <h4 id="fileLabelText" class="font-extrabold text-gray-800 mb-1.5 text-[15px]">Pilih File Desain (klik di sini)</h4>
                         <p class="text-xs text-gray-400 font-bold tracking-wide">PNG, JPG, PDF &mdash; MAX 10MB</p>
                     </div>
-                    <!-- Virtual File input -> Gets cloned and pushed into hiddenFilesContainer on Added format -->
                     <input type="file" id="designFile" class="hidden" accept=".png,.jpg,.jpeg,.pdf" onchange="document.getElementById('fileLabelText').innerText = this.files[0] ? this.files[0].name : 'Pilih File Desain (klik di sini)'">
                 </div>
 
-                <!-- Divider Line (Moved Below Upload Design) -->
+                <!-- Divider Line -->
                 <div class="relative py-2">
                     <div class="absolute inset-0 flex items-center">
                         <div class="w-full border-t border-dashed border-gray-300"></div>
@@ -140,36 +147,14 @@
     </form>
 </div>
 
-<!-- Addon Modal -->
-<div id="addonModal" class="fixed inset-0 z-[100] hidden bg-gray-900/50 backdrop-blur-sm flex items-center justify-center transition-opacity" style="opacity: 0;">
-    <div class="bg-white rounded-2xl shadow-xl w-full max-w-lg p-6 relative transform transition-all scale-95" id="addonModalContent">
-        <button type="button" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition" onclick="window.closeAddonModal()">
-            <i class="fa-solid fa-xmark text-lg"></i>
-        </button>
-        <h3 class="text-xl font-extrabold text-gray-900 mb-2">Kelola Add-on</h3>
-        <p class="text-xs text-gray-500 mb-6 font-medium">Pilih ekstra layanan/tambahan untuk <span id="modalProductName" class="font-bold text-gray-700"></span></p>
-        
-        <input type="hidden" id="modalCartItemId" value="">
-        <div id="modalAddonsList" class="flex flex-col gap-3 max-h-[50vh] overflow-y-auto mb-6 pr-2">
-            <!-- Addons will be injected here -->
-        </div>
-
-        <button type="button" onclick="window.saveAddonsToCartItem()" class="w-full bg-brand-blue text-white rounded-xl py-3 font-bold hover:bg-indigo-700 transition">
-            Simpan Add-ons
-        </button>
-    </div>
-</div>
-
-<!-- Reactive Script -->
 <script>
     window.dbCategories = @json($categories);
     window.cart = [];
     window.liveDraft = null;
-    window.draftAddons = [];
+    let sizeRowCounter = 0;
 
     function formatRupiah(amount) { return 'Rp ' + amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."); }
 
-    // Bind real-time tracking
     document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('entryBox').addEventListener('change', window.syncDraft);
         document.getElementById('entryBox').addEventListener('input', window.syncDraft);
@@ -196,85 +181,114 @@
         return parseFloat(sortedPrices[sortedPrices.length - 1].price);
     };
 
-    window.syncDraft = function() {
-        const catSelect = document.getElementById('categorySelect');
-        const prodSelect = document.getElementById('productSelect');
-        
-        if(!catSelect.value || !prodSelect.value) {
-            window.liveDraft = null;
-            window.renderCart();
-            return;
+    window.addSizeRow = function(sizeId = '', qty = 1, selectedAddonIds = []) {
+        const catId = document.getElementById('categorySelect').value;
+        if (!catId) return;
+
+        const category = window.dbCategories.find(c => c.id == catId);
+        if (!category || !category.sizes || category.sizes.length === 0) return;
+
+        const rowId = 'row_' + (++sizeRowCounter);
+        const container = document.getElementById('sizeRowsContainer');
+
+        if (container.querySelector('.italic')) container.innerHTML = '';
+
+        let sizeOptionsHtml = category.sizes.map(s => `
+            <option value="${s.id}" data-name="${s.name}" ${sizeId == s.id ? 'selected' : ''}>Ukuran ${s.name}</option>
+        `).join('');
+
+        let addonsCheckboxesHtml = '';
+        if (category.addons && category.addons.length > 0) {
+            addonsCheckboxesHtml = category.addons.map(a => {
+                let price = a.pivot && a.pivot.price ? parseInt(a.pivot.price) : 0;
+                let type = a.pivot && a.pivot.type ? a.pivot.type : 'add';
+                let checked = selectedAddonIds.includes(String(a.id)) ? 'checked' : '';
+                let badge = type === 'subtract' ? `- ${formatRupiah(price)}` : `+ ${formatRupiah(price)}`;
+
+                return `
+                    <label class="inline-flex items-center gap-1.5 bg-white border border-gray-200 px-2.5 py-1.5 rounded-lg text-xs font-bold text-gray-700 hover:border-brand-blue transition cursor-pointer">
+                        <input type="checkbox" class="row-addon-cb w-3.5 h-3.5 text-brand-blue border-gray-300 rounded focus:ring-brand-blue" value="${a.id}" data-name="${a.name}" data-price="${price}" data-type="${type}" ${checked} onchange="window.syncDraft()">
+                        <span>${a.name} <span class="text-[10px] text-brand-blue font-extrabold">(${badge})</span></span>
+                    </label>
+                `;
+            }).join('');
+        } else {
+            addonsCheckboxesHtml = '<span class="text-[11px] text-gray-400 italic">Tidak ada Add-on khusus</span>';
         }
 
-        const catId = catSelect.value;
-        const prodId = prodSelect.value;
-        const category = window.dbCategories.find(c => c.id == catId);
-        const product = category ? category.products.find(p => p.id == prodId) : null;
-        
-        const sizesData = {};
-        let totalQty = 0;
-        document.querySelectorAll('.size-input').forEach(el => {
-            let val = parseInt(el.value || 0);
-            if(val > 0) {
-                sizesData[el.getAttribute('data-size-id')] = val;
+        const rowDiv = document.createElement('div');
+        rowDiv.id = rowId;
+        rowDiv.className = 'size-row border border-gray-200 rounded-2xl p-4 bg-gray-50/60 shadow-2xs space-y-3 relative group';
+        rowDiv.innerHTML = `
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                <div class="flex items-center gap-3 w-full sm:w-auto">
+                    <div class="w-36 shrink-0">
+                        <select class="row-size-select w-full border border-gray-200 rounded-xl px-3 py-2 text-xs font-extrabold text-gray-800 bg-white outline-none focus:border-brand-blue" onchange="window.syncDraft()">
+                            ${sizeOptionsHtml}
+                        </select>
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                        <span class="text-xs font-bold text-gray-500">Jumlah:</span>
+                        <input type="number" min="1" value="${qty}" class="row-qty-input w-20 border border-gray-200 rounded-xl px-3 py-2 text-xs font-extrabold text-center text-gray-800 bg-white outline-none focus:border-brand-blue" oninput="window.syncDraft()">
+                        <span class="text-xs font-bold text-gray-500">pcs</span>
+                    </div>
+                </div>
+
+                <button type="button" onclick="window.removeSizeRow('${rowId}')" class="btn-remove-row text-xs font-extrabold text-red-500 hover:text-red-700 bg-red-50 hover:bg-red-100 px-2.5 py-1.5 rounded-lg transition self-end sm:self-auto">
+                    <i class="fa-solid fa-trash-can mr-1"></i> Hapus
+                </button>
+            </div>
+
+            <div class="pt-2 border-t border-gray-200/60">
+                <span class="block text-[10px] font-extrabold text-gray-400 uppercase tracking-wider mb-1.5">Add-on Spesifik Kelompok Ini (Opsional):</span>
+                <div class="flex flex-wrap gap-2">
+                    ${addonsCheckboxesHtml}
+                </div>
+            </div>
+        `;
+
+        container.appendChild(rowDiv);
+        window.syncDraft();
+    };
+
+    window.removeSizeRow = function(rowId) {
+        const row = document.getElementById(rowId);
+        if (row) {
+            row.remove();
+            const container = document.getElementById('sizeRowsContainer');
+            if (container.children.length === 0) {
+                window.addSizeRow();
             }
-            totalQty += val;
-        });
-
-        const unitPrice = window.getUnitPriceForQty(product, totalQty);
-
-        let addonsData = window.draftAddons || []; 
-        let itemTotal = unitPrice * totalQty;
-        addonsData.forEach(a => itemTotal += (a.price * a.qty));
-
-        const fileInput = document.getElementById('designFile');
-        const fileLabel = fileInput.files.length > 0 ? fileInput.files[0].name : '(Belum ada file desain)';
-        const fileUrl = fileInput.files.length > 0 ? URL.createObjectURL(fileInput.files[0]) : null;
-
-        const selProdOpt = prodSelect.options[prodSelect.selectedIndex];
-
-        window.liveDraft = {
-            id: 'draft',
-            category_id: catSelect.value,
-            product_id: prodSelect.value,
-            product_name: selProdOpt.text + " (Draft)",
-            sizes: sizesData,
-            total_qty: totalQty,
-            addons: addonsData,
-            base_price: unitPrice,
-            total_price: itemTotal,
-            design_file_name: fileLabel,
-            design_file_url: fileUrl,
-            is_draft: true
-        };
-
-        window.renderCart();
+            window.syncDraft();
+        }
     };
 
     window.updateProducts = function() {
-        window.draftAddons = [];
         const catId = document.getElementById('categorySelect').value;
         const productSelect = document.getElementById('productSelect');
-        const sizesGrid = document.getElementById('sizesGrid');
+        const container = document.getElementById('sizeRowsContainer');
+        const globalContainer = document.getElementById('globalAddonList');
+        const btnAdd = document.getElementById('btnAddSizeRow');
 
         productSelect.innerHTML = '<option value="">Pilih Produk</option>';
-        sizesGrid.innerHTML = '';
+        container.innerHTML = '';
+        globalContainer.innerHTML = '';
 
-        if(!catId) {
+        if (!catId) {
             productSelect.disabled = true;
+            btnAdd.classList.add('hidden');
+            container.innerHTML = '<div class="text-xs text-gray-400 italic">Pilih kategori untuk mengisi ukuran.</div>';
+            globalContainer.innerHTML = '<div class="text-xs text-gray-400 italic">Pilih kategori untuk melihat Add-on global.</div>';
+            window.syncDraft();
             return;
         }
 
         const category = window.dbCategories.find(c => c.id == catId);
-        if(category) {
-            
-            // Render Inline Size Chart
+        if (category) {
             let scBox = document.getElementById('inlineSizeChartBox');
-            let scImg = document.getElementById('inlineSizeChartImg');
-            if(category.size_chart) {
+            if (category.size_chart) {
                 let scUrl = '/storage/' + category.size_chart;
                 scBox.href = scUrl;
-                scImg.src = scUrl;
                 scBox.classList.remove('hidden');
                 scBox.classList.add('flex');
             } else {
@@ -289,27 +303,161 @@
             });
             productSelect.disabled = false;
 
-            if(category.sizes.length > 0) {
-                category.sizes.forEach(s => {
-                    sizesGrid.innerHTML += `
-                        <div class="text-center">
-                            <div class="text-[10px] font-extrabold text-gray-900 mb-1 uppercase">${s.name}</div>
-                            <input type="number" min="0" value="0" name="temp_size" class="size-input w-full text-center border border-gray-200 rounded-xl py-2.5 text-sm font-semibold text-gray-400 outline-none focus:border-brand-blue focus:text-gray-800 transition shadow-sm" data-size-id="${s.id}" data-size-name="${s.name}">
-                        </div>
+            if (category.addons && category.addons.length > 0) {
+                let globalHtml = category.addons.map(a => {
+                    let price = a.pivot && a.pivot.price ? parseInt(a.pivot.price) : 0;
+                    let type = a.pivot && a.pivot.type ? a.pivot.type : 'add';
+                    let priceBadge = type === 'subtract'
+                        ? `<span class="text-xs text-red-600 font-bold tracking-wide">- ${price > 0 ? formatRupiah(price) : 'Gratis'} /pcs</span>`
+                        : `<span class="text-xs text-brand-blue font-bold tracking-wide">+ ${price > 0 ? formatRupiah(price) : 'Gratis'} /pcs</span>`;
+
+                    return `
+                        <label class="flex items-center justify-between p-3 border border-gray-200 rounded-xl bg-gray-50/50 hover:bg-white has-[:checked]:border-brand-blue has-[:checked]:bg-indigo-50/30 transition cursor-pointer">
+                            <div class="flex items-center gap-3">
+                                <input type="checkbox" class="global-addon-cb w-4 h-4 text-brand-blue focus:ring-brand-blue border-gray-300 rounded" value="${a.id}" data-name="${a.name}" data-price="${price}" data-type="${type}" onchange="window.syncDraft()">
+                                <span class="text-xs font-extrabold text-gray-800">${a.name}</span>
+                            </div>
+                            ${priceBadge}
+                        </label>
                     `;
-                });
+                }).join('');
+                globalContainer.innerHTML = globalHtml;
             } else {
-                sizesGrid.innerHTML = '<div class="text-xs text-gray-400 col-span-full">Tidak ada ukuran untuk Kategori ini.</div>';
+                globalContainer.innerHTML = '<div class="text-xs text-gray-400 italic">Tidak ada Add-on tersedia.</div>';
             }
 
-
+            if (category.sizes && category.sizes.length > 0) {
+                btnAdd.classList.remove('hidden');
+                window.addSizeRow();
+            } else {
+                btnAdd.classList.add('hidden');
+                container.innerHTML = '<div class="text-xs text-gray-400 italic">Tidak ada ukuran untuk Kategori ini.</div>';
+            }
         }
-        
-        // Provide an onchange fallback bindings for dynamically spawned sizes & checkboxes
-        document.querySelectorAll('.size-input').forEach(i => i.addEventListener('change', window.syncDraft));
-        document.querySelectorAll('.size-input').forEach(i => i.addEventListener('input', window.syncDraft));
-        
+
         window.syncDraft();
+    };
+
+    window.syncDraft = function() {
+        const catSelect = document.getElementById('categorySelect');
+        const prodSelect = document.getElementById('productSelect');
+        
+        if(!catSelect.value || !prodSelect.value) {
+            window.liveDraft = null;
+            window.renderCart();
+            return;
+        }
+
+        const catId = catSelect.value;
+        const prodId = prodSelect.value;
+        const category = window.dbCategories.find(c => c.id == catId);
+        const product = category ? category.products.find(p => p.id == prodId) : null;
+
+        const globalAddons = [];
+        document.querySelectorAll('.global-addon-cb:checked').forEach(cb => {
+            globalAddons.push({
+                id: cb.value,
+                name: cb.getAttribute('data-name'),
+                price: parseInt(cb.getAttribute('data-price') || 0),
+                type: cb.getAttribute('data-type') || 'add'
+            });
+        });
+        
+        const sizesData = {};
+        const sizeAddonsMap = {};
+        let totalQty = 0;
+
+        document.querySelectorAll('#sizeRowsContainer .size-row').forEach(row => {
+            let sizeSelect = row.querySelector('.row-size-select');
+            let qtyInput = row.querySelector('.row-qty-input');
+            if (!sizeSelect || !qtyInput) return;
+
+            let szId = sizeSelect.value;
+            let szName = sizeSelect.options[sizeSelect.selectedIndex].getAttribute('data-name') || szId;
+            let rowQty = parseInt(qtyInput.value || 0);
+
+            if (rowQty > 0) {
+                sizesData[szId] = (sizesData[szId] || 0) + rowQty;
+                totalQty += rowQty;
+
+                const rowAddonMap = new Map();
+                row.querySelectorAll('.row-addon-cb:checked').forEach(cb => {
+                    rowAddonMap.set(String(cb.value), {
+                        id: cb.value,
+                        name: cb.getAttribute('data-name'),
+                        price: parseInt(cb.getAttribute('data-price') || 0),
+                        type: cb.getAttribute('data-type') || 'add',
+                        qty: rowQty,
+                        size_id: szId,
+                        size_name: szName
+                    });
+                });
+
+                globalAddons.forEach(ga => {
+                    if (!rowAddonMap.has(String(ga.id))) {
+                        rowAddonMap.set(String(ga.id), {
+                            id: ga.id,
+                            name: ga.name,
+                            price: ga.price,
+                            type: ga.type,
+                            qty: rowQty,
+                            size_id: szId,
+                            size_name: szName
+                        });
+                    }
+                });
+
+                let rowAddonsList = Array.from(rowAddonMap.values());
+
+                if (rowAddonsList.length > 0) {
+                    if (!sizeAddonsMap[szId]) sizeAddonsMap[szId] = [];
+                    rowAddonsList.forEach(a => {
+                        sizeAddonsMap[szId].push(a);
+                    });
+                }
+            }
+        });
+
+        const unitPrice = window.getUnitPriceForQty(product, totalQty);
+
+        let totalAddonCost = 0;
+        let addonsDataList = [];
+        Object.keys(sizeAddonsMap).forEach(szId => {
+            let addons = sizeAddonsMap[szId] || [];
+            addons.forEach(a => {
+                let cost = a.price * a.qty;
+                if (a.type === 'subtract') totalAddonCost -= cost;
+                else totalAddonCost += cost;
+                addonsDataList.push(a);
+            });
+        });
+
+        let itemTotal = (unitPrice * totalQty) + totalAddonCost;
+        itemTotal = Math.max(0, itemTotal);
+
+        const fileInput = document.getElementById('designFile');
+        const fileLabel = fileInput.files.length > 0 ? fileInput.files[0].name : '(Belum ada file desain)';
+        const fileUrl = fileInput.files.length > 0 ? URL.createObjectURL(fileInput.files[0]) : null;
+
+        const selProdOpt = prodSelect.options[prodSelect.selectedIndex];
+
+        window.liveDraft = {
+            id: 'draft',
+            category_id: catSelect.value,
+            product_id: prodSelect.value,
+            product_name: selProdOpt.text + " (Draft)",
+            sizes: sizesData,
+            total_qty: totalQty,
+            addons: addonsDataList,
+            size_addons: JSON.parse(JSON.stringify(sizeAddonsMap)),
+            base_price: unitPrice,
+            total_price: itemTotal,
+            design_file_name: fileLabel,
+            design_file_url: fileUrl,
+            is_draft: true
+        };
+
+        window.renderCart();
     };
 
     window.addToCart = function(silent = false) {
@@ -333,17 +481,68 @@
             return false;
         }
 
-        const selProdOpt = prodSelect.options[prodSelect.selectedIndex];
-        const basePrice = parseInt(selProdOpt.getAttribute('data-price') || 75000);
-        
+        const globalAddons = [];
+        document.querySelectorAll('.global-addon-cb:checked').forEach(cb => {
+            globalAddons.push({
+                id: cb.value,
+                name: cb.getAttribute('data-name'),
+                price: parseInt(cb.getAttribute('data-price') || 0),
+                type: cb.getAttribute('data-type') || 'add'
+            });
+        });
+
         const sizesData = {};
+        const sizeAddonsMap = {};
         let totalQty = 0;
-        document.querySelectorAll('.size-input').forEach(el => {
-            let val = parseInt(el.value || 0);
-            if(val > 0) {
-                sizesData[el.getAttribute('data-size-id')] = val;
-                totalQty += val;
-                el.value = 0;
+
+        document.querySelectorAll('#sizeRowsContainer .size-row').forEach(row => {
+            let sizeSelect = row.querySelector('.row-size-select');
+            let qtyInput = row.querySelector('.row-qty-input');
+            if (!sizeSelect || !qtyInput) return;
+
+            let szId = sizeSelect.value;
+            let szName = sizeSelect.options[sizeSelect.selectedIndex].getAttribute('data-name') || szId;
+            let rowQty = parseInt(qtyInput.value || 0);
+
+            if (rowQty > 0) {
+                sizesData[szId] = (sizesData[szId] || 0) + rowQty;
+                totalQty += rowQty;
+
+                const rowAddonMap = new Map();
+                row.querySelectorAll('.row-addon-cb:checked').forEach(cb => {
+                    rowAddonMap.set(String(cb.value), {
+                        id: cb.value,
+                        name: cb.getAttribute('data-name'),
+                        price: parseInt(cb.getAttribute('data-price') || 0),
+                        type: cb.getAttribute('data-type') || 'add',
+                        qty: rowQty,
+                        size_id: szId,
+                        size_name: szName
+                    });
+                });
+
+                globalAddons.forEach(ga => {
+                    if (!rowAddonMap.has(String(ga.id))) {
+                        rowAddonMap.set(String(ga.id), {
+                            id: ga.id,
+                            name: ga.name,
+                            price: ga.price,
+                            type: ga.type,
+                            qty: rowQty,
+                            size_id: szId,
+                            size_name: szName
+                        });
+                    }
+                });
+
+                let rowAddonsList = Array.from(rowAddonMap.values());
+
+                if (rowAddonsList.length > 0) {
+                    if (!sizeAddonsMap[szId]) sizeAddonsMap[szId] = [];
+                    rowAddonsList.forEach(a => {
+                        sizeAddonsMap[szId].push(a);
+                    });
+                }
             }
         });
 
@@ -355,29 +554,41 @@
             return false;
         }
 
-        const addonsData = window.draftAddons ? [...window.draftAddons] : [];
+        const catId = catSelect.value;
+        const category = window.dbCategories.find(c => c.id == catId);
+        const product = category ? category.products.find(p => p.id == prodSelect.value) : null;
+        const unitPrice = window.getUnitPriceForQty(product, totalQty);
 
-        let itemTotal = basePrice * totalQty;
-        addonsData.forEach(a => {
-            itemTotal += (a.price * a.qty);
+        let totalAddonCost = 0;
+        let addonsDataList = [];
+        Object.keys(sizeAddonsMap).forEach(szId => {
+            let addons = sizeAddonsMap[szId] || [];
+            addons.forEach(a => {
+                let cost = a.price * a.qty;
+                if (a.type === 'subtract') totalAddonCost -= cost;
+                else totalAddonCost += cost;
+                addonsDataList.push(a);
+            });
         });
 
-        // File extraction handling
+        let itemTotal = (unitPrice * totalQty) + totalAddonCost;
+        itemTotal = Math.max(0, itemTotal);
+
         const cartItemId = 'cart_' + Date.now();
         const fileObj = fileInput.files[0];
         const fileLabel = fileObj.name;
         const fileUrl = URL.createObjectURL(fileObj);
 
-        // Clone the input element to retain file buffer and pass it functionally inside hidden layer
         const clonedFile = fileInput.cloneNode(true);
         clonedFile.removeAttribute('id');
         clonedFile.removeAttribute('onchange');
         clonedFile.setAttribute('name', `design_files[${cartItemId}]`);
         document.getElementById('hiddenFilesContainer').appendChild(clonedFile);
 
-        // Reset visual File input state
         fileInput.value = "";
         document.getElementById('fileLabelText').innerText = "Pilih File Desain (klik di sini)";
+
+        const selProdOpt = prodSelect.options[prodSelect.selectedIndex];
 
         window.cart.push({
             id: cartItemId,
@@ -386,8 +597,9 @@
             product_name: selProdOpt.text,
             sizes: sizesData,
             total_qty: totalQty,
-            addons: addonsData,
-            base_price: basePrice,
+            addons: addonsDataList,
+            size_addons: JSON.parse(JSON.stringify(sizeAddonsMap)),
+            base_price: unitPrice,
             total_price: itemTotal,
             design_file_name: fileLabel,
             design_file_url: fileUrl
@@ -395,7 +607,8 @@
 
         prodSelect.value = "";
         window.liveDraft = null;
-        window.draftAddons = [];
+        document.getElementById('sizeRowsContainer').innerHTML = '';
+        document.getElementById('globalAddonList').innerHTML = '';
         window.renderCart();
         if(!silent) {
             if(typeof toastr !== 'undefined') toastr.success('Item berhasil ditambahkan ke Keranjang');
@@ -407,13 +620,12 @@
     window.removeFromCart = function(id) {
         window.cart = window.cart.filter(c => c.id !== id);
         
-        // Remove the hidden generated design constraint payload
         const targetFile = document.querySelector(`input[name="design_files[${id}]"]`);
         if(targetFile) targetFile.remove();
 
         window.renderCart();
         if(typeof toastr !== 'undefined') toastr.info('Item dihapus dari Keranjang');
-    }
+    };
 
     window.renderCart = function() {
         const cont = document.getElementById('cartItemsContainer');
@@ -437,42 +649,94 @@
             bigTotal += item.total_price;
             bigQty += item.total_qty;
             
-            let addonsDesc = item.addons.length > 0 
-                ? item.addons.map(a => `${a.name} (${a.qty}pcs${a.size_name ? ' uk:'+a.size_name : ''})`).join(', ') 
-                : 'Tidak ada add-ons';
+            const category = window.dbCategories.find(c => c.id == item.category_id);
+            
+            let sizeRowsHtml = Object.keys(item.sizes).map(szId => {
+                let catSize = category ? category.sizes.find(s => s.id == szId) : null;
+                let szName = catSize ? catSize.name : szId;
+                let szQty = item.sizes[szId];
+                let addonsForSz = (item.size_addons && item.size_addons[szId]) ? item.size_addons[szId] : [];
+                
+                let subItemsHtml = '';
+                let usedAddonQtySum = 0;
+
+                if (addonsForSz.length > 0) {
+                    addonsForSz.forEach(a => {
+                        let addonQty = parseInt(a.qty || 0);
+                        usedAddonQtySum += addonQty;
+                        subItemsHtml += `
+                            <div class="flex items-center gap-1.5 text-brand-blue font-bold">
+                                <i class="fa-solid fa-puzzle-piece text-[9px]"></i>
+                                <span>${addonQty}x ${a.name}</span>
+                            </div>
+                        `;
+                    });
+
+                    let remainingStd = szQty - usedAddonQtySum;
+                    if (remainingStd > 0) {
+                        subItemsHtml += `
+                            <div class="flex items-center gap-1.5 text-gray-500 font-medium">
+                                <i class="fa-solid fa-minus text-[9px] text-gray-400"></i>
+                                <span>${remainingStd}x Standar</span>
+                            </div>
+                        `;
+                    }
+                } else {
+                    subItemsHtml = `
+                        <div class="flex items-center gap-1.5 text-gray-500 font-medium">
+                            <i class="fa-solid fa-minus text-[9px] text-gray-400"></i>
+                            <span>${szQty}x Standar</span>
+                        </div>
+                    `;
+                }
+
+                return `
+                    <div class="bg-white border border-gray-200/80 rounded-xl p-2.5 shadow-2xs">
+                        <div class="flex items-center justify-between font-extrabold text-xs text-gray-800 border-b border-gray-100 pb-1.5 mb-1.5">
+                            <span class="flex items-center gap-1.5 uppercase"><i class="fa-solid fa-ruler-horizontal text-brand-blue text-[10px]"></i> Ukuran: ${szName}</span>
+                            <span class="bg-indigo-50 text-brand-blue px-2 py-0.5 rounded-full text-[10px] font-extrabold">${szQty} pcs</span>
+                        </div>
+                        <div class="space-y-1 pl-1 text-[11px]">
+                            ${subItemsHtml}
+                        </div>
+                    </div>
+                `;
+            }).join('');
 
             html += `
-                <div class="p-4 border border-gray-100 bg-gray-50/50 rounded-xl relative overflow-hidden">
+                <div class="p-4 border border-gray-100 bg-gray-50/70 rounded-2xl relative overflow-hidden shadow-xs">
                     <div class="flex justify-between items-start mb-2">
-                        <div class="max-w-[70%]">
+                        <div class="max-w-[75%]">
                             <h4 class="font-extrabold text-sm text-gray-900 truncate">${item.product_name}</h4>
-                            <p class="text-[10px] text-gray-500 uppercase font-bold mt-0.5">${item.total_qty} PCS &bull; ${item.addons.length} ADD-ONS</p>
-                            <p class="text-[9px] text-gray-400 mt-1 truncate" title="${addonsDesc}">${addonsDesc}</p>
-                            ${item.design_file_url ? 
-                            `<a href="${item.design_file_url}" target="_blank" class="text-[10px] text-brand-blue mt-1.5 font-bold truncate hover:underline inline-block" title="Lihat Foto / Desain">
-                                <i class="fa-solid fa-file-image mr-1"></i> ${item.design_file_name}
-                            </a>` : 
-                            `<p class="text-[10px] text-red-500 mt-1.5 font-bold truncate"><i class="fa-solid fa-triangle-exclamation mr-1"></i> ${item.design_file_name}</p>`
-                            }
+                            <p class="text-[10px] text-gray-400 font-extrabold uppercase tracking-wider mt-0.5">Total: ${item.total_qty} PCS</p>
                         </div>
                         ${!item.is_draft ? `
-                        <div class="flex flex-col gap-1.5 items-end shrink-0 max-w-[30%]">
-                            <button type="button" class="text-[10px] font-bold text-brand-blue bg-brand-bluelight px-2 py-1.5 rounded-lg hover:bg-indigo-100 transition whitespace-nowrap" onclick="window.openAddonModal('${item.id}')">
-                                <i class="fa-solid fa-plus text-[9px] mr-0.5"></i> Add-on
-                            </button>
-                            <button type="button" class="text-[10px] font-bold text-red-500 bg-red-50 px-2 py-1.5 rounded-lg hover:bg-red-100 transition whitespace-nowrap" onclick="window.removeFromCart('${item.id}')">
-                                <i class="fa-solid fa-trash-can mr-0.5"></i> Hapus
-                            </button>
-                        </div>` : `
-                        <div class="flex flex-col gap-1.5 items-end shrink-0 max-w-[30%]">
-                            <button type="button" class="text-[10px] font-bold text-brand-blue bg-brand-bluelight px-2 py-1.5 rounded-lg hover:bg-indigo-100 transition whitespace-nowrap" onclick="window.openAddonModal('draft')">
-                                <i class="fa-solid fa-plus text-[9px] mr-0.5"></i> Add-on
-                            </button>
-                        </div>`}
+                        <button type="button" class="text-[10px] font-bold text-red-500 bg-red-50 hover:bg-red-100 px-2 py-1 rounded-lg transition" onclick="window.removeFromCart('${item.id}')">
+                            <i class="fa-solid fa-trash-can mr-0.5"></i> Hapus
+                        </button>` : ''}
                     </div>
-                    <div class="flex justify-between items-center mt-3 pt-3 border-t border-gray-200">
+
+                    <!-- Per-Size & Addon Breakdown Box -->
+                    <div class="mt-3 space-y-1.5 border-t border-gray-200/60 pt-2.5">
+                        <div class="text-[10px] font-extrabold text-gray-400 uppercase tracking-wider mb-1">Rincian Ukuran & Add-on:</div>
+                        <div class="space-y-1.5">
+                            ${sizeRowsHtml}
+                        </div>
+                    </div>
+
+                    ${item.design_file_url ? 
+                    `<div class="mt-3 pt-2 border-t border-gray-200/40">
+                        <a href="${item.design_file_url}" target="_blank" class="text-[11px] text-brand-blue font-bold truncate hover:underline inline-flex items-center gap-1" title="Lihat Foto / Desain">
+                            <i class="fa-solid fa-file-image"></i> ${item.design_file_name}
+                        </a>
+                    </div>` : 
+                    `<div class="mt-3 pt-2 border-t border-gray-200/40">
+                        <p class="text-[10px] text-red-500 font-bold truncate"><i class="fa-solid fa-triangle-exclamation mr-1"></i> ${item.design_file_name}</p>
+                    </div>`}
+
+                    <div class="flex justify-between items-center mt-3 pt-2.5 border-t border-gray-200">
                         <span class="text-xs text-gray-500 font-medium">${formatRupiah(item.base_price)} /pcs</span>
-                        <span class="font-bold text-brand-blue text-sm">${formatRupiah(item.total_price)}</span>
+                        <span class="font-extrabold text-brand-blue text-sm">${formatRupiah(item.total_price)}</span>
                     </div>
                 </div>
             `;
@@ -483,132 +747,14 @@
         document.getElementById('grandTotalQty').innerText = bigQty + " pcs";
     };
 
-    window.openAddonModal = function(cartItemId) {
-        let item = (cartItemId === 'draft') ? window.liveDraft : window.cart.find(c => c.id === cartItemId);
-        if(!item) return;
-        const category = window.dbCategories.find(c => c.id == item.category_id);
-        
-        document.getElementById('modalCartItemId').value = cartItemId;
-        document.getElementById('modalProductName').innerText = item.product_name;
-
-        const list = document.getElementById('modalAddonsList');
-        list.innerHTML = '';
-
-        if(!category.addons || category.addons.length === 0) {
-            list.innerHTML = '<div class="text-sm text-gray-400 text-center py-4">Tidak ada addons tersedia untuk kategori ini.</div>';
-        } else {
-            category.addons.forEach(a => {
-                let addonPivotPrice = a.pivot && a.pivot.price ? parseInt(a.pivot.price) : 0;
-                let existing = item.addons.find(xa => xa.id == a.id);
-                let isChecked = existing ? 'checked' : '';
-                let qty = existing ? existing.qty : 1;
-                let selSzId = existing ? existing.size_id : '';
-                
-                let htmlOptions = '<option value="">Pilih Ukuran (Opsional)</option>';
-                Object.keys(item.sizes).forEach(szId => {
-                    let catSize = category.sizes.find(s => s.id == szId);
-                    if(catSize) {
-                        let sel = (selSzId == szId) ? 'selected' : '';
-                        htmlOptions += `<option value="${szId}" ${sel}>${catSize.name}</option>`;
-                    }
-                });
-
-                list.innerHTML += `
-                    <div class="flex flex-col gap-2 p-3 border border-gray-200 rounded-xl bg-gray-50 has-[:checked]:border-brand-blue has-[:checked]:bg-brand-blue/5 transition">
-                        <label class="flex items-center justify-between cursor-pointer">
-                            <div class="flex items-center gap-3">
-                                <input type="checkbox" class="modal-addon-checkbox w-4 h-4 text-brand-blue focus:ring-brand-blue border-gray-300 rounded" value="${a.id}" data-name="${a.name}" data-price="${addonPivotPrice}" ${isChecked} onchange="document.getElementById('modal_addon_details_${a.id}').classList.toggle('hidden', !this.checked)">
-                                <span class="text-sm font-bold text-gray-700">${a.name}</span>
-                            </div>
-                            <span class="text-xs text-brand-blue font-bold tracking-wide">+ ${addonPivotPrice > 0 ? formatRupiah(addonPivotPrice) : 'Gratis'}</span>
-                        </label>
-                        
-                        <div id="modal_addon_details_${a.id}" class="${isChecked ? '' : 'hidden'} mt-2 pt-3 border-t border-gray-100 flex gap-3">
-                            <div class="flex-1">
-                                <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest block mb-1">Kuantitas (pcs)</label>
-                                <input type="number" id="modal_addon_qty_${a.id}" min="1" value="${qty}" class="w-full border border-gray-200 rounded-lg px-3 py-1.5 text-xs outline-none focus:border-brand-blue bg-white">
-                            </div>
-                            <div class="flex-1">
-                                <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest block mb-1">Ukuran Baju</label>
-                                <select id="modal_addon_size_${a.id}" class="w-full border border-gray-200 rounded-lg px-3 py-1.5 text-xs outline-none focus:border-brand-blue bg-white">
-                                    ${htmlOptions}
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            });
-        }
-
-        const modal = document.getElementById('addonModal');
-        const modalContent = document.getElementById('addonModalContent');
-        modal.classList.remove('hidden');
-        setTimeout(() => {
-            modal.style.opacity = '1';
-            modalContent.classList.remove('scale-95');
-            modalContent.classList.add('scale-100');
-        }, 10);
-    };
-
-    window.closeAddonModal = function() {
-        const modal = document.getElementById('addonModal');
-        const modalContent = document.getElementById('addonModalContent');
-        modal.style.opacity = '0';
-        modalContent.classList.remove('scale-100');
-        modalContent.classList.add('scale-95');
-        setTimeout(() => {
-            modal.classList.add('hidden');
-        }, 300);
-    };
-
-    window.saveAddonsToCartItem = function() {
-        const cartItemId = document.getElementById('modalCartItemId').value;
-        let item = (cartItemId === 'draft') ? window.liveDraft : window.cart.find(c => c.id === cartItemId);
-        if(!item) return;
-
-        let newAddons = [];
-        document.querySelectorAll('.modal-addon-checkbox:checked').forEach(el => {
-            let addonId = el.value;
-            let qty = document.getElementById('modal_addon_qty_' + addonId).value || 1;
-            let szEl = document.getElementById('modal_addon_size_' + addonId);
-            let szId = szEl.value || null;
-            let szName = szId ? szEl.options[szEl.selectedIndex].text : '';
-            let parsedPrice = parseInt(el.getAttribute('data-price') || 0);
-
-            newAddons.push({
-                id: addonId,
-                name: el.getAttribute('data-name'),
-                qty: parseInt(qty),
-                size_id: szId,
-                size_name: szName,
-                price: parsedPrice
-            });
-        });
-
-        if (cartItemId === 'draft') {
-            window.draftAddons = newAddons;
-            window.syncDraft();
-        } else {
-            item.addons = newAddons;
-            let itemTotal = item.base_price * item.total_qty;
-            item.addons.forEach(a => { itemTotal += (a.price * a.qty); });
-            item.total_price = itemTotal;
-            window.renderCart();
-        }
-
-        window.closeAddonModal();
-        if(typeof toastr !== 'undefined') toastr.success('Add-ons berhasil diperbarui');
-    };
-
     window.processCheckout = function(e) {
         e.preventDefault();
 
         const catSelect = document.getElementById('categorySelect');
         const prodSelect = document.getElementById('productSelect');
         
-        // Auto-commit live draft to cart
         if(catSelect.value && prodSelect.value) {
-            let res = window.addToCart(true); // silent auto-commit
+            let res = window.addToCart(true);
             if(!res) return false;
         }
 
