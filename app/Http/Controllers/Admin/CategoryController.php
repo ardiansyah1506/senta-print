@@ -61,8 +61,10 @@ class CategoryController extends Controller
 
     public function addAddon(Request $request, string $id) {
         $category = Category::findOrFail($id);
+        $type = in_array($request->type, ['add', 'subtract']) ? $request->type : 'add';
         $category->addons()->attach($request->addon_id, [
             'price' => $request->price ?? 0,
+            'type' => $type,
             'display_order' => 0
         ]);
         return back()->with('success', 'Add On ditambahkan ke kategori ini.');

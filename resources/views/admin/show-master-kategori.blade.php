@@ -193,8 +193,18 @@
                                         <i class="fa-solid fa-chevron-down text-gray-400 text-xs absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none"></i>
                                     </div>
                                 </div>
-                                <div class="w-full sm:w-48">
-                                    <label class="block text-[11px] font-bold text-gray-700 mb-1.5 uppercase tracking-wider">Harga Tambahan (Rp)</label>
+                                <div class="w-full sm:w-44">
+                                    <label class="block text-[11px] font-bold text-gray-700 mb-1.5 uppercase tracking-wider">Tipe Harga</label>
+                                    <div class="relative">
+                                        <select name="type" required class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm font-semibold text-gray-700 outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue bg-white appearance-none transition shadow-sm">
+                                            <option value="add">+ Menambah</option>
+                                            <option value="subtract">- Mengurangi</option>
+                                        </select>
+                                        <i class="fa-solid fa-chevron-down text-gray-400 text-xs absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+                                    </div>
+                                </div>
+                                <div class="w-full sm:w-44">
+                                    <label class="block text-[11px] font-bold text-gray-700 mb-1.5 uppercase tracking-wider">Nominal (Rp)</label>
                                     <input type="number" name="price" required min="0" placeholder="0" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm font-semibold outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition shadow-sm">
                                 </div>
                                 <button type="submit" class="bg-brand-blue text-white px-5 py-2.5 rounded-lg text-sm font-bold hover:bg-indigo-700 transition shadow-sm w-full sm:w-auto h-10 border border-transparent">
@@ -209,7 +219,8 @@
                             <thead>
                                 <tr class="bg-gray-50/50">
                                     <th class="py-4 px-6 text-xs font-bold text-gray-500 uppercase tracking-wider">Nama Add On</th>
-                                    <th class="py-4 px-6 text-xs font-bold text-gray-500 uppercase tracking-wider text-right">Harga Tambahan</th>
+                                    <th class="py-4 px-6 text-xs font-bold text-gray-500 uppercase tracking-wider text-center">Tipe Harga</th>
+                                    <th class="py-4 px-6 text-xs font-bold text-gray-500 uppercase tracking-wider text-right">Nominal</th>
                                     <th class="py-4 px-6 text-xs font-bold text-gray-500 uppercase tracking-wider text-right w-32">Aksi</th>
                                 </tr>
                             </thead>
@@ -217,7 +228,20 @@
                                 @forelse($category->addons as $catAddon)
                                 <tr class="hover:bg-gray-50/50 transition">
                                     <td class="py-4 px-6 font-bold text-gray-900">{{ $catAddon->name }}</td>
-                                    <td class="py-4 px-6 text-right">Rp {{ number_format($catAddon->pivot->price, 0, ',', '.') }}</td>
+                                    <td class="py-4 px-6 text-center">
+                                        @if(($catAddon->pivot->type ?? 'add') === 'subtract')
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-red-100 text-red-700 border border-red-200">
+                                                <i class="fa-solid fa-minus mr-1"></i> Mengurangi (-)
+                                            </span>
+                                        @else
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-green-100 text-green-700 border border-green-200">
+                                                <i class="fa-solid fa-plus mr-1"></i> Menambah (+)
+                                            </span>
+                                        @endif
+                                    </td>
+                                    <td class="py-4 px-6 text-right font-semibold {{ ($catAddon->pivot->type ?? 'add') === 'subtract' ? 'text-red-600' : 'text-gray-900' }}">
+                                        {{ ($catAddon->pivot->type ?? 'add') === 'subtract' ? '-' : '+' }} Rp {{ number_format($catAddon->pivot->price, 0, ',', '.') }}
+                                    </td>
                                     <td class="py-4 px-6 text-right space-x-2">
                                         <form action="{{ route('admin.master-kategori.removeAddon', [$category->id, $catAddon->id]) }}" method="POST" class="inline-block" onsubmit="return confirm('Hapus Add On dari kategori ini?');">
                                             @csrf
@@ -227,7 +251,7 @@
                                     </td>
                                 </tr>
                                 @empty
-                                <tr><td colspan="3" class="py-6 text-center text-gray-400 font-semibold text-xs">Belum ada Add On yang ditautkan ke kategori ini.</td></tr>
+                                <tr><td colspan="4" class="py-6 text-center text-gray-400 font-semibold text-xs">Belum ada Add On yang ditautkan ke kategori ini.</td></tr>
                                 @endforelse
                             </tbody>
                         </table>

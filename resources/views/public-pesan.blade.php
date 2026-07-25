@@ -238,7 +238,12 @@
 
         let addonsData = window.draftAddons || []; 
         let itemTotal = basePrice * totalQty;
-        addonsData.forEach(a => itemTotal += (a.price * a.qty));
+        addonsData.forEach(a => {
+            let lineCost = a.price * a.qty;
+            if (a.type === 'subtract') itemTotal -= lineCost;
+            else itemTotal += lineCost;
+        });
+        itemTotal = Math.max(0, itemTotal);
 
         const fileInput = document.getElementById('designFile');
         const fileLabel = fileInput.files.length > 0 ? fileInput.files[0].name : '(Belum ada file desain)';
@@ -370,8 +375,11 @@
 
         let itemTotal = basePrice * totalQty;
         addonsData.forEach(a => {
-            itemTotal += (a.price * a.qty);
+            let lineCost = a.price * a.qty;
+            if (a.type === 'subtract') itemTotal -= lineCost;
+            else itemTotal += lineCost;
         });
+        itemTotal = Math.max(0, itemTotal);
 
         // File extraction handling
         const cartItemId = 'cart_' + Date.now();
@@ -449,7 +457,7 @@
             bigQty += item.total_qty;
             
             let addonsDesc = item.addons.length > 0 
-                ? item.addons.map(a => `${a.name} (${a.qty}pcs${a.size_name ? ' uk:'+a.size_name : ''})`).join(', ') 
+                ? item.addons.map(a => `${a.type === 'subtract' ? '[-]' : '[+]'} ${a.name} (${a.qty}pcs${a.size_name ? ' uk:'+a.size_name : ''})`).join(', ') 
                 : 'Tidak ada add-ons';
 
             html += `
@@ -511,6 +519,7 @@
         } else {
             category.addons.forEach(a => {
                 let addonPivotPrice = a.pivot && a.pivot.price ? parseInt(a.pivot.price) : 0;
+                let addonPivotType = a.pivot && a.pivot.type ? a.pivot.type : 'add';
                 let existing = item.addons.find(xa => xa.id == a.id);
                 let isChecked = existing ? 'checked' : '';
                 let qty = existing ? existing.qty : 1;
@@ -525,14 +534,18 @@
                     }
                 });
 
+                let priceBadge = addonPivotType === 'subtract'
+                    ? `<span class="text-xs text-red-600 font-bold tracking-wide">- ${addonPivotPrice > 0 ? formatRupiah(addonPivotPrice) : 'Gratis'}</span>`
+                    : `<span class="text-xs text-brand-blue font-bold tracking-wide">+ ${addonPivotPrice > 0 ? formatRupiah(addonPivotPrice) : 'Gratis'}</span>`;
+
                 list.innerHTML += `
                     <div class="flex flex-col gap-2 p-3 border border-gray-200 rounded-xl bg-gray-50 has-[:checked]:border-brand-blue has-[:checked]:bg-brand-blue/5 transition">
                         <label class="flex items-center justify-between cursor-pointer">
                             <div class="flex items-center gap-3">
-                                <input type="checkbox" class="modal-addon-checkbox w-4 h-4 text-brand-blue focus:ring-brand-blue border-gray-300 rounded" value="${a.id}" data-name="${a.name}" data-price="${addonPivotPrice}" ${isChecked} onchange="document.getElementById('modal_addon_details_${a.id}').classList.toggle('hidden', !this.checked)">
+                                <input type="checkbox" class="modal-addon-checkbox w-4 h-4 text-brand-blue focus:ring-brand-blue border-gray-300 rounded" value="${a.id}" data-name="${a.name}" data-price="${addonPivotPrice}" data-type="${addonPivotType}" ${isChecked} onchange="document.getElementById('modal_addon_details_${a.id}').classList.toggle('hidden', !this.checked)">
                                 <span class="text-sm font-bold text-gray-700">${a.name}</span>
                             </div>
-                            <span class="text-xs text-brand-blue font-bold tracking-wide">+ ${addonPivotPrice > 0 ? formatRupiah(addonPivotPrice) : 'Gratis'}</span>
+                            ${priceBadge}
                         </label>
                         
                         <div id="modal_addon_details_${a.id}" class="${isChecked ? '' : 'hidden'} mt-2 pt-3 border-t border-gray-100 flex gap-3">
@@ -586,6 +599,7 @@
             let szId = szEl.value || null;
             let szName = szId ? szEl.options[szEl.selectedIndex].text : '';
             let parsedPrice = parseInt(el.getAttribute('data-price') || 0);
+            let parsedType = el.getAttribute('data-type') || 'add';
 
             newAddons.push({
                 id: addonId,
@@ -593,7 +607,8 @@
                 qty: parseInt(qty),
                 size_id: szId,
                 size_name: szName,
-                price: parsedPrice
+                price: parsedPrice,
+                type: parsedType
             });
         });
 
@@ -603,8 +618,12 @@
         } else {
             item.addons = newAddons;
             let itemTotal = item.base_price * item.total_qty;
-            item.addons.forEach(a => { itemTotal += (a.price * a.qty); });
-            item.total_price = itemTotal;
+            item.addons.forEach(a => {
+                let lineCost = a.price * a.qty;
+                if (a.type === 'subtract') itemTotal -= lineCost;
+                else itemTotal += lineCost;
+            });
+            item.total_price = Math.max(0, itemTotal);
             window.renderCart();
         }
 

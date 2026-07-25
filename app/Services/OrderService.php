@@ -81,7 +81,8 @@ class OrderService
                         if (!$addon) continue;
                         
                         $qtyAddon = $addonPayload['qty'] ?? 1;
-                        $fullAddonName = $addon->name;
+                        $addonType = $addonPayload['type'] ?? 'add';
+                        $fullAddonName = ($addonType === 'subtract' ? '[-] ' : '') . $addon->name;
                         
                         // Standardizing Addon name details depending on available logic
                         if (isset($addonPayload['qty'])) {
@@ -89,13 +90,20 @@ class OrderService
                         }
 
                         $addon_line_total = $addonPayload['price'] * $qtyAddon;
-                        $grand_total += $addon_line_total;
+                        
+                        if ($addonType === 'subtract') {
+                            $grand_total -= $addon_line_total;
+                            $storedAddonPrice = -$addon_line_total;
+                        } else {
+                            $grand_total += $addon_line_total;
+                            $storedAddonPrice = $addon_line_total;
+                        }
 
                         OrderItemAddon::create([
                             'order_item_id' => $orderItem->id,
                             'addon_id' => $addon->id,
                             'addon_name' => $fullAddonName,
-                            'addon_price' => $addon_line_total
+                            'addon_price' => $storedAddonPrice
                         ]);
                     }
                 }
