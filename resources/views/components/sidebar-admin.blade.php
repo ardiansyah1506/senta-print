@@ -41,6 +41,9 @@
             <a href="{{ route('admin.master-kategori.index') }}" class="flex items-center gap-3 px-4 py-3 text-sm rounded-lg transition {{ Request::routeIs('admin.master-kategori.*', 'admin.data-master.*', 'admin.ukuran.*') ? 'font-bold bg-brand-yellow text-gray-900 shadow-sm' : 'font-medium hover:bg-sidebarhover hover:text-white' }}">
                 <i class="fa-solid fa-database w-5 text-center"></i> Data Master
             </a>
+            <a href="{{ route('admin.tahap-produksi.index') }}" class="flex items-center gap-3 px-4 py-3 text-sm rounded-lg transition {{ Request::routeIs('admin.tahap-produksi.*') ? 'font-bold bg-brand-yellow text-gray-900 shadow-sm' : 'font-medium hover:bg-sidebarhover hover:text-white' }}">
+                <i class="fa-solid fa-layer-group w-5 text-center"></i> Tahap Produksi
+            </a>
             <a href="{{ route('admin.manajemen-user.index') }}" class="flex items-center gap-3 px-4 py-3 text-sm rounded-lg transition {{ Request::routeIs('admin.manajemen-user.*') ? 'font-bold bg-brand-yellow text-gray-900 shadow-sm' : 'font-medium hover:bg-sidebarhover hover:text-white' }}">
                 <i class="fa-solid fa-users-gear w-5 text-center"></i> Manajemen User
             </a>

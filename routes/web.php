@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\AddonController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\SizeController;
+use App\Http\Controllers\Admin\ProductionStepController;
 use App\Http\Controllers\Operator\ProductionController;
 use App\Http\Controllers\User\CustomerPortalController;
 use App\Http\Controllers\AuthController;
@@ -45,6 +46,7 @@ Route::middleware('auth')->group(function () {
         Route::delete('master-kategori/{category}/products/{product_id}', [CategoryController::class, 'removeProduct'])->name('master-kategori.removeProduct');
         Route::resource('data-master', AddonController::class)->parameters(['data-master' => 'addon']);
         Route::resource('ukuran', SizeController::class);
+        Route::resource('tahap-produksi', ProductionStepController::class);
         Route::resource('manajemen-user', \App\Http\Controllers\Admin\UserController::class)->except(['create', 'show', 'edit', 'update']);
         
         Route::resource('kelola-pesanan', OrderController::class)->parameters(['kelola-pesanan' => 'order'])->names('order');
