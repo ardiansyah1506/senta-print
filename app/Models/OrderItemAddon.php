@@ -10,5 +10,5 @@ class OrderItemAddon extends Model
     use HasFactory;
     protected $guarded = [];
     public function orderItem() { return $this->belongsTo(OrderItem::class); }
-    public function addon() { return $this->belongsTo(Addon::class); }
+    public function addon() { return $this->belongsTo(Addon::class)->withTrashed(); }
 }

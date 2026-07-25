@@ -6,16 +6,16 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class ProductPrice extends Model
+class OrderFile extends Model
 {
     use HasFactory;
 
-    protected $table = 'product_prices';
+    protected $table = 'order_files';
 
     protected $guarded = [];
 
-    public function product(): BelongsTo
+    public function order(): BelongsTo
     {
-        return $this->belongsTo(Product::class, 'product_id');
+        return $this->belongsTo(Order::class, 'order_id');
     }
 }

@@ -5,10 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ProductionStep extends Model
+class ProductImage extends Model
 {
     use HasFactory;
-    protected $table = 'm_production_steps';
+
+    protected $table = 'product_images';
+
     protected $guarded = [];
-    public function logs() {return $this->hasMany(ProductionStepLog::class);}
+
+    public function product(){return $this->belongsTo(Product::class); }
 }
