@@ -81,7 +81,7 @@
         </div>
 
         <!-- Step 1: Input Invoice -->
-        <div id="trackStepInvoice" class="space-y-4">
+        <form id="trackStepInvoice" class="space-y-4" onsubmit="event.preventDefault(); submitTrackInvoice();">
             <div>
                 <label class="block text-xs font-bold text-gray-700 mb-2">Nomor Invoice Pesanan</label>
                 <div class="relative">
@@ -89,13 +89,13 @@
                     <i class="fa-solid fa-receipt text-gray-400 text-sm absolute right-4 top-1/2 -translate-y-1/2"></i>
                 </div>
             </div>
-            <button type="button" onclick="submitTrackInvoice()" class="w-full bg-brand-blue text-white rounded-xl py-3 font-bold text-xs hover:bg-indigo-700 transition shadow-md shadow-brand-blue/20 flex items-center justify-center gap-2">
+            <button type="submit" class="w-full bg-brand-blue text-white rounded-xl py-3 font-bold text-xs hover:bg-indigo-700 transition shadow-md shadow-brand-blue/20 flex items-center justify-center gap-2">
                 Cari Pesanan <i class="fa-solid fa-magnifying-glass"></i>
             </button>
-        </div>
+        </form>
 
         <!-- Step 2: Verification Phone (Hidden initially) -->
-        <div id="trackStepVerifyPhone" class="hidden space-y-4 pt-2">
+        <form id="trackStepVerifyPhone" class="hidden space-y-4 pt-2" onsubmit="event.preventDefault(); submitVerifyPhone();">
             <div class="p-3 bg-amber-50 border border-amber-200 rounded-xl text-amber-800 text-xs font-semibold flex items-center gap-2">
                 <i class="fa-solid fa-shield-halved text-amber-600 text-sm"></i>
                 <span>Invoice ditemukan! Masukkan Nomor WhatsApp untuk verifikasi kepemilikan.</span>
@@ -113,11 +113,11 @@
                 <button type="button" onclick="backToTrackStep1()" class="w-1/3 border border-gray-200 text-gray-600 rounded-xl py-3 text-xs font-bold hover:bg-gray-50 transition">
                     Kembali
                 </button>
-                <button type="button" onclick="submitVerifyPhone()" class="w-2/3 bg-brand-blue text-white rounded-xl py-3 font-bold text-xs hover:bg-indigo-700 transition shadow-md shadow-brand-blue/20">
+                <button type="submit" class="w-2/3 bg-brand-blue text-white rounded-xl py-3 font-bold text-xs hover:bg-indigo-700 transition shadow-md shadow-brand-blue/20">
                     Verifikasi & Lacak <i class="fa-solid fa-arrow-right ml-1"></i>
                 </button>
             </div>
-        </div>
+        </form>
 
         <!-- Step 3: Tracking Results Details (Hidden initially) -->
         <div id="trackStepResults" class="hidden space-y-6 pt-2">
