@@ -85,7 +85,7 @@ class ProductionController extends Controller
             foreach ($request->file('photos') as $photoFile) {
                 if ($photoFile->isValid()) {
                     $fileName = time() . '_' . rand(100, 999) . '_' . preg_replace('/[^a-zA-Z0-9._-]/', '', $photoFile->getClientOriginalName());
-                    $photoFile->storeAs('public/production_photos', $fileName);
+                    $photoFile->storeAs('production_photos', $fileName, 'public');
                     $log->photos()->create([
                         'file_path' => 'production_photos/' . $fileName
                     ]);

@@ -45,8 +45,8 @@ class OrderService
             $designFilePath = null;
             if ($request->hasFile("design_files.{$item['id']}")) {
                 $file = $request->file("design_files.{$item['id']}");
-                $fileName = time() . '_' . $file->getClientOriginalName();
-                $file->storeAs('public/designs', $fileName);
+                $fileName = time() . '_' . preg_replace('/[^a-zA-Z0-9._-]/', '', $file->getClientOriginalName());
+                $file->storeAs('designs', $fileName, 'public');
                 $designFilePath = 'designs/' . $fileName;
             }
 
