@@ -14,23 +14,10 @@
 </head>
 <body class="bg-gray-50 text-gray-800 antialiased font-sans">
     
-    <nav class="bg-white border-b border-gray-100 py-4">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 flex items-center justify-between">
-            <a href="{{ route('home') }}" class="flex items-center gap-3">
-                <svg class="w-8 h-8 text-brand-blue" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 2L2 22h20L12 2zm0 4.5l6.5 13h-13L12 6.5z"/>
-                </svg>
-                <span class="font-extrabold text-lg tracking-wider text-gray-900 uppercase">Senta Print</span>
-            </a>
-            <div class="flex items-center gap-6">
-                <a href="{{ route('home') }}" class="{{ Request::routeIs('home') ? 'text-[#4f46e5] font-extrabold border-b-2 border-[#4f46e5]' : 'text-gray-500 font-semibold hover:text-[#4f46e5]' }} text-sm transition pb-1">Home</a>
-                <button type="button" onclick="openPublicTrackingModal()" class="text-gray-500 font-semibold hover:text-[#4f46e5] text-sm transition pb-1 cursor-pointer">Lacak Pesanan</button>
-                <a href="{{ route('login') }}" class="{{ Request::routeIs('login') ? 'text-[#4f46e5] font-extrabold border-b-2 border-[#4f46e5]' : 'text-gray-500 font-semibold hover:text-[#4f46e5]' }} text-sm transition pb-1">Login</a>
-            </div>
-        </div>
-    </nav>
+    <!-- Navbar -->
+    <x-public-navbar />
 
-    <div class="max-w-6xl mx-auto pb-10 px-4 sm:px-6 mt-8">
+    <div class="max-w-6xl mx-auto pb-10 px-4 sm:px-6 pt-24 mt-4">
         <div class="mb-8">
             <h1 class="text-2xl font-extrabold text-gray-900 mb-1">Buat Pesanan Custom <span class="bg-brand-blue text-white text-xs px-3 py-1 rounded-full font-bold ml-2">Jalur Public</span></h1>
             <p class="text-gray-500 text-sm font-medium">Bebas antrian, kustomisasi sebebas mungkin. Langsung terhubung dengan Tim Produksi.</p>

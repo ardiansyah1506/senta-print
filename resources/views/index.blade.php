@@ -38,15 +38,7 @@
 <body class="bg-gray-50 text-gray-800 antialiased selection:bg-brand-500 selection:text-white">
 
     <!-- Navbar -->
-                </a>
-                <div class="flex items-center gap-6">
-                    <a href="{{ route('home') }}" class="{{ Request::routeIs('home') ? 'text-[#4f46e5] font-extrabold border-b-2 border-[#4f46e5]' : 'text-gray-500 font-semibold hover:text-[#4f46e5]' }} text-sm transition pb-1">Home</a>
-                    <a href="#lacak-pesanan" class="text-gray-500 font-semibold hover:text-[#4f46e5] text-sm transition pb-1">Lacak Pesanan</a>
-                    <a href="{{ route('login') }}" class="{{ Request::routeIs('login') ? 'text-[#4f46e5] font-extrabold border-b-2 border-[#4f46e5]' : 'text-gray-500 font-semibold hover:text-[#4f46e5]' }} text-sm transition pb-1">Login</a>
-                </div>
-            </div>
-        </div>
-    </nav>
+    <x-public-navbar />
 
     <!-- Hero Section -->
     <section class="bg-white pt-20 pb-16">
