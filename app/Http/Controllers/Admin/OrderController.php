@@ -11,7 +11,7 @@ use App\Models\ProductionStep;
 class OrderController extends Controller
 {
     public function index() { 
-        $orders = Order::with(['customer', 'items.product', 'production.logs.step'])
+        $orders = Order::with(['customer', 'items.product', 'items.addons', 'production.logs.step', 'production.logs.photos'])
             ->latest()
             ->paginate(10);
 
