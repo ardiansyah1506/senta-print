@@ -83,30 +83,7 @@
         </div>
     </section>
 
-    <!-- Section Lacak Status Produk Konveksi -->
-    <section id="lacak-pesanan" class="py-16 bg-indigo-900 text-white relative overflow-hidden">
-        <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px]"></div>
-        <div class="max-w-4xl mx-auto px-4 text-center relative z-10">
-            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-indigo-800/80 border border-indigo-700 text-indigo-200 text-xs font-bold mb-5">
-                <i class="fa-solid fa-location-crosshairs text-brand-500"></i> Tracking Real-time
-            </div>
-            <h2 class="text-3xl md:text-4xl font-extrabold text-white mb-3">
-                Lacak Status Produk Konveksi
-            </h2>
-            <p class="text-indigo-200 text-sm md:text-base max-w-2xl mx-auto mb-8 leading-relaxed font-medium">
-                Masukkan nomor invoice anda untuk melihat proses pemotongan, sablon, jahit, Quality Control, hingga Pengiriman.
-            </p>
 
-            <form onsubmit="event.preventDefault(); startPublicTrackFromPage();" class="max-w-xl mx-auto bg-white/10 backdrop-blur-md p-3 rounded-2xl border border-white/20 shadow-2xl flex flex-col sm:flex-row gap-3">
-                <div class="relative flex-1">
-                    <input type="text" id="pageInvoiceInput" placeholder="Contoh: INV-PUB-20260726-1234" class="w-full h-14 bg-white rounded-xl px-5 text-sm font-extrabold text-gray-800 placeholder-gray-400 uppercase outline-none focus:ring-2 focus:ring-brand-500 shadow-inner">
-                </div>
-                <button type="submit" class="h-14 px-8 bg-brand-600 hover:bg-brand-700 text-white font-extrabold text-sm rounded-xl transition flex items-center justify-center gap-2 shadow-lg shrink-0 cursor-pointer">
-                    Cari Invoice <i class="fa-solid fa-magnifying-glass text-xs"></i>
-                </button>
-            </form>
-        </div>
-    </section>
 
     <!-- Catalog Section -->
     <section class="py-20 bg-gray-50">
@@ -219,7 +196,7 @@
     </section>
 
     <!-- Tracking Section -->
-    <section class="py-20 bg-gray-50 border-y border-gray-100">
+    <section id="lacak-pesanan" class="py-20 bg-gray-50 border-y border-gray-100">
         <div class="max-w-3xl mx-auto px-4 text-center">
             <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">
                 <span class="text-brand-600">Lacak Status</span> Produk Konveksi
@@ -227,12 +204,12 @@
             <p class="text-gray-500 text-lg mb-10 max-w-xl mx-auto">
                 Masukkan nomor invoice anda untuk melihat proses pemotongan, sablon, jahit, Quality Control, hingga Pengiriman
             </p>
-            <div class="bg-white p-2 rounded-2xl shadow-sm border border-gray-200 flex flex-col sm:flex-row focus-within:ring-2 focus-within:ring-brand-500 focus-within:border-brand-500 transition-shadow">
-                <input type="text" placeholder="Masukkan Nomor Invoice (contoh: INV-2026-001)" class="w-full px-4 py-3 outline-none text-gray-700 bg-transparent rounded-lg">
-                <button class="bg-brand-900 text-white font-semibold px-8 py-3 rounded-xl hover:bg-brand-950 transition flex items-center justify-center mt-2 sm:mt-0 shadow-md">
+            <form onsubmit="event.preventDefault(); startPublicTrackFromPage();" class="bg-white p-2 rounded-2xl shadow-sm border border-gray-200 flex flex-col sm:flex-row focus-within:ring-2 focus-within:ring-brand-500 focus-within:border-brand-500 transition-shadow">
+                <input type="text" id="pageInvoiceInput" placeholder="Masukkan Nomor Invoice (contoh: INV-PUB-20260726-1234)" class="w-full px-4 py-3 outline-none text-gray-700 bg-transparent rounded-lg">
+                <button type="submit" class="bg-brand-900 text-white font-semibold px-8 py-3 rounded-xl hover:bg-brand-950 transition flex items-center justify-center mt-2 sm:mt-0 shadow-md">
                     Lacak <i class="fa-solid fa-arrow-right ml-2 text-sm"></i>
                 </button>
-            </div>
+            </form>
         </div>
     </section>
 
