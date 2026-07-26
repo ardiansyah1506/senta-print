@@ -4,42 +4,102 @@ namespace App\Http\Controllers\Operator;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Order;
+use App\Models\ProductionStep;
 
 class ProductionController extends Controller
 {
     public function index() { 
-        $orders = \App\Models\Order::whereIn('status', ['production'])
+        $orders = Order::whereIn('status', ['production'])
             ->with(['customer', 'items.product', 'production.logs'])
             ->latest()
             ->paginate(10);
         
-        $totalSteps = \App\Models\ProductionStep::count();
+        $totalSteps = ProductionStep::count();
         if ($totalSteps == 0) $totalSteps = 6;
         
         return view('operator.kelolaproduksi', compact('orders', 'totalSteps')); 
     }
 
     public function tracking($id) {
-        $order = \App\Models\Order::with(['customer', 'items.product', 'production.logs.step'])->findOrFail($id);
-        $steps = \App\Models\ProductionStep::orderBy('sort_order')->get();
-        return view('operator.tracking', compact('order', 'steps')); 
+        $order = Order::with(['customer', 'items.product', 'production.logs.step', 'production.logs.photos'])->findOrFail($id);
+        $allSteps = ProductionStep::orderBy('sort_order', 'asc')->get();
+        
+        $completedStepIds = [];
+        if ($order->production && $order->production->logs) {
+            $completedStepIds = $order->production->logs->pluck('production_step_id')->toArray();
+        }
+
+        // Determine next required step in sequential order
+        $nextStep = $allSteps->first(function($step) use ($completedStepIds) {
+            return !in_array($step->id, $completedStepIds);
+        });
+
+        $nextStepIndex = 1;
+        if ($nextStep) {
+            $nextStepIndex = $allSteps->search(function($s) use ($nextStep) {
+                return $s->id == $nextStep->id;
+            }) + 1;
+        }
+
+        return view('operator.tracking', compact('order', 'allSteps', 'completedStepIds', 'nextStep', 'nextStepIndex')); 
     }
 
     public function storeLog(Request $request, $id) {
-        $order = \App\Models\Order::findOrFail($id);
+        $request->validate([
+            'notes' => 'required|string',
+            'photos.*' => 'nullable|image|max:10240'
+        ]);
+
+        $order = Order::findOrFail($id);
         
         $production = $order->production()->firstOrCreate(
             ['order_id' => $order->id],
             ['started_at' => now()]
         );
-        
-        $production->logs()->create([
-            'production_step_id' => $request->production_step_id,
-            'notes' => $request->notes,
+
+        $allSteps = ProductionStep::orderBy('sort_order', 'asc')->get();
+        if ($allSteps->isEmpty()) {
+            return back()->with('error', 'Belum ada data Master Tahap Produksi.');
+        }
+
+        $completedStepIds = $production->logs()->pluck('production_step_id')->toArray();
+
+        // Calculate expected next step in sequential order
+        $nextStep = $allSteps->first(function($step) use ($completedStepIds) {
+            return !in_array($step->id, $completedStepIds);
+        });
+
+        if (!$nextStep) {
+            return back()->with('error', 'Seluruh tahap produksi untuk pesanan ini telah selesai.');
+        }
+
+        $log = $production->logs()->create([
+            'production_step_id' => $nextStep->id,
+            'notes' => trim($request->notes),
             'created_by' => auth()->id() ?? 1,
             'status' => 'completed'
         ]);
 
-        return back()->with('success', 'Progress diperbarui.');
+        if ($request->hasFile('photos')) {
+            foreach ($request->file('photos') as $photoFile) {
+                if ($photoFile->isValid()) {
+                    $fileName = time() . '_' . rand(100, 999) . '_' . preg_replace('/[^a-zA-Z0-9._-]/', '', $photoFile->getClientOriginalName());
+                    $photoFile->storeAs('public/production_photos', $fileName);
+                    $log->photos()->create([
+                        'file_path' => 'production_photos/' . $fileName
+                    ]);
+                }
+            }
+        }
+
+        // Check if all steps are completed
+        $updatedCompletedCount = count($completedStepIds) + 1;
+        if ($updatedCompletedCount >= $allSteps->count()) {
+            $order->status = 'completed';
+            $order->save();
+        }
+
+        return back()->with('success', 'Tahap "' . $nextStep->name . '" berhasil diselesaikan!');
     }
 }

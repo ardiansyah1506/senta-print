@@ -5,9 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Models\Order;
-use App\Models\OrderItem;
-use App\Models\OrderItemAddon;
+use App\Models\Customer;
 use App\Models\User;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class PublicPageController extends Controller
 {
@@ -27,16 +28,182 @@ class PublicPageController extends Controller
             'cart' => 'required|string'
         ]);
 
-        $anonUser = User::firstOrCreate(
-            ['username' => $request->no_whatsapp],
-            ['nama' => $request->nama_pemesan, 'password' => bcrypt('sentaprint'), 'role' => 'customer']
+        $rawPhone = trim($request->no_whatsapp);
+        $cleanPhone = preg_replace('/[^0-9]/', '', $rawPhone);
+
+        // 1. Find or create Customer record
+        $customer = Customer::firstOrCreate(
+            ['phone' => $rawPhone],
+            ['name' => trim($request->nama_pemesan)]
         );
+        if ($customer->name !== trim($request->nama_pemesan)) {
+            $customer->update(['name' => trim($request->nama_pemesan)]);
+        }
+
+        // 2. Find or create User account for customer portal
+        $user = User::where('phone', $rawPhone)
+            ->orWhere('phone', $cleanPhone)
+            ->orWhere('name', $rawPhone)
+            ->first();
+
+        if (!$user) {
+            $randomPassword = Str::random(10);
+            $user = User::create([
+                'name' => trim($request->nama_pemesan),
+                'phone' => $rawPhone,
+                'email' => $cleanPhone . '@customer.sentaprint.com',
+                'password' => Hash::make($randomPassword),
+                'role' => 'customer',
+            ]);
+        }
 
         try {
-            $order = $orderService->createOrder($request, $anonUser->id, 'INV-PUB-');
-            return redirect()->route('home')->with('success', 'Pesanan berhasil dibuat! Nomor Invoice Anda: ' . $order->invoice_no);
+            $order = $orderService->createOrder($request, $customer->id, 'INV-PUB-');
+
+            return redirect()->route('public.order.buat')->with('order_success', [
+                'invoice_no' => $order->invoice_no,
+                'nama_pemesan' => trim($request->nama_pemesan),
+                'no_whatsapp' => $rawPhone,
+                'total_price' => (float)$order->grand_total,
+                'total_qty' => $order->items->sum('qty'),
+                'created_at' => $order->created_at->format('d M Y H:i'),
+            ]);
         } catch (\Exception $e) {
             return back()->with('error', $e->getMessage());
         }
+    }
+
+    public function searchOrder(Request $request) {
+        $request->validate([
+            'invoice_no' => 'required|string'
+        ]);
+
+        $invoiceNo = trim($request->invoice_no);
+        $order = Order::where('invoice_no', $invoiceNo)->first();
+
+        if (!$order) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Nomor Invoice "' . $invoiceNo . '" tidak ditemukan.'
+            ], 404);
+        }
+
+        return response()->json([
+            'success' => true,
+            'invoice_no' => $order->invoice_no,
+            'message' => 'Invoice ditemukan. Silakan masukkan nomor WhatsApp Anda untuk memverifikasi pesanan.'
+        ]);
+    }
+
+    public function verifyAndTrackOrder(Request $request) {
+        $request->validate([
+            'invoice_no' => 'required|string',
+            'no_whatsapp' => 'required|string'
+        ]);
+
+        $invoiceNo = trim($request->invoice_no);
+        $inputPhoneClean = preg_replace('/[^0-9]/', '', $request->no_whatsapp);
+
+        $order = Order::with(['customer', 'items.addons', 'production.logs.step', 'production.logs.photos'])
+            ->where('invoice_no', $invoiceNo)
+            ->first();
+
+        if (!$order) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Nomor Invoice tidak ditemukan.'
+            ], 404);
+        }
+
+        $customerPhoneClean = preg_replace('/[^0-9]/', '', $order->customer->phone ?? '');
+        if ($customerPhoneClean !== $inputPhoneClean && $order->customer->phone !== trim($request->no_whatsapp)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Nomor WhatsApp tidak cocok dengan pemilik Invoice ini.'
+            ], 403);
+        }
+
+        $allMasterSteps = \App\Models\ProductionStep::orderBy('sort_order', 'asc')->get();
+        $completedLogsMap = [];
+        if ($order->production && $order->production->logs) {
+            foreach ($order->production->logs as $log) {
+                $completedLogsMap[$log->production_step_id] = [
+                    'notes' => $log->notes,
+                    'created_at' => $log->created_at->format('d M Y, H:i'),
+                    'photos' => $log->photos->map(fn($p) => asset('storage/' . $p->file_path))->toArray()
+                ];
+            }
+        }
+
+        $completedIds = array_keys($completedLogsMap);
+        $nextRequiredStep = $allMasterSteps->first(fn($s) => !in_array($s->id, $completedIds));
+
+        $sequentialSteps = $allMasterSteps->map(function($st) use ($completedLogsMap, $nextRequiredStep) {
+            $isDone = isset($completedLogsMap[$st->id]);
+            $isActive = ($nextRequiredStep && $nextRequiredStep->id == $st->id);
+            
+            return [
+                'id' => $st->id,
+                'name' => $st->name,
+                'status' => $isDone ? 'completed' : ($isActive ? 'active' : 'pending'),
+                'notes' => $isDone ? $completedLogsMap[$st->id]['notes'] : null,
+                'created_at' => $isDone ? $completedLogsMap[$st->id]['created_at'] : null,
+                'photos' => $isDone ? $completedLogsMap[$st->id]['photos'] : []
+            ];
+        });
+
+        $currentStepName = 'Menunggu Pembayaran';
+        if ($order->status === 'completed') {
+            $currentStepName = 'Selesai / Siap Dikirim';
+        } elseif ($nextRequiredStep) {
+            $currentStepName = $nextRequiredStep->name;
+        } elseif ($allMasterSteps->isNotEmpty() && empty($nextRequiredStep)) {
+            $currentStepName = 'Seluruh Tahap Selesai';
+        }
+
+        $paymentStatus = strtoupper($order->payment_status ?? 'PENDING');
+
+        $itemsSummary = $order->items->map(function($item) {
+            $basePrice = (float)($item->base_price > 0 ? $item->base_price : $item->unit_price);
+            $subtotalBaju = $basePrice * $item->qty;
+
+            $addonsDetail = $item->addons->map(function($addon) {
+                return [
+                    'name' => $addon->addon_name,
+                    'price' => (float)$addon->addon_price
+                ];
+            });
+
+            $totalAddonCost = $addonsDetail->sum('price');
+            $lineTotalFinal = $subtotalBaju + $totalAddonCost;
+
+            return [
+                'product_name' => $item->product_name,
+                'size_name' => $item->size_name,
+                'qty' => (int)$item->qty,
+                'base_price' => $basePrice,
+                'subtotal_baju' => $subtotalBaju,
+                'total_addon' => $totalAddonCost,
+                'total_price' => $lineTotalFinal,
+                'addons' => $addonsDetail,
+                'design_file' => $item->design_file ? asset('storage/' . $item->design_file) : null
+            ];
+        });
+
+        return response()->json([
+            'success' => true,
+            'order' => [
+                'invoice_no' => $order->invoice_no,
+                'customer_name' => $order->customer->name,
+                'phone' => $order->customer->phone,
+                'payment_status' => $paymentStatus,
+                'current_production_step' => $currentStepName,
+                'subtotal' => (float)$order->subtotal,
+                'grand_total' => (float)$order->grand_total,
+                'created_at' => $order->created_at->format('d M Y H:i'),
+                'sequential_steps' => $sequentialSteps,
+                'items' => $itemsSummary
+            ]
+        ]);
     }
 }

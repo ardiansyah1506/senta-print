@@ -41,6 +41,7 @@
                 </a>
                 <div class="flex items-center gap-6">
                     <a href="{{ route('home') }}" class="{{ Request::routeIs('home') ? 'text-[#4f46e5] font-extrabold border-b-2 border-[#4f46e5]' : 'text-gray-500 font-semibold hover:text-[#4f46e5]' }} text-sm transition pb-1">Home</a>
+                    <a href="#lacak-pesanan" class="text-gray-500 font-semibold hover:text-[#4f46e5] text-sm transition pb-1">Lacak Pesanan</a>
                     <a href="{{ route('login') }}" class="{{ Request::routeIs('login') ? 'text-[#4f46e5] font-extrabold border-b-2 border-[#4f46e5]' : 'text-gray-500 font-semibold hover:text-[#4f46e5]' }} text-sm transition pb-1">Login</a>
                 </div>
             </div>
@@ -61,8 +62,8 @@
                 <a href="{{ route('public.order') }}" class="w-full sm:w-auto px-8 py-3.5 bg-brand-900 text-white rounded-full font-semibold hover:bg-brand-950 transition flex items-center justify-center gap-2 shadow-lg shadow-gray-200">
                     Pesan Sekarang <i class="fa-solid fa-arrow-right text-sm"></i>
                 </a>
-                <a href="#" class="w-full sm:w-auto px-8 py-3.5 bg-white text-gray-700 border border-gray-300 rounded-full font-semibold hover:bg-gray-50 transition flex items-center justify-center">
-                    Lacak Invoice Anda
+                <a href="#lacak-pesanan" class="w-full sm:w-auto px-8 py-3.5 bg-white text-gray-700 border border-gray-300 rounded-full font-semibold hover:bg-gray-50 transition flex items-center justify-center gap-2 cursor-pointer">
+                    Lacak Invoice Anda <i class="fa-solid fa-arrow-down text-brand-600 text-sm"></i>
                 </a>
             </div>
 
@@ -87,6 +88,31 @@
                     <div class="text-sm text-gray-500 font-medium whitespace-nowrap">Rating</div>
                 </div>
             </div>
+        </div>
+    </section>
+
+    <!-- Section Lacak Status Produk Konveksi -->
+    <section id="lacak-pesanan" class="py-16 bg-indigo-900 text-white relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px]"></div>
+        <div class="max-w-4xl mx-auto px-4 text-center relative z-10">
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-indigo-800/80 border border-indigo-700 text-indigo-200 text-xs font-bold mb-5">
+                <i class="fa-solid fa-location-crosshairs text-brand-500"></i> Tracking Real-time
+            </div>
+            <h2 class="text-3xl md:text-4xl font-extrabold text-white mb-3">
+                Lacak Status Produk Konveksi
+            </h2>
+            <p class="text-indigo-200 text-sm md:text-base max-w-2xl mx-auto mb-8 leading-relaxed font-medium">
+                Masukkan nomor invoice anda untuk melihat proses pemotongan, sablon, jahit, Quality Control, hingga Pengiriman.
+            </p>
+
+            <form onsubmit="event.preventDefault(); startPublicTrackFromPage();" class="max-w-xl mx-auto bg-white/10 backdrop-blur-md p-3 rounded-2xl border border-white/20 shadow-2xl flex flex-col sm:flex-row gap-3">
+                <div class="relative flex-1">
+                    <input type="text" id="pageInvoiceInput" placeholder="Contoh: INV-PUB-20260726-1234" class="w-full h-14 bg-white rounded-xl px-5 text-sm font-extrabold text-gray-800 placeholder-gray-400 uppercase outline-none focus:ring-2 focus:ring-brand-500 shadow-inner">
+                </div>
+                <button type="submit" class="h-14 px-8 bg-brand-600 hover:bg-brand-700 text-white font-extrabold text-sm rounded-xl transition flex items-center justify-center gap-2 shadow-lg shrink-0 cursor-pointer">
+                    Cari Invoice <i class="fa-solid fa-magnifying-glass text-xs"></i>
+                </button>
+            </form>
         </div>
     </section>
 
@@ -373,5 +399,6 @@
         @if(session('success')) toastr.success("{{ session('success') }}"); @endif
         @if(session('error')) toastr.error("{{ session('error') }}"); @endif
     </script>
+    @include('partials.tracking-modal')
 </body>
 </html>

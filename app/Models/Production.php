@@ -11,4 +11,5 @@ class Production extends Model
     protected $guarded = [];
     public function order() { return $this->belongsTo(Order::class); }
     public function logs() { return $this->hasMany(ProductionStepLog::class); }
+    public function currentStep() { return $this->hasOne(ProductionStepLog::class)->latestOfMany(); }
 }

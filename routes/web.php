@@ -15,7 +15,10 @@ use App\Http\Controllers\AuthController;
 // Public Pages
 Route::get('/', [PublicPageController::class, 'index'])->name('home');
 Route::get('/pesan-sekarang', [PublicPageController::class, 'buatPesanan'])->name('public.order');
+Route::get('/pesan-sekarang/buat', [PublicPageController::class, 'buatPesanan'])->name('public.order.buat');
 Route::post('/pesan-sekarang', [PublicPageController::class, 'storeOrder'])->name('public.order.store');
+Route::post('/lacak-pesanan/search', [PublicPageController::class, 'searchOrder'])->name('public.order.search');
+Route::post('/lacak-pesanan/verify', [PublicPageController::class, 'verifyAndTrackOrder'])->name('public.order.verify');
 
 // Auth Routes
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
@@ -51,6 +54,7 @@ Route::middleware('auth')->group(function () {
         Route::resource('tahap-produksi', ProductionStepController::class);
         Route::resource('manajemen-user', \App\Http\Controllers\Admin\UserController::class)->except(['create', 'show', 'edit', 'update']);
         
+        Route::post('kelola-pesanan/{order}/confirm-payment', [OrderController::class, 'confirmPayment'])->name('order.confirmPayment');
         Route::resource('kelola-pesanan', OrderController::class)->parameters(['kelola-pesanan' => 'order'])->names('order');
         Route::get('/laporan', [ReportController::class, 'index'])->name('report.index');
     });

@@ -36,7 +36,7 @@ class OrderService
 
         $grand_total = 0;
         
-        // Loop through logic
+        // Loop through cart items
         foreach ($cart as $item) {
             $product = Product::find($item['product_id']);
             if (!$product) continue;
@@ -50,68 +50,139 @@ class OrderService
                 $designFilePath = 'designs/' . $fileName;
             }
 
-            // Calculate total quantity for this cart item to determine tiered price
-            $totalItemQty = array_sum($item['sizes']);
+            // Calculate total quantity for this cart item to determine tiered unit price
+            $sizes = $item['sizes'] ?? [];
+            $totalItemQty = array_sum($sizes);
             $unitPrice = $product->getPriceForQty($totalItemQty > 0 ? $totalItemQty : 1);
             if ($unitPrice <= 0 && isset($item['base_price'])) {
                 $unitPrice = (float) $item['base_price'];
             }
 
+            $sizeAddonsMap = $item['size_addons'] ?? [];
+
             // Distribute Order items per size explicitly allocated
-            foreach ($item['sizes'] as $sizeId => $qty) {
-                if ($qty <= 0) continue;
+            foreach ($sizes as $sizeId => $totalSizeQty) {
+                if ($totalSizeQty <= 0) continue;
                 
                 $size = Size::find($sizeId);
                 if (!$size) continue;
                 
-                $item_total = $unitPrice * $qty;
-                
-                $orderItem = OrderItem::create([
-                    'order_id' => $order->id,
-                    'product_id' => $product->id,
-                    'product_name' => $product->product_name,
-                    'qty' => $qty,
-                    'size_id' => $sizeId,
-                    'size_name' => $size->name,
-                    'unit_price' => $unitPrice,
-                    'total_price' => $item_total,
-                    'notes' => $request->notes ?? '', // 'notes' field mostly used loosely
-                    'design_file' => $designFilePath,
-                ]);
-                
-                $grand_total += $item_total;
+                $addonsForThisSize = $sizeAddonsMap[$sizeId] ?? [];
 
-                // Bind generic add-ons (if selected by customer logic payload)
-                if (!empty($item['addons'])) {
-                    foreach ($item['addons'] as $addonPayload) {
-                        $addon = Addon::find($addonPayload['id']);
-                        if (!$addon) continue;
-                        
-                        $qtyAddon = $addonPayload['qty'] ?? 1;
-                        $addonType = $addonPayload['type'] ?? 'add';
-                        $fullAddonName = ($addonType === 'subtract' ? '[-] ' : '') . $addon->name;
-                        
-                        // Standardizing Addon name details depending on available logic
-                        if (isset($addonPayload['qty'])) {
-                            $fullAddonName .= " ({$qtyAddon} pcs" . (isset($addonPayload['size_name']) ? " pada {$addonPayload['size_name']}" : "") . ")";
+                if (!empty($addonsForThisSize)) {
+                    // Calculate the max addon qty requested for this size
+                    $maxAddonQty = 0;
+                    foreach ($addonsForThisSize as $addonData) {
+                        if (isset($addonData['qty']) && (int)$addonData['qty'] > $maxAddonQty) {
+                            $maxAddonQty = (int)$addonData['qty'];
                         }
+                    }
+                    $maxAddonQty = min($totalSizeQty, $maxAddonQty > 0 ? $maxAddonQty : $totalSizeQty);
+                    $qtyWithoutAddon = $totalSizeQty - $maxAddonQty;
 
-                        $addon_line_total = $addonPayload['price'] * $qtyAddon;
-                        
-                        if ($addonType === 'subtract') {
-                            $grand_total -= $addon_line_total;
-                            $storedAddonPrice = -$addon_line_total;
-                        } else {
-                            $grand_total += $addon_line_total;
-                            $storedAddonPrice = $addon_line_total;
-                        }
-
-                        OrderItemAddon::create([
-                            'order_item_id' => $orderItem->id,
-                            'addon_id' => $addon->id,
-                            'addon_name' => $fullAddonName,
-                            'addon_price' => $storedAddonPrice
+                    // 1. Create OrderItem for portion WITH addons
+                    if ($maxAddonQty > 0) {
+                        $itemTotal = $unitPrice * $maxAddonQty;
+                        $orderItemWithAddon = OrderItem::create([
+                            'order_id' => $order->id,
+                            'product_id' => $product->id,
+                            'product_name' => $product->product_name,
+                            'qty' => $maxAddonQty,
+                            'size_id' => $sizeId,
+                            'size_name' => $size->name,
+                            'base_price' => $unitPrice,
+                            'unit_price' => $unitPrice,
+                            'total_price' => $itemTotal,
+                            'notes' => $request->notes ?? '',
+                            'design_file' => $designFilePath,
                         ]);
+                        $grand_total += $itemTotal;
+
+                        foreach ($addonsForThisSize as $addonPayload) {
+                            $addon = Addon::find($addonPayload['id']);
+                            if (!$addon) continue;
+                            
+                            $qtyAddon = $addonPayload['qty'] ?? $maxAddonQty;
+                            $addonType = $addonPayload['type'] ?? 'add';
+                            $fullAddonName = ($addonType === 'subtract' ? '[-] ' : '') . $addon->name . " ({$qtyAddon} pcs pada {$size->name})";
+                            
+                            $addon_line_total = ($addonPayload['price'] ?? 0) * $qtyAddon;
+                            $storedAddonPrice = ($addonType === 'subtract') ? -$addon_line_total : $addon_line_total;
+
+                            $grand_total += $storedAddonPrice;
+
+                            OrderItemAddon::create([
+                                'order_item_id' => $orderItemWithAddon->id,
+                                'addon_id' => $addon->id,
+                                'addon_name' => $fullAddonName,
+                                'addon_price' => $storedAddonPrice
+                            ]);
+                        }
+                    }
+
+                    // 2. Create OrderItem for portion WITHOUT addons (if remaining qty exists)
+                    if ($qtyWithoutAddon > 0) {
+                        $itemTotalNoAddon = $unitPrice * $qtyWithoutAddon;
+                        OrderItem::create([
+                            'order_id' => $order->id,
+                            'product_id' => $product->id,
+                            'product_name' => $product->product_name,
+                            'qty' => $qtyWithoutAddon,
+                            'size_id' => $sizeId,
+                            'size_name' => $size->name,
+                            'base_price' => $unitPrice,
+                            'unit_price' => $unitPrice,
+                            'total_price' => $itemTotalNoAddon,
+                            'notes' => $request->notes ?? '',
+                            'design_file' => $designFilePath,
+                        ]);
+                        $grand_total += $itemTotalNoAddon;
+                    }
+
+                } else {
+                    // Standard single OrderItem creation when no addons for this size
+                    $item_total = $unitPrice * $totalSizeQty;
+                    $orderItem = OrderItem::create([
+                        'order_id' => $order->id,
+                        'product_id' => $product->id,
+                        'product_name' => $product->product_name,
+                        'qty' => $totalSizeQty,
+                        'size_id' => $sizeId,
+                        'size_name' => $size->name,
+                        'base_price' => $unitPrice,
+                        'unit_price' => $unitPrice,
+                        'total_price' => $item_total,
+                        'notes' => $request->notes ?? '',
+                        'design_file' => $designFilePath,
+                    ]);
+                    
+                    $grand_total += $item_total;
+
+                    // Fallback for global item addons (legacy compatibility)
+                    if (!empty($item['addons'])) {
+                        foreach ($item['addons'] as $addonPayload) {
+                            $addon = Addon::find($addonPayload['id']);
+                            if (!$addon) continue;
+                            
+                            $qtyAddon = $addonPayload['qty'] ?? 1;
+                            $addonType = $addonPayload['type'] ?? 'add';
+                            $fullAddonName = ($addonType === 'subtract' ? '[-] ' : '') . $addon->name;
+                            if (isset($addonPayload['qty'])) {
+                                $fullAddonName .= " ({$qtyAddon} pcs" . (isset($addonPayload['size_name']) ? " pada {$addonPayload['size_name']}" : "") . ")";
+                            }
+
+                            $addon_line_total = ($addonPayload['price'] ?? 0) * $qtyAddon;
+                            $storedAddonPrice = ($addonType === 'subtract') ? -$addon_line_total : $addon_line_total;
+
+                            $grand_total += $storedAddonPrice;
+
+                            OrderItemAddon::create([
+                                'order_item_id' => $orderItem->id,
+                                'addon_id' => $addon->id,
+                                'addon_name' => $fullAddonName,
+                                'addon_price' => $storedAddonPrice
+                            ]);
+                        }
                     }
                 }
             }
