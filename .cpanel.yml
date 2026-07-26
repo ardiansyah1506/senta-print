@@ -2,4 +2,4 @@
 deployment:
   tasks:
     - export DEPLOYPATH=/home/senh9183/public_html/
-    - /bin/cp -R public/* $DEPLOYPATH
+    - /bin/cp -R /home/senh9183/repositories/senta-print/public/* $DEPLOYPATH
