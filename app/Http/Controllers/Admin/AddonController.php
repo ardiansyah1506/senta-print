@@ -41,5 +41,10 @@ class AddonController extends Controller
     public function create() {}
     public function show(string $id) {}
     public function edit(string $id) {}
-    public function update(Request $request, string $id) {}
+    public function update(Request $request, string $id) {
+        $validated = $request->validate(['name' => 'required|string|max:255']);
+        $addon = Addon::findOrFail($id);
+        $addon->update($validated);
+        return back()->with('success', 'Add On berhasil diupdate!');
+    }
 }

@@ -77,7 +77,7 @@
                                             <td class="py-4 px-8 font-bold text-gray-900">{{ $category->name }}</td>
                                             <td class="py-4 px-8 text-right space-x-2 flex justify-end">
                                                 <a href="{{ route('admin.master-kategori.show', $category->id) }}" title="Kelola Item" class="inline-flex items-center justify-center text-brand-blue hover:text-white hover:bg-brand-blue transition w-8 h-8 rounded-md bg-brand-bluelight"><i class="fa-solid fa-eye text-xs"></i></a>
-                                                <button class="text-gray-400 hover:text-brand-blue transition w-8 h-8 rounded-md hover:bg-gray-100 inline-flex items-center justify-center"><i class="fa-regular fa-pen-to-square"></i></button>
+                                                <button type="button" data-url="{{ route('admin.master-kategori.update', $category->id) }}" data-name="{{ $category->name }}" onclick="openEditModal(this)" class="text-gray-400 hover:text-brand-blue transition w-8 h-8 rounded-md hover:bg-gray-100 inline-flex items-center justify-center"><i class="fa-regular fa-pen-to-square"></i></button>
                                                 <form action="{{ route('admin.master-kategori.destroy', $category->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Hapus data ini?');">
                                                     @csrf
                                                     @method('DELETE')
@@ -102,4 +102,41 @@
 
                     </div>
                 </div>
+
+    <!-- Edit Modal -->
+    <div id="editModal" class="fixed inset-0 z-50 hidden bg-gray-900/50 flex items-center justify-center backdrop-blur-sm">
+        <div class="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden transform transition-all">
+            <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
+                <h3 class="text-lg font-bold text-gray-900">Edit Kategori</h3>
+                <button type="button" class="text-gray-400 hover:text-gray-700 transition" onclick="closeEditModal()">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <form id="editForm" method="POST" class="p-6 space-y-4">
+                @csrf
+                @method('PUT')
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 mb-2">Nama Kategori</label>
+                    <input type="text" name="name" id="editName" required class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition bg-white text-gray-800">
+                </div>
+                <div class="flex justify-end pt-2 gap-3">
+                    <button type="button" onclick="closeEditModal()" class="px-5 py-2.5 rounded-xl text-sm font-bold text-gray-600 bg-gray-100 hover:bg-gray-200 transition">Batal</button>
+                    <button type="submit" class="bg-brand-blue text-white px-5 py-2.5 rounded-xl text-sm font-bold hover:bg-indigo-700 transition shadow-[0_4px_12px_-4px_rgba(79,70,229,0.5)]">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function openEditModal(btn) {
+            document.getElementById('editForm').action = btn.getAttribute('data-url');
+            document.getElementById('editName').value = btn.getAttribute('data-name');
+            document.getElementById('editModal').classList.remove('hidden');
+        }
+        
+        function closeEditModal() {
+            document.getElementById('editModal').classList.add('hidden');
+        }
+    </script>
+</div>
 @endsection

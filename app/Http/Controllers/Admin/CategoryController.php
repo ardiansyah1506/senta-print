@@ -145,4 +145,12 @@ class CategoryController extends Controller
         $product->prices()->findOrFail($price_id)->delete();
         return back()->with('success', 'Harga bertingkat dihapus.')->with('open_product_price_modal_id', $product_id);
     }
+
+    public function update(Request $request, string $id)
+    {
+        $validated = $request->validate(['name' => 'required|string|max:255']);
+        $category = Category::findOrFail($id);
+        $category->update($validated);
+        return back()->with('success', 'Kategori diperbarui!');
+    }
 }

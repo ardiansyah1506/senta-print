@@ -31,5 +31,10 @@ class SizeController extends Controller
     public function create() {}
     public function show(string $id) {}
     public function edit(string $id) {}
-    public function update(Request $request, string $id) {}
+    public function update(Request $request, string $id) {
+        $validated = $request->validate(['name' => 'required|string|max:255']);
+        $size = Size::findOrFail($id);
+        $size->update($validated);
+        return back()->with('success', 'Ukuran berhasil diupdate!');
+    }
 }
