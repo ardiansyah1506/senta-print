@@ -16,7 +16,6 @@ class ProductionController extends Controller
             ->paginate(10);
         
         $totalSteps = ProductionStep::count();
-        if ($totalSteps == 0) $totalSteps = 6;
         
         return view('operator.kelolaproduksi', compact('orders', 'totalSteps')); 
     }
@@ -27,7 +26,7 @@ class ProductionController extends Controller
         
         $completedStepIds = [];
         if ($order->production && $order->production->logs) {
-            $completedStepIds = $order->production->logs->pluck('production_step_id')->toArray();
+            $completedStepIds = array_unique($order->production->logs->pluck('production_step_id')->toArray());
         }
 
         // Determine next required step in sequential order
@@ -63,7 +62,7 @@ class ProductionController extends Controller
             return back()->with('error', 'Belum ada data Master Tahap Produksi.');
         }
 
-        $completedStepIds = $production->logs()->pluck('production_step_id')->toArray();
+        $completedStepIds = array_unique($production->logs()->pluck('production_step_id')->toArray());
 
         // Calculate expected next step in sequential order
         $nextStep = $allSteps->first(function($step) use ($completedStepIds) {

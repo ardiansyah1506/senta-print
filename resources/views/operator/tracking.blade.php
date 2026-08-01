@@ -102,10 +102,20 @@
             
             <!-- Right: Form Input Tahap Selanjutnya (Strict Sequential Order) -->
             <div class="bg-gray-50/70 rounded-2xl border border-gray-200/80 p-6 shadow-sm self-start space-y-5">
-                @if($nextStep)
+                @if($allSteps->isEmpty())
+                    <div class="p-8 bg-red-50 border border-red-200 rounded-2xl text-center space-y-3">
+                        <div class="w-12 h-12 bg-red-100 text-red-600 rounded-full flex items-center justify-center mx-auto text-xl font-bold">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                        </div>
+                        <h4 class="text-base font-extrabold text-red-900">Data Master Kosong</h4>
+                        <p class="text-xs text-red-700 font-medium leading-relaxed">
+                            Belum ada tahapan produksi yang diatur. Anda tidak dapat memperbarui progres.
+                        </p>
+                    </div>
+                @elseif($nextStep)
                     <div class="bg-white border border-indigo-100 rounded-2xl p-4 space-y-2 shadow-xs">
                         <div class="flex items-center justify-between text-xs">
-                            <span class="font-extrabold text-gray-400 uppercase tracking-wider">Tahap Produksi Berikunya</span>
+                            <span class="font-extrabold text-gray-400 uppercase tracking-wider">Tahap Produksi Berikutnya</span>
                             <span class="bg-indigo-50 text-brand-blue px-3 py-1 rounded-full font-extrabold text-xs">Tahap {{ $nextStepIndex }} dari {{ $allSteps->count() }}</span>
                         </div>
                         <h4 class="text-lg font-extrabold text-brand-blue flex items-center gap-2">
