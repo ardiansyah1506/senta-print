@@ -8,26 +8,11 @@
         'description' => 'Masuk ke portal akun Senta Print untuk memantau status pesanan konveksi dan riwayat transaksi Anda.',
         'robots' => 'noindex, follow'
     ])
-    <script src="https://cdn.tailwindcss.com"></script>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
-                    },
-                    colors: {
-                        brand: {
-                            blue: '#4f46e5', // Indigo 600
-                        }
-                    }
-                }
-            }
-        }
-    </script>
+
 </head>
 <body class="bg-gray-50 selection:bg-brand-blue selection:text-white font-sans antialiased">
     <x-public-navbar />

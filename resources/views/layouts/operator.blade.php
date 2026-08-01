@@ -8,29 +8,11 @@
         'description' => 'Portal operator Senta Print untuk pemantauan dan pengkinian status produksi pesanan.',
         'robots' => 'noindex, nofollow'
     ])
-    <script src="https://cdn.tailwindcss.com"></script>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
-                    },
-                    colors: {
-                        sidebar: '#1a2234',
-                        sidebarhover: '#252e42',
-                        brand: {
-                            blue: '#4f46e5', // Indigo 600
-                            bluelight: '#e0e7ff',
-                            yellow: '#facc15', // Yellow 400
-                        }
-                    }
-                }
-            }
-        }
 
         // Popup logic
         function openPopup() {
