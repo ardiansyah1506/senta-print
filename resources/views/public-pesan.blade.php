@@ -3,7 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Senta Print - Buat Pesanan</title>
+    @include('partials.seo-meta', [
+        'title' => 'Buat Pesanan Custom - Senta Print',
+        'description' => 'Formulir pemesanan produk konveksi custom Senta Print. Pesan kaos, seragam, polo shirt, dan merchandise custom secara online dengan kalkulasi harga cepat.',
+        'keywords' => 'buat pesanan senta print, pesan kaos custom online, cetak seragam custom, pesan hoodie semarang, kustomisasi produk konveksi',
+        'robots' => 'noindex, follow'
+    ])
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">

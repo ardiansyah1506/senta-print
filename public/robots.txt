@@ -1,2 +1,13 @@
 User-agent: *
-Disallow:
+Allow: /$
+Disallow: /admin
+Disallow: /user
+Disallow: /operator
+Disallow: /login
+Disallow: /register
+Disallow: /pesan
+Disallow: /api/
+Disallow: /storage/
+
+# Sitemap
+Sitemap: https://sentraprint.com/sitemap.xml

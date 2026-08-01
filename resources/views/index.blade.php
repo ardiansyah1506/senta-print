@@ -3,7 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Senta Print - Wujudkan Desain Impian</title>
+    @include('partials.seo-meta', [
+        'title' => 'Senta Print - Wujudkan Desain Impian dengan Kualitas Terbaik',
+        'description' => 'Platform manajemen konveksi modern Senta Print. Pesan kaos, seragam, jaket, polo shirt, dan merchandise custom dengan tracking real-time dan jaminan kualitas 100%.',
+        'keywords' => 'senta print, konveksi semarang, pesan kaos custom, cetak seragam, jaket hoodie custom, polo shirt custom, merchandise custom, tracking pesanan',
+        'robots' => 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1'
+    ])
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">

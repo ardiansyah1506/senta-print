@@ -1,0 +1,85 @@
+@php
+    $defaultTitle = 'Senta Print - Wujudkan Desain Impian dengan Kualitas Terbaik';
+    $pageTitle = isset($title) && !empty($title) ? $title : $defaultTitle;
+
+    $defaultDescription = 'Platform manajemen konveksi modern Senta Print. Pesan kaos, seragam, jaket, polo, dan produk custom lainnya dengan tracking real-time dan jaminan kualitas 100%.';
+    $pageDescription = isset($description) && !empty($description) ? $description : $defaultDescription;
+
+    $defaultKeywords = 'senta print, konveksi semarang, pesan kaos custom, cetak seragam, jaket hoodie custom, polo shirt custom, merchandise custom, tracking pesanan konveksi, konveksi murah';
+    $pageKeywords = isset($keywords) && !empty($keywords) ? $keywords : $defaultKeywords;
+
+    $pageAuthor = isset($author) && !empty($author) ? $author : 'Senta Group';
+    $pageRobots = isset($robots) && !empty($robots) ? $robots : 'noindex, follow';
+    $pageCanonical = isset($canonicalUrl) && !empty($canonicalUrl) ? $canonicalUrl : url()->current();
+    $pageImage = isset($imageUrl) && !empty($imageUrl) ? $imageUrl : 'https://images.unsplash.com/photo-1581655353564-df123a1eb820?auto=format&fit=crop&q=80&w=1200&h=630';
+    $pageType = isset($type) && !empty($type) ? $type : 'website';
+    $siteName = 'Senta Print';
+@endphp
+
+<!-- Basic Meta Tags -->
+<title>{{ $pageTitle }}</title>
+<meta name="title" content="{{ $pageTitle }}">
+<meta name="description" content="{{ $pageDescription }}">
+<meta name="keywords" content="{{ $pageKeywords }}">
+<meta name="author" content="{{ $pageAuthor }}">
+<meta name="robots" content="{{ $pageRobots }}">
+<link rel="canonical" href="{{ $pageCanonical }}">
+
+<!-- Open Graph / Facebook / WhatsApp Meta Tags -->
+<meta property="og:type" content="{{ $pageType }}">
+<meta property="og:site_name" content="{{ $siteName }}">
+<meta property="og:title" content="{{ $pageTitle }}">
+<meta property="og:description" content="{{ $pageDescription }}">
+<meta property="og:url" content="{{ $pageCanonical }}">
+<meta property="og:image" content="{{ $pageImage }}">
+<meta property="og:locale" content="id_ID">
+
+<!-- Twitter Card Meta Tags -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@sentaprint">
+<meta name="twitter:title" content="{{ $pageTitle }}">
+<meta name="twitter:description" content="{{ $pageDescription }}">
+<meta name="twitter:image" content="{{ $pageImage }}">
+
+<!-- Structured Data / JSON-LD Schema.org -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "name": "{{ $siteName }}",
+  "image": "{{ $pageImage }}",
+  "description": "{{ $pageDescription }}",
+  "url": "{{ url('/') }}",
+  "telephone": "+6281234567890",
+  "email": "info@sentraprint.com",
+  "priceRange": "$$",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Jl. Semarang Raya No. 1, Semarang Indah",
+    "addressLocality": "Semarang",
+    "addressRegion": "Jawa Tengah",
+    "addressCountry": "ID"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": "-6.966667",
+    "longitude": "110.416667"
+  },
+  "openingHoursSpecification": {
+    "@type": "OpeningHoursSpecification",
+    "dayOfWeek": [
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday"
+    ],
+    "opens": "08:00",
+    "closes": "17:00"
+  },
+  "sameAs": [
+    "https://wa.me/6281234567890"
+  ]
+}
+</script>
