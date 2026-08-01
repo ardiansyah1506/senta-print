@@ -4,12 +4,15 @@
     $user = Auth::user(); 
     $userName = $user ? $user->name : 'Senta User';
 @endphp
-        <header class="bg-white h-16 flex items-center justify-between px-8 shrink-0 shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)] relative z-10 border-b border-gray-100">
-            <!-- Breadcrumb -->
-            <div class="flex items-center text-sm font-medium text-gray-500">
-                <span class="hover:text-gray-800 cursor-pointer">{{ $role }}</span>
-                <i class="fa-solid fa-chevron-right text-[10px] mx-3"></i>
-                <span class="text-gray-900 font-bold">{{ $title }}</span>
+        <header class="bg-white h-16 flex items-center justify-between px-4 md:px-8 shrink-0 shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)] relative z-10 border-b border-gray-100">
+            <!-- Left: Mobile Toggle & Breadcrumb -->
+            <div class="flex items-center gap-3 text-sm font-medium text-gray-500">
+                <button type="button" onclick="toggleMobileSidebar()" class="md:hidden text-gray-600 hover:text-brand-blue p-1.5 rounded-lg border border-gray-200 focus:outline-none transition">
+                    <i class="fa-solid fa-bars text-lg"></i>
+                </button>
+                <span class="hover:text-gray-800 cursor-pointer hidden sm:inline">{{ $role }}</span>
+                <i class="fa-solid fa-chevron-right text-[10px] mx-1 sm:mx-3 hidden sm:inline"></i>
+                <span class="text-gray-900 font-bold truncate max-w-[150px] sm:max-w-none">{{ $title }}</span>
             </div>
 
             <!-- Right Menus -->
