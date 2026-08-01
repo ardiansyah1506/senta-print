@@ -39,6 +39,7 @@ Route::middleware(['auth', \App\Http\Middleware\CheckRole::class . ':customer,ad
 Route::middleware('auth')->group(function () {
     // Admin Routes
     Route::middleware([\App\Http\Middleware\CheckRole::class . ':admin'])->prefix('admin')->name('admin.')->group(function () {
+        Route::get('/dashboard', [\App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
         Route::resource('master-kategori', CategoryController::class)->parameters(['master-kategori' => 'category']);
         Route::post('master-kategori/{category}/sync-sizes', [CategoryController::class, 'syncSizes'])->name('master-kategori.syncSizes');
         Route::post('master-kategori/{category}/size-chart', [CategoryController::class, 'uploadSizeChart'])->name('master-kategori.uploadSizeChart');

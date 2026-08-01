@@ -27,7 +27,7 @@
 
         <!-- Navigation -->
         <nav class="flex-1 px-4 space-y-1 overflow-y-auto">
-            <a href="#" class="flex items-center gap-3 px-4 py-3 text-sm rounded-lg transition {{ request()->is('admin/dashboard') ? 'font-bold bg-brand-yellow text-gray-900 shadow-sm' : 'font-medium hover:bg-sidebarhover hover:text-white' }}">
+            <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3 px-4 py-3 text-sm rounded-lg transition {{ Request::routeIs('admin.dashboard') ? 'font-bold bg-brand-yellow text-gray-900 shadow-sm' : 'font-medium hover:bg-sidebarhover hover:text-white' }}">
                 <i class="fa-solid fa-border-all w-5 text-center"></i> Dashboard
             </a>
             <a href="{{ route('admin.order.index') }}" class="flex items-center gap-3 px-4 py-3 text-sm rounded-lg transition {{ Request::routeIs('admin.order.*') ? 'font-bold bg-brand-yellow text-gray-900 shadow-sm' : 'font-medium hover:bg-sidebarhover hover:text-white' }}">
