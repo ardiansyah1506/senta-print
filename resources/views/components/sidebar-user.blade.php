@@ -2,7 +2,11 @@
     $user = Auth::user(); 
     $userName = $user ? $user->name : 'Customer';
 @endphp
-    <aside class="w-64 bg-sidebar text-gray-300 flex flex-col h-full shrink-0 border-r border-gray-800 z-10 relative">
+    <!-- Mobile Backdrop -->
+    <div id="sidebarBackdrop" onclick="toggleMobileSidebar()" class="fixed inset-0 bg-gray-900/60 backdrop-blur-xs z-40 hidden md:hidden transition-opacity"></div>
+
+    <!-- Sidebar Drawer -->
+    <aside id="sidebarDrawer" class="fixed inset-y-0 left-0 z-50 w-64 bg-sidebar text-gray-300 flex flex-col h-full shrink-0 border-r border-gray-800 transition-transform duration-300 transform -translate-x-full md:translate-x-0 md:static md:z-10">
         <!-- Logo -->
         <div class="h-20 flex items-center px-6 border-b border-gray-800/50">
             <img src="{{ asset('logo/logo2.png') }}" alt="Senta Print Logo" class="h-10 w-auto object-contain">

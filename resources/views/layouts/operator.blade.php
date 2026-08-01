@@ -52,7 +52,7 @@
         <x-dashboard-topbar role="Operator" title="Kelola Produksi" />
 
         <!-- Content Area -->
-        <div class="flex-1 overflow-y-auto p-8">
+        <div class="flex-1 overflow-y-auto p-4 md:p-8">
             @yield("content")
         </div>
     </main>
