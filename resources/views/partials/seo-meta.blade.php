@@ -14,6 +14,46 @@
     $pageImage = isset($imageUrl) && !empty($imageUrl) ? $imageUrl : 'https://images.unsplash.com/photo-1581655353564-df123a1eb820?auto=format&fit=crop&q=80&w=1200&h=630';
     $pageType = isset($type) && !empty($type) ? $type : 'website';
     $siteName = 'Senta Print';
+
+    $jsonLdData = [
+        '@context' => 'https://schema.org',
+        '@type' => 'LocalBusiness',
+        'name' => $siteName,
+        'image' => $pageImage,
+        'description' => $pageDescription,
+        'url' => url('/'),
+        'telephone' => '+6281234567890',
+        'email' => 'info@sentraprint.com',
+        'priceRange' => '$$',
+        'address' => [
+            '@type' => 'PostalAddress',
+            'streetAddress' => 'Jl. Semarang Raya No. 1, Semarang Indah',
+            'addressLocality' => 'Semarang',
+            'addressRegion' => 'Jawa Tengah',
+            'addressCountry' => 'ID'
+        ],
+        'geo' => [
+            '@type' => 'GeoCoordinates',
+            'latitude' => '-6.966667',
+            'longitude' => '110.416667'
+        ],
+        'openingHoursSpecification' => [
+            '@type' => 'OpeningHoursSpecification',
+            'dayOfWeek' => [
+                'Monday',
+                'Tuesday',
+                'Wednesday',
+                'Thursday',
+                'Friday',
+                'Saturday'
+            ],
+            'opens' => '08:00',
+            'closes' => '17:00'
+        ],
+        'sameAs' => [
+            'https://wa.me/6281234567890'
+        ]
+    ];
 @endphp
 
 <!-- Basic Meta Tags -->
@@ -36,50 +76,12 @@
 
 <!-- Twitter Card Meta Tags -->
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:site" content="@sentaprint">
+<meta name="twitter:site" content="@@sentaprint">
 <meta name="twitter:title" content="{{ $pageTitle }}">
 <meta name="twitter:description" content="{{ $pageDescription }}">
 <meta name="twitter:image" content="{{ $pageImage }}">
 
 <!-- Structured Data / JSON-LD Schema.org -->
 <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "LocalBusiness",
-  "name": "{{ $siteName }}",
-  "image": "{{ $pageImage }}",
-  "description": "{{ $pageDescription }}",
-  "url": "{{ url('/') }}",
-  "telephone": "+6281234567890",
-  "email": "info@sentraprint.com",
-  "priceRange": "$$",
-  "address": {
-    "@type": "PostalAddress",
-    "streetAddress": "Jl. Semarang Raya No. 1, Semarang Indah",
-    "addressLocality": "Semarang",
-    "addressRegion": "Jawa Tengah",
-    "addressCountry": "ID"
-  },
-  "geo": {
-    "@type": "GeoCoordinates",
-    "latitude": "-6.966667",
-    "longitude": "110.416667"
-  },
-  "openingHoursSpecification": {
-    "@type": "OpeningHoursSpecification",
-    "dayOfWeek": [
-      "Monday",
-      "Tuesday",
-      "Wednesday",
-      "Thursday",
-      "Friday",
-      "Saturday"
-    ],
-    "opens": "08:00",
-    "closes": "17:00"
-  },
-  "sameAs": [
-    "https://wa.me/6281234567890"
-  ]
-}
+{!! json_encode($jsonLdData, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) !!}
 </script>
