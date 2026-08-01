@@ -65,6 +65,11 @@
 <meta name="robots" content="{{ $pageRobots }}">
 <link rel="canonical" href="{{ $pageCanonical }}">
 
+<!-- Favicon -->
+<link rel="icon" type="image/png" href="{{ asset('logo/logo_mark.png') }}">
+<link rel="shortcut icon" type="image/png" href="{{ asset('logo/logo_mark.png') }}">
+<link rel="apple-touch-icon" href="{{ asset('logo/logo_mark.png') }}">
+
 <!-- Open Graph / Facebook / WhatsApp Meta Tags -->
 <meta property="og:type" content="{{ $pageType }}">
 <meta property="og:site_name" content="{{ $siteName }}">

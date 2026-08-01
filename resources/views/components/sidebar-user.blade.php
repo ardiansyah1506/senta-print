@@ -5,13 +5,7 @@
     <aside class="w-64 bg-sidebar text-gray-300 flex flex-col h-full shrink-0 border-r border-gray-800 z-10 relative">
         <!-- Logo -->
         <div class="h-20 flex items-center px-6 border-b border-gray-800/50">
-            <div class="flex items-center gap-3">
-                <svg class="w-8 h-8 text-white" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 2L2 22h20L12 2zm0 4.5l6.5 13h-13L12 6.5z"/>
-                    <path d="M12 10.5l-3 6h6l-3-6z" fill="currentColor"/>
-                </svg>
-                <span class="font-extrabold text-lg tracking-wider text-white uppercase">Senta Print</span>
-            </div>
+            <img src="{{ asset('logo/logo2.png') }}" alt="Senta Print Logo" class="h-10 w-auto object-contain">
         </div>
 
         <!-- User Profile (Customer) -->
