@@ -9,13 +9,11 @@
         'keywords' => 'buat pesanan senta print, pesan kaos custom online, cetak seragam custom, pesan hoodie semarang, kustomisasi produk konveksi',
         'robots' => 'noindex, follow'
     ])
-    <script src="https://cdn.tailwindcss.com"></script>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
-    <script>
-        tailwind.config = { theme: { extend: { fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'], }, colors: { brand: { blue: '#4f46e5', light: '#eef2ff' } } } } }
-    </script>
+
 </head>
 <body class="bg-gray-50 text-gray-800 antialiased font-sans">
     

@@ -9,31 +9,10 @@
         'keywords' => 'senta print, konveksi semarang, pesan kaos custom, cetak seragam, jaket hoodie custom, polo shirt custom, merchandise custom, tracking pesanan',
         'robots' => 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1'
     ])
-    <script src="https://cdn.tailwindcss.com"></script>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
-                    },
-                    colors: {
-                        brand: {
-                            50: '#eff6ff',
-                            100: '#dbeafe',
-                            500: '#3b82f6',
-                            600: '#2563eb',
-                            700: '#1d4ed8',
-                            900: '#1e293b', // Dark background
-                            950: '#0f172a', // Darker background
-                        }
-                    }
-                }
-            }
-        }
-    </script>
+
     <style>
         .feature-icon-container {
             background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
