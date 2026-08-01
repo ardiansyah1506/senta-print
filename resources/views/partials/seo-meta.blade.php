@@ -91,6 +91,10 @@
 {!! json_encode($jsonLdData, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) !!}
 </script>
 
+<!-- FontAwesome & Lucide Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js"></script>
+
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-LPGQJBQ8TM"></script>
 <script>

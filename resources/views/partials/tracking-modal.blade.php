@@ -3,11 +3,11 @@
 <div id="orderSuccessModal" class="fixed inset-0 z-[100] bg-gray-900/60 backdrop-blur-sm flex items-center justify-center p-4 transition-opacity duration-300">
     <div class="bg-white rounded-3xl shadow-2xl max-w-lg w-full p-8 text-center relative transform transition-all scale-100 border border-gray-100">
         <button type="button" onclick="document.getElementById('orderSuccessModal').remove()" class="absolute top-5 right-5 text-gray-400 hover:text-gray-600 transition">
-            <i class="fa-solid fa-xmark text-xl"></i>
+            <i data-lucide="x" class="w-5 h-5"></i>
         </button>
 
-        <div class="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl shadow-inner">
-            <i class="fa-solid fa-circle-check"></i>
+        <div class="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-inner">
+            <i data-lucide="check-circle-2" class="w-8 h-8"></i>
         </div>
 
         <h3 class="text-2xl font-extrabold text-gray-900 mb-1">Pesanan Berhasil Dibuat!</h3>
@@ -19,7 +19,7 @@
             <div class="flex items-center justify-center gap-2">
                 <span id="createdInvoiceNo" class="font-extrabold text-xl text-gray-900 tracking-wide">{{ session('order_success.invoice_no') }}</span>
                 <button type="button" onclick="copyCreatedInvoice()" class="bg-white border border-indigo-200 text-brand-blue hover:bg-brand-blue hover:text-white px-3 py-1.5 rounded-xl text-xs font-bold transition shadow-xs flex items-center gap-1.5">
-                    <i class="fa-solid fa-copy text-[11px]"></i> Salin
+                    <i data-lucide="copy" class="w-3.5 h-3.5"></i> Salin
                 </button>
             </div>
         </div>
@@ -44,8 +44,8 @@
         </p>
 
         <div class="flex flex-col sm:flex-row gap-3">
-            <button type="button" onclick="openPublicTrackingModal('{{ session('order_success.invoice_no') }}')" class="w-full sm:w-1/2 bg-brand-blue text-white rounded-xl py-3 font-bold text-xs hover:bg-indigo-700 transition shadow-md shadow-brand-blue/20">
-                Lacak Pesanan Ini <i class="fa-solid fa-location-crosshairs ml-1"></i>
+            <button type="button" onclick="openPublicTrackingModal('{{ session('order_success.invoice_no') }}')" class="w-full sm:w-1/2 bg-brand-blue text-white rounded-xl py-3 font-bold text-xs hover:bg-indigo-700 transition shadow-md shadow-brand-blue/20 flex items-center justify-center gap-1">
+                Lacak Pesanan Ini <i data-lucide="crosshair" class="w-3.5 h-3.5"></i>
             </button>
             <button type="button" onclick="document.getElementById('orderSuccessModal').remove()" class="w-full sm:w-1/2 bg-gray-100 text-gray-700 rounded-xl py-3 font-bold text-xs hover:bg-gray-200 transition">
                 Tutup Window
@@ -67,12 +67,12 @@
 <div id="publicTrackingModal" class="fixed inset-0 z-[100] hidden bg-gray-900/60 backdrop-blur-sm flex items-center justify-center p-4 transition-opacity duration-300">
     <div class="bg-white rounded-3xl shadow-2xl max-w-2xl w-full p-8 relative transform transition-all scale-95 max-h-[90vh] overflow-y-auto" id="publicTrackingContent">
         <button type="button" onclick="closePublicTrackingModal()" class="absolute top-5 right-5 text-gray-400 hover:text-gray-600 transition">
-            <i class="fa-solid fa-xmark text-xl"></i>
+            <i data-lucide="x" class="w-5 h-5"></i>
         </button>
 
         <div class="flex items-center gap-3 mb-6 border-b border-gray-100 pb-4">
             <div class="w-10 h-10 bg-indigo-50 text-brand-blue rounded-xl flex items-center justify-center text-lg">
-                <i class="fa-solid fa-location-crosshairs"></i>
+                <i data-lucide="crosshair" class="w-5 h-5"></i>
             </div>
             <div>
                 <h3 class="text-xl font-extrabold text-gray-900">Lacak Status Pesanan</h3>
@@ -86,18 +86,18 @@
                 <label class="block text-xs font-bold text-gray-700 mb-2">Nomor Invoice Pesanan</label>
                 <div class="relative">
                     <input type="text" id="trackInvoiceInput" placeholder="Contoh: INV-PUB-20260726-1234" class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm font-extrabold uppercase text-gray-800 outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition">
-                    <i class="fa-solid fa-receipt text-gray-400 text-sm absolute right-4 top-1/2 -translate-y-1/2"></i>
+                    <i data-lucide="receipt" class="w-4 h-4 text-gray-400 absolute right-4 top-1/2 -translate-y-1/2"></i>
                 </div>
             </div>
             <button type="submit" class="w-full bg-brand-blue text-white rounded-xl py-3 font-bold text-xs hover:bg-indigo-700 transition shadow-md shadow-brand-blue/20 flex items-center justify-center gap-2">
-                Cari Pesanan <i class="fa-solid fa-magnifying-glass"></i>
+                Cari Pesanan <i data-lucide="search" class="w-4 h-4"></i>
             </button>
         </form>
 
         <!-- Step 2: Verification Phone (Hidden initially) -->
         <form id="trackStepVerifyPhone" class="hidden space-y-4 pt-2" onsubmit="event.preventDefault(); submitVerifyPhone();">
             <div class="p-3 bg-amber-50 border border-amber-200 rounded-xl text-amber-800 text-xs font-semibold flex items-center gap-2">
-                <i class="fa-solid fa-shield-halved text-amber-600 text-sm"></i>
+                <i data-lucide="shield" class="w-4 h-4 text-amber-600"></i>
                 <span>Invoice ditemukan! Masukkan Nomor WhatsApp untuk verifikasi kepemilikan.</span>
             </div>
 
@@ -105,7 +105,7 @@
                 <label class="block text-xs font-bold text-gray-700 mb-2">Nomor WhatsApp Pemesan</label>
                 <div class="relative">
                     <input type="text" id="trackPhoneInput" placeholder="081234567890" class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm font-extrabold text-gray-800 outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition">
-                    <i class="fa-brands fa-whatsapp text-emerald-500 text-base absolute right-4 top-1/2 -translate-y-1/2"></i>
+                    <i data-lucide="message-square" class="w-4 h-4 text-emerald-500 absolute right-4 top-1/2 -translate-y-1/2"></i>
                 </div>
             </div>
 
@@ -113,8 +113,8 @@
                 <button type="button" onclick="backToTrackStep1()" class="w-1/3 border border-gray-200 text-gray-600 rounded-xl py-3 text-xs font-bold hover:bg-gray-50 transition">
                     Kembali
                 </button>
-                <button type="submit" class="w-2/3 bg-brand-blue text-white rounded-xl py-3 font-bold text-xs hover:bg-indigo-700 transition shadow-md shadow-brand-blue/20">
-                    Verifikasi & Lacak <i class="fa-solid fa-arrow-right ml-1"></i>
+                <button type="submit" class="w-2/3 bg-brand-blue text-white rounded-xl py-3 font-bold text-xs hover:bg-indigo-700 transition shadow-md shadow-brand-blue/20 flex items-center justify-center gap-1">
+                    Verifikasi & Lacak <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
                 </button>
             </div>
         </form>
@@ -143,7 +143,7 @@
             <!-- Production Log & Photos Progress -->
             <div id="resProductionSection" class="hidden">
                 <h4 class="text-xs font-extrabold text-gray-900 uppercase tracking-wider mb-3 flex items-center gap-1.5">
-                    <i class="fa-solid fa-camera text-brand-blue text-xs"></i> Progress Foto Pengerjaan Produksi:
+                    <i data-lucide="camera" class="w-3.5 h-3.5 text-brand-blue"></i> Progress Foto Pengerjaan Produksi:
                 </h4>
                 <div id="resProductionLogs" class="space-y-3 mb-6"></div>
             </div>

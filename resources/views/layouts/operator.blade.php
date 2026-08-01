@@ -133,7 +133,19 @@
                 toastr.error("{{ $error }}");
             @endforeach
         @endif
-        if (typeof lucide !== 'undefined') { lucide.createIcons(); }
+        function renderLucide() {
+            if (typeof lucide !== 'undefined' && typeof lucide.createIcons === 'function') {
+                lucide.createIcons();
+            }
+        }
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', renderLucide);
+        } else {
+            renderLucide();
+        }
+        window.addEventListener('load', renderLucide);
+        setTimeout(renderLucide, 100);
+        setTimeout(renderLucide, 500);
     </script>
 </body>
 </html>

@@ -91,7 +91,7 @@
                     <div class="relative bg-gray-100 rounded-3xl p-8 shadow-sm">
                         <!-- Red Badge -->
                         <div class="absolute -top-4 -right-4 bg-red-600 text-white rounded-full w-16 h-16 flex items-center justify-center shadow-lg shadow-red-200 z-10 border-4 border-white">
-                            <i class="fa-solid fa-award text-2xl"></i>
+                            <i data-lucide="award" class="w-8 h-8"></i>
                         </div>
                         <img src="https://images.unsplash.com/photo-1581655353564-df123a1eb820?auto=format&fit=crop&q=80&w=800&h=600" alt="Polo Shirt Senta Print" class="w-full h-80 object-cover rounded-xl shadow-md mix-blend-multiply filter contrast-125" style="object-position: center;">
                     </div>
@@ -128,7 +128,7 @@
                             Team andalan dalam produksi konveksi yang menjamin kelancaran project Anda dari awal hingga selesai.
                         </p>
                         <div class="w-14 h-14 mx-auto rounded-2xl flex items-center justify-center bg-brand-50 text-brand-600 border border-brand-100 shadow-sm">
-                            <i class="fa-solid fa-box-open text-xl"></i>
+                            <i data-lucide="package-open" class="w-7 h-7 text-brand-600"></i>
                         </div>
                     </div>
                     <!-- Card 2 -->
@@ -138,7 +138,7 @@
                             Yang pertama kali memberikan layanan gratis ongkir dengan minimum order yang berlaku.
                         </p>
                         <div class="w-14 h-14 mx-auto rounded-2xl flex items-center justify-center bg-brand-50 text-brand-600 border border-brand-100 shadow-sm">
-                            <i class="fa-solid fa-truck-fast text-xl"></i>
+                            <i data-lucide="truck" class="w-7 h-7 text-brand-600"></i>
                         </div>
                     </div>
                     <!-- Card 3 -->
@@ -148,7 +148,7 @@
                             Kami selalu menyiapkan desain dengan konsep visual yang baik dan sesuai dengan fungsi dan kebutuhannya.
                         </p>
                         <div class="w-14 h-14 mx-auto rounded-2xl flex items-center justify-center bg-brand-50 text-brand-600 border border-brand-100 shadow-sm">
-                            <i class="fa-solid fa-pen-ruler text-xl"></i>
+                            <i data-lucide="pen-tool" class="w-7 h-7 text-brand-600"></i>
                         </div>
                     </div>
                 </div>
@@ -161,7 +161,7 @@
                             Garansi 100% jika ada cacat dalam produksi kami yang tidak sesuai dengan order.
                         </p>
                         <div class="w-14 h-14 mx-auto rounded-2xl flex items-center justify-center bg-brand-50 text-brand-600 border border-brand-100 shadow-sm">
-                            <i class="fa-solid fa-shield-check text-xl"></i>
+                            <i data-lucide="shield-check" class="w-7 h-7 text-brand-600"></i>
                         </div>
                     </div>
                     <!-- Card 5 -->
@@ -171,7 +171,7 @@
                             Tepat waktu dalam pengadaan, kecepatan dalam hal operasional dan menjaga amanah dari konsumen.
                         </p>
                         <div class="w-14 h-14 mx-auto rounded-2xl flex items-center justify-center bg-brand-50 text-brand-600 border border-brand-100 shadow-sm">
-                            <i class="fa-solid fa-bolt text-xl"></i>
+                            <i data-lucide="zap" class="w-7 h-7 text-brand-600"></i>
                         </div>
                     </div>
                 </div>
@@ -190,8 +190,8 @@
             </p>
             <form onsubmit="event.preventDefault(); startPublicTrackFromPage();" class="bg-white p-2 rounded-2xl shadow-sm border border-gray-200 flex flex-col sm:flex-row focus-within:ring-2 focus-within:ring-brand-500 focus-within:border-brand-500 transition-shadow">
                 <input type="text" id="pageInvoiceInput" placeholder="Masukkan Nomor Invoice (contoh: INV-PUB-20260726-1234)" class="w-full px-4 py-3 outline-none text-gray-700 bg-transparent rounded-lg">
-                <button type="submit" class="bg-brand-900 text-white font-semibold px-8 py-3 rounded-xl hover:bg-brand-950 transition flex items-center justify-center mt-2 sm:mt-0 shadow-md">
-                    Lacak <i class="fa-solid fa-arrow-right ml-2 text-sm"></i>
+                <button type="submit" class="bg-brand-900 text-white font-semibold px-8 py-3 rounded-xl hover:bg-brand-950 transition flex items-center justify-center mt-2 sm:mt-0 shadow-md gap-2">
+                    Lacak <i data-lucide="arrow-right" class="w-4 h-4"></i>
                 </button>
             </form>
         </div>
@@ -269,10 +269,10 @@
             </p>
             <div class="flex flex-col sm:flex-row justify-center items-center gap-4">
                 <a href="{{ route('public.order') }}" class="w-full sm:w-auto px-8 py-3.5 bg-brand-600 text-white rounded-full font-semibold hover:bg-brand-500 transition shadow-lg shadow-brand-900/50 flex items-center justify-center gap-2">
-                    Pesan Sekarang <i class="fa-solid fa-arrow-right text-sm"></i>
+                    Pesan Sekarang <i data-lucide="arrow-right" class="w-4 h-4"></i>
                 </a>
                 <a href="https://wa.me/6281234567890" target="_blank" class="w-full sm:w-auto px-8 py-3.5 bg-transparent text-white border-2 border-gray-600 rounded-full font-semibold hover:border-gray-400 hover:bg-gray-800 transition flex items-center justify-center gap-2">
-                    <i class="fa-brands fa-whatsapp text-lg"></i> Hubungi Kami
+                    <i data-lucide="message-circle" class="w-5 h-5"></i> Hubungi Kami
                 </a>
             </div>
         </div>
@@ -324,15 +324,15 @@
                     <h4 class="text-white font-bold mb-6 tracking-wide text-xs uppercase">Kontak</h4>
                     <ul class="space-y-4">
                         <li class="flex gap-3">
-                            <i class="fa-solid fa-phone mt-1 text-gray-500"></i>
+                            <i data-lucide="phone" class="w-4 h-4 mt-1 text-gray-500"></i>
                             <a href="#" class="hover:text-white transition">+62 812 3456 7890</a>
                         </li>
                         <li class="flex gap-3">
-                            <i class="fa-solid fa-envelope mt-1 text-gray-500"></i>
+                            <i data-lucide="mail" class="w-4 h-4 mt-1 text-gray-500"></i>
                             <a href="#" class="hover:text-white transition">info@sentraprint.com</a>
                         </li>
                         <li class="flex gap-3">
-                            <i class="fa-solid fa-location-dot mt-1 text-gray-500"></i>
+                            <i data-lucide="map-pin" class="w-4 h-4 mt-1 text-gray-500 shrink-0"></i>
                             <span>Jl. Semarang Raya No. 1, Semarang Indah, Semarang, Jawa Tengah</span>
                         </li>
                     </ul>
@@ -351,7 +351,19 @@
         toastr.options = { "positionClass": "toast-top-right", "timeOut": "3000" };
         @if(session('success')) toastr.success("{{ session('success') }}"); @endif
         @if(session('error')) toastr.error("{{ session('error') }}"); @endif
-        if (typeof lucide !== 'undefined') { lucide.createIcons(); }
+        function renderLucide() {
+            if (typeof lucide !== 'undefined' && typeof lucide.createIcons === 'function') {
+                lucide.createIcons();
+            }
+        }
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', renderLucide);
+        } else {
+            renderLucide();
+        }
+        window.addEventListener('load', renderLucide);
+        setTimeout(renderLucide, 100);
+        setTimeout(renderLucide, 500);
     </script>
     @include('partials.tracking-modal')
 </body>
