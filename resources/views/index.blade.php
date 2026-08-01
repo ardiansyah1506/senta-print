@@ -103,7 +103,7 @@
                     <p class="text-lg text-gray-600 mb-8 leading-relaxed">
                         Beragam pilihan produk konveksi tersedia untuk kebutuhan komunitas, perusahaan, sekolah, hingga event. Semua dapat dikustom sesuai desain, warna, dan kebutuhan Anda.
                     </p>
-                    <a href="#" class="inline-flex items-center justify-center px-8 py-3.5 bg-brand-900 text-white rounded-full font-semibold hover:bg-brand-950 transition shadow-lg shadow-gray-200">
+                    <a href="katalog.pdf" target="_blank" class="inline-flex items-center justify-center px-8 py-3.5 bg-brand-900 text-white rounded-full font-semibold hover:bg-brand-950 transition shadow-lg shadow-gray-200">
                         Lihat Katalog Kami
                     </a>
                 </div>
