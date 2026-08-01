@@ -28,7 +28,7 @@
         <!-- Navigation -->
         <nav class="flex-1 px-4 space-y-1 overflow-y-auto">
             <a href="{{ route('operator.production.index') }}" class="flex items-center gap-3 px-4 py-3 text-sm rounded-lg transition {{ Request::routeIs('operator.production.*', 'operator.tracking*') ? 'font-bold bg-brand-yellow text-gray-900 shadow-sm' : 'font-medium hover:bg-sidebarhover hover:text-white' }}">
-                <i class="fa-solid fa-clipboard-list w-5 text-center"></i> Kelola Produksi
+                <i data-lucide="clipboard-list" class="w-5 h-5"></i> Kelola Produksi
             </a>
         </nav>
 
@@ -37,7 +37,7 @@
             <form action="{{ route('logout') }}" method="POST">
                 @csrf
                 <button type="submit" class="w-full flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg hover:bg-sidebarhover hover:text-white transition text-gray-400">
-                    <i class="fa-solid fa-arrow-right-from-bracket w-5 text-center"></i> Log out
+                    <i data-lucide="log-out" class="w-5 h-5"></i> Log out
                 </button>
             </form>
         </div>

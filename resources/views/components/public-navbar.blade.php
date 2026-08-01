@@ -15,7 +15,7 @@
                 <!-- Mobile Menu Button -->
                 <div class="md:hidden">
                     <button class="text-gray-600 hover:text-brand-600 focus:outline-none p-2" id="mobile-menu-btn" onclick="document.getElementById('mobile-menu').classList.toggle('hidden')">
-                        <i class="fa-solid fa-bars text-2xl"></i>
+                        <i data-lucide="menu" class="w-6 h-6"></i>
                     </button>
                 </div>
             </div>

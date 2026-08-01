@@ -9,10 +9,9 @@
         'robots' => 'noindex, nofollow'
     ])
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <script src="https://unpkg.com/lucide@latest"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
-
 </head>
 <body class="bg-gray-50 text-gray-800 antialiased flex h-screen overflow-hidden selection:bg-brand-blue selection:text-white">
 
@@ -61,6 +60,7 @@
                 toastr.error("{{ $error }}");
             @endforeach
         @endif
+        if (typeof lucide !== 'undefined') { lucide.createIcons(); }
     </script>
 </body>
 </html>

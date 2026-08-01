@@ -8,10 +8,10 @@
             <!-- Left: Mobile Toggle & Breadcrumb -->
             <div class="flex items-center gap-3 text-sm font-medium text-gray-500">
                 <button type="button" onclick="toggleMobileSidebar()" class="md:hidden text-gray-600 hover:text-brand-blue p-1.5 rounded-lg border border-gray-200 focus:outline-none transition">
-                    <i class="fa-solid fa-bars text-lg"></i>
+                    <i data-lucide="menu" class="w-5 h-5"></i>
                 </button>
                 <span class="hover:text-gray-800 cursor-pointer hidden sm:inline">{{ $role }}</span>
-                <i class="fa-solid fa-chevron-right text-[10px] mx-1 sm:mx-3 hidden sm:inline"></i>
+                <i data-lucide="chevron-right" class="w-3.5 h-3.5 mx-1 sm:mx-2 hidden sm:inline"></i>
                 <span class="text-gray-900 font-bold truncate max-w-[150px] sm:max-w-none">{{ $title }}</span>
             </div>
 
@@ -19,10 +19,10 @@
             <div class="flex items-center gap-6">
                 <div class="flex items-center gap-4 text-gray-400">
                     <button class="hover:text-gray-700 transition relative">
-                        <i class="fa-regular fa-circle-question text-lg"></i>
+                        <i data-lucide="help-circle" class="w-5 h-5"></i>
                     </button>
                     <button class="hover:text-gray-700 transition relative">
-                        <i class="fa-regular fa-bell text-lg"></i>
+                        <i data-lucide="bell" class="w-5 h-5"></i>
                         <span class="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full border border-white"></span>
                     </button>
                 </div>
@@ -32,7 +32,7 @@
                         {{ substr($userName, 0, 1) }}
                     </div>
                     <div class="text-sm font-semibold text-gray-700 group-hover:text-brand-blue transition">{{ $userName }}</div>
-                    <i class="fa-solid fa-chevron-down text-[10px] text-gray-400"></i>
+                    <i data-lucide="chevron-down" class="w-3.5 h-3.5 text-gray-400"></i>
                 </div>
             </div>
         </header>

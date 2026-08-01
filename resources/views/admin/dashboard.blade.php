@@ -16,14 +16,14 @@
         <div class="bg-white rounded-2xl p-5 shadow-xs border border-gray-100/80 flex flex-col justify-between hover:shadow-md transition duration-200">
             <div class="flex items-center justify-between">
                 <span class="text-xs font-bold uppercase tracking-wider text-gray-400">Total Pesanan</span>
-                <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-lg">
-                    <i class="fa-solid fa-cart-shopping"></i>
+                <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
+                    <i data-lucide="shopping-cart" class="w-5 h-5"></i>
                 </div>
             </div>
             <div class="mt-4">
                 <div class="text-3xl font-extrabold text-gray-900 tracking-tight">{{ $totalOrders }}</div>
                 <div class="mt-2 flex items-center text-xs font-bold text-emerald-600">
-                    <i class="fa-solid fa-arrow-up mr-1 text-[10px]"></i> 12%
+                    <i data-lucide="arrow-up" class="w-3.5 h-3.5 mr-1"></i> 12%
                 </div>
             </div>
         </div>
@@ -32,8 +32,8 @@
         <div class="bg-white rounded-2xl p-5 shadow-xs border border-gray-100/80 flex flex-col justify-between hover:shadow-md transition duration-200">
             <div class="flex items-center justify-between">
                 <span class="text-xs font-bold uppercase tracking-wider text-gray-400">Pesanan Aktif</span>
-                <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-500 flex items-center justify-center text-lg">
-                    <i class="fa-regular fa-clock"></i>
+                <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-500 flex items-center justify-center">
+                    <i data-lucide="clock" class="w-5 h-5"></i>
                 </div>
             </div>
             <div class="mt-4">
@@ -48,14 +48,14 @@
         <div class="bg-white rounded-2xl p-5 shadow-xs border border-gray-100/80 flex flex-col justify-between hover:shadow-md transition duration-200">
             <div class="flex items-center justify-between">
                 <span class="text-xs font-bold uppercase tracking-wider text-gray-400">Selesai</span>
-                <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-lg">
-                    <i class="fa-solid fa-box font-normal"></i>
+                <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                    <i data-lucide="package" class="w-5 h-5"></i>
                 </div>
             </div>
             <div class="mt-4">
                 <div class="text-3xl font-extrabold text-gray-900 tracking-tight">{{ $completedOrders }}</div>
                 <div class="mt-2 flex items-center text-xs font-bold text-emerald-600">
-                    <i class="fa-solid fa-arrow-up mr-1 text-[10px]"></i> 8%
+                    <i data-lucide="arrow-up" class="w-3.5 h-3.5 mr-1"></i> 8%
                 </div>
             </div>
         </div>
@@ -64,8 +64,8 @@
         <div class="bg-white rounded-2xl p-5 shadow-xs border border-gray-100/80 flex flex-col justify-between hover:shadow-md transition duration-200">
             <div class="flex items-center justify-between">
                 <span class="text-xs font-bold uppercase tracking-wider text-gray-400">Total Pendapatan</span>
-                <div class="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center text-lg">
-                    <i class="fa-solid fa-rotate"></i>
+                <div class="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center">
+                    <i data-lucide="refresh-cw" class="w-5 h-5"></i>
                 </div>
             </div>
             <div class="mt-4">
@@ -157,8 +157,8 @@
             <div class="space-y-3.5 my-auto">
                 <!-- Stat Item 1 -->
                 <div class="bg-indigo-50/50 rounded-xl p-4 flex items-center gap-4 border border-indigo-100/30">
-                    <div class="w-10 h-10 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center text-lg shrink-0">
-                        <i class="fa-solid fa-chart-column"></i>
+                    <div class="w-10 h-10 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center shrink-0">
+                        <i data-lucide="bar-chart-3" class="w-5 h-5"></i>
                     </div>
                     <div>
                         <div class="text-xl font-extrabold text-gray-900">{{ number_format($totalItemsProduced, 0, ',', '.') }}</div>
@@ -168,8 +168,8 @@
 
                 <!-- Stat Item 2 -->
                 <div class="bg-purple-50/50 rounded-xl p-4 flex items-center gap-4 border border-purple-100/30">
-                    <div class="w-10 h-10 rounded-xl bg-purple-100 text-purple-600 flex items-center justify-center text-lg shrink-0">
-                        <i class="fa-solid fa-users"></i>
+                    <div class="w-10 h-10 rounded-xl bg-purple-100 text-purple-600 flex items-center justify-center shrink-0">
+                        <i data-lucide="users" class="w-5 h-5"></i>
                     </div>
                     <div>
                         <div class="text-xl font-extrabold text-gray-900">{{ $activeCustomers }}</div>
@@ -179,8 +179,8 @@
 
                 <!-- Stat Item 3 -->
                 <div class="bg-blue-50/50 rounded-xl p-4 flex items-center gap-4 border border-blue-100/30">
-                    <div class="w-10 h-10 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center text-lg shrink-0">
-                        <i class="fa-regular fa-clock"></i>
+                    <div class="w-10 h-10 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center shrink-0">
+                        <i data-lucide="clock" class="w-5 h-5"></i>
                     </div>
                     <div>
                         <div class="text-xl font-extrabold text-gray-900">{{ $pendingConfirmation }}</div>
@@ -200,7 +200,7 @@
                 <p class="text-xs font-medium text-gray-400 mt-0.5">5 pesanan terakhir masuk</p>
             </div>
             <a href="{{ route('admin.order.index') }}" class="text-xs font-bold text-indigo-600 hover:text-indigo-700 flex items-center gap-1 transition">
-                Lihat Semua <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                Lihat Semua <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
             </a>
         </div>
 

@@ -10,8 +10,8 @@
         'robots' => 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1'
     ])
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <script src="https://unpkg.com/lucide@latest"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
         .feature-icon-container {
@@ -36,10 +36,10 @@
             </p>
             <div class="flex flex-col sm:flex-row justify-center items-center gap-4 mb-20">
                 <a href="{{ route('public.order') }}" class="w-full sm:w-auto px-8 py-3.5 bg-brand-900 text-white rounded-full font-semibold hover:bg-brand-950 transition flex items-center justify-center gap-2 shadow-lg shadow-gray-200">
-                    Pesan Sekarang <i class="fa-solid fa-arrow-right text-sm"></i>
+                    Pesan Sekarang <i data-lucide="arrow-right" class="w-4 h-4"></i>
                 </a>
                 <a href="#lacak-pesanan" class="w-full sm:w-auto px-8 py-3.5 bg-white text-gray-700 border border-gray-300 rounded-full font-semibold hover:bg-gray-50 transition flex items-center justify-center gap-2 cursor-pointer">
-                    Lacak Invoice Anda <i class="fa-solid fa-arrow-down text-brand-600 text-sm"></i>
+                    Lacak Invoice Anda <i data-lucide="arrow-down" class="w-4 h-4 text-brand-600"></i>
                 </a>
             </div>
 
@@ -59,7 +59,7 @@
                 </div>
                 <div class="px-4">
                     <div class="text-4xl font-extrabold text-gray-900 mb-1 flex items-center justify-center gap-2">
-                        5.0 <i class="fa-solid fa-star text-xl mt-1"></i>
+                        5.0 <i data-lucide="star" class="w-5 h-5 fill-amber-400 text-amber-400"></i>
                     </div>
                     <div class="text-sm text-gray-500 font-medium whitespace-nowrap">Rating</div>
                 </div>
@@ -351,6 +351,7 @@
         toastr.options = { "positionClass": "toast-top-right", "timeOut": "3000" };
         @if(session('success')) toastr.success("{{ session('success') }}"); @endif
         @if(session('error')) toastr.error("{{ session('error') }}"); @endif
+        if (typeof lucide !== 'undefined') { lucide.createIcons(); }
     </script>
     @include('partials.tracking-modal')
 </body>

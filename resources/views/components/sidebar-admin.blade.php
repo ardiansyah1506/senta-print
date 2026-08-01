@@ -28,22 +28,22 @@
         <!-- Navigation -->
         <nav class="flex-1 px-4 space-y-1 overflow-y-auto">
             <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3 px-4 py-3 text-sm rounded-lg transition {{ Request::routeIs('admin.dashboard') ? 'font-bold bg-brand-yellow text-gray-900 shadow-sm' : 'font-medium hover:bg-sidebarhover hover:text-white' }}">
-                <i class="fa-solid fa-border-all w-5 text-center"></i> Dashboard
+                <i data-lucide="layout-grid" class="w-5 h-5"></i> Dashboard
             </a>
             <a href="{{ route('admin.order.index') }}" class="flex items-center gap-3 px-4 py-3 text-sm rounded-lg transition {{ Request::routeIs('admin.order.*') ? 'font-bold bg-brand-yellow text-gray-900 shadow-sm' : 'font-medium hover:bg-sidebarhover hover:text-white' }}">
-                <i class="fa-solid fa-clipboard-list w-5 text-center"></i> Kelola Pesanan
+                <i data-lucide="clipboard-list" class="w-5 h-5"></i> Kelola Pesanan
             </a>
             <a href="{{ route('admin.report.index') }}" class="flex items-center gap-3 px-4 py-3 text-sm rounded-lg transition {{ Request::routeIs('admin.report.*') ? 'font-bold bg-brand-yellow text-gray-900 shadow-sm' : 'font-medium hover:bg-sidebarhover hover:text-white' }}">
-                <i class="fa-solid fa-file-lines w-5 text-center"></i> Laporan
+                <i data-lucide="file-text" class="w-5 h-5"></i> Laporan
             </a>
             <a href="{{ route('admin.master-kategori.index') }}" class="flex items-center gap-3 px-4 py-3 text-sm rounded-lg transition {{ Request::routeIs('admin.master-kategori.*', 'admin.data-master.*', 'admin.ukuran.*') ? 'font-bold bg-brand-yellow text-gray-900 shadow-sm' : 'font-medium hover:bg-sidebarhover hover:text-white' }}">
-                <i class="fa-solid fa-database w-5 text-center"></i> Data Master
+                <i data-lucide="database" class="w-5 h-5"></i> Data Master
             </a>
             <a href="{{ route('admin.tahap-produksi.index') }}" class="flex items-center gap-3 px-4 py-3 text-sm rounded-lg transition {{ Request::routeIs('admin.tahap-produksi.*') ? 'font-bold bg-brand-yellow text-gray-900 shadow-sm' : 'font-medium hover:bg-sidebarhover hover:text-white' }}">
-                <i class="fa-solid fa-layer-group w-5 text-center"></i> Tahap Produksi
+                <i data-lucide="layers" class="w-5 h-5"></i> Tahap Produksi
             </a>
             <a href="{{ route('admin.manajemen-user.index') }}" class="flex items-center gap-3 px-4 py-3 text-sm rounded-lg transition {{ Request::routeIs('admin.manajemen-user.*') ? 'font-bold bg-brand-yellow text-gray-900 shadow-sm' : 'font-medium hover:bg-sidebarhover hover:text-white' }}">
-                <i class="fa-solid fa-users-gear w-5 text-center"></i> Manajemen User
+                <i data-lucide="users" class="w-5 h-5"></i> Manajemen User
             </a>
         </nav>
 
@@ -52,7 +52,7 @@
             <form action="{{ route('logout') }}" method="POST">
                 @csrf
                 <button type="submit" class="w-full flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg hover:bg-sidebarhover hover:text-white transition text-gray-400">
-                    <i class="fa-solid fa-arrow-right-from-bracket w-5 text-center"></i> Log out
+                    <i data-lucide="log-out" class="w-5 h-5"></i> Log out
                 </button>
             </form>
         </div>
