@@ -1,5 +1,5 @@
 @php
-    $defaultTitle = 'Senta Print - Wujudkan Desain Impian dengan Kualitas Terbaik';
+    $defaultTitle = 'Senta Print - Produksi Baju & Souvenir Semarang';
     $pageTitle = isset($title) && !empty($title) ? $title : $defaultTitle;
 
     $defaultDescription = 'Platform manajemen konveksi modern Senta Print. Pesan kaos, seragam, jaket, polo, dan produk custom lainnya dengan tracking real-time dan jaminan kualitas 100%.';
