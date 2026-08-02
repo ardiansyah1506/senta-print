@@ -76,9 +76,9 @@
 <link rel="canonical" href="{{ $pageCanonical }}">
 
 <!-- Favicon -->
-<link rel="icon" type="image/png" href="{{ asset('logo/logo_mark.png') }}">
-<link rel="shortcut icon" type="image/png" href="{{ asset('logo/logo_mark.png') }}">
-<link rel="apple-touch-icon" href="{{ asset('logo/logo_mark.png') }}">
+<link rel="icon" type="image/png" href="/logo/logo_mark.png?v=2">
+<link rel="shortcut icon" type="image/png" href="/logo/logo_mark.png?v=2">
+<link rel="apple-touch-icon" href="/logo/logo_mark.png?v=2">
 
 <!-- Open Graph / Facebook / WhatsApp Meta Tags -->
 <meta property="og:type" content="{{ $pageType }}">
