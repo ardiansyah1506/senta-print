@@ -23,7 +23,7 @@
         'description' => $pageDescription,
         'url' => url('/'),
         'telephone' => '+6281234567890',
-        'email' => 'info@sentraprint.com',
+        'email' => 'order@sentaprint.com',
         'priceRange' => '$$',
         'address' => [
             '@type' => 'PostalAddress',

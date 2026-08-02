@@ -325,7 +325,7 @@
                         </li>
                         <li class="flex gap-3">
                             <i data-lucide="mail" class="w-4 h-4 mt-1 text-gray-500"></i>
-                            <a href="#" class="hover:text-white transition">info@sentraprint.com</a>
+                            <a href="mailto:order@sentaprint.com" class="hover:text-white transition">order@sentaprint.com</a>
                         </li>
                         <li class="flex gap-3">
                             <i data-lucide="map-pin" class="w-4 h-4 mt-1 text-gray-500 shrink-0"></i>
