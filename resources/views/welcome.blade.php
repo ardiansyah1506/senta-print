@@ -14,6 +14,10 @@
 
         <!-- Styles / Scripts -->
         @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
+            <link rel="icon" type="image/x-icon" href="/favicon.ico">
+            <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('logo/logo_mark.png') }}">
+            <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('logo/logo_mark.png') }}">
+            <link rel="apple-touch-icon" href="{{ asset('logo/logo_mark.png') }}">
             @vite(['resources/css/app.css', 'resources/js/app.js'])
         @else
             <style>
