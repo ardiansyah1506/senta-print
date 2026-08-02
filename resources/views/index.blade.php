@@ -285,7 +285,7 @@
                 <!-- Brand Info -->
                 <div class="md:col-span-1">
                     <a href="{{ route('home') }}" class="flex items-center gap-2 mb-6 text-white">
-                        <img src="{{ asset('logo/logo.png') }}" alt="Senta Print Logo" class="h-10 w-auto object-contain bg-white/10 rounded p-1">
+                        <img src="{{ asset('logo/logo2.png') }}" alt="Senta Print Logo" class="h-10 w-auto object-contain bg-white/10 rounded p-1">
                     </a>
                     <p class="leading-relaxed mb-6">
                         Senta Print adalah perusahaan yang bergerak di bidang produksi Konveksi dan Merchandise, dengan bergaransi utama memberikan dua hal yaitu produk dan garansi pada pembeli dengan kualitas dan tepat waktu.
