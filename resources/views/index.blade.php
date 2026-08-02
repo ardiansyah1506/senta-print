@@ -329,7 +329,7 @@
                         </li>
                         <li class="flex gap-3">
                             <i data-lucide="map-pin" class="w-4 h-4 mt-1 text-gray-500 shrink-0"></i>
-                            <span>Jl. Semarang Raya No. 1, Semarang Indah, Semarang, Jawa Tengah</span>
+                            <span>Jl. Sendang Utara 2, Gemah, Kec. Pedurungan, Kota Semarang, Jawa Tengah 50246</span>
                         </li>
                     </ul>
                 </div>

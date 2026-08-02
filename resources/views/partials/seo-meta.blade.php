@@ -27,28 +27,38 @@
         'priceRange' => '$$',
         'address' => [
             '@type' => 'PostalAddress',
-            'streetAddress' => 'Jl. Semarang Raya No. 1, Semarang Indah',
-            'addressLocality' => 'Semarang',
+            'streetAddress' => 'Jl. Sendang Utara 2, Gemah, Kec. Pedurungan',
+            'addressLocality' => 'Kota Semarang',
             'addressRegion' => 'Jawa Tengah',
+            'postalCode' => '50246',
             'addressCountry' => 'ID'
         ],
         'geo' => [
             '@type' => 'GeoCoordinates',
-            'latitude' => '-6.966667',
-            'longitude' => '110.416667'
+            'latitude' => '-7.01311',
+            'longitude' => '110.46162'
         ],
         'openingHoursSpecification' => [
-            '@type' => 'OpeningHoursSpecification',
-            'dayOfWeek' => [
-                'Monday',
-                'Tuesday',
-                'Wednesday',
-                'Thursday',
-                'Friday',
-                'Saturday'
+            [
+                '@type' => 'OpeningHoursSpecification',
+                'dayOfWeek' => [
+                    'Monday',
+                    'Tuesday',
+                    'Wednesday',
+                    'Thursday',
+                    'Friday'
+                ],
+                'opens' => '08:00',
+                'closes' => '19:00'
             ],
-            'opens' => '08:00',
-            'closes' => '17:00'
+            [
+                '@type' => 'OpeningHoursSpecification',
+                'dayOfWeek' => [
+                    'Saturday'
+                ],
+                'opens' => '08:00',
+                'closes' => '18:00'
+            ]
         ],
         'sameAs' => [
             'https://wa.me/6281234567890'
