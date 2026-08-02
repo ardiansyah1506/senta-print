@@ -284,13 +284,9 @@
             <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
                 <!-- Brand Info -->
                 <div class="md:col-span-1">
-                    <div class="flex items-center gap-2 mb-6 text-white">
-                        <svg class="w-7 h-7" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 2L2 22h20L12 2zm0 4.5l6.5 13h-13L12 6.5z"/>
-                            <path d="M12 10.5l-3 6h6l-3-6z" fill="currentColor"/>
-                        </svg>
-                        <span class="font-extrabold text-lg tracking-tight uppercase">Senta Print</span>
-                    </div>
+                    <a href="{{ route('home') }}" class="flex items-center gap-2 mb-6 text-white">
+                        <img src="{{ asset('logo/logo.png') }}" alt="Senta Print Logo" class="h-10 w-auto object-contain bg-white/10 rounded p-1">
+                    </a>
                     <p class="leading-relaxed mb-6">
                         Senta Print adalah perusahaan yang bergerak di bidang produksi Konveksi dan Merchandise, dengan bergaransi utama memberikan dua hal yaitu produk dan garansi pada pembeli dengan kualitas dan tepat waktu.
                     </p>

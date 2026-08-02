@@ -20,13 +20,9 @@
     <div class="min-h-[calc(100vh-80px)] flex items-center justify-center p-4">
         <div class="w-full max-w-md bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 p-8 sm:p-10">
         <div class="flex justify-center mb-8">
-            <div class="flex items-center gap-3">
-                <svg class="w-10 h-10 text-brand-blue" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 2L2 22h20L12 2zm0 4.5l6.5 13h-13L12 6.5z"/>
-                    <path d="M12 10.5l-3 6h6l-3-6z" fill="currentColor"/>
-                </svg>
-                <span class="font-extrabold text-2xl tracking-tight text-gray-900 uppercase">Senta Print</span>
-            </div>
+            <a href="{{ route('home') }}" class="flex items-center gap-3">
+                <img src="{{ asset('logo/logo.png') }}" alt="Senta Print Logo" class="h-10 w-auto object-contain">
+            </a>
         </div>
 
         <h2 class="text-center text-2xl font-bold text-gray-900 mb-2">Welcome Back</h2>
