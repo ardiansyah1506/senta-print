@@ -300,11 +300,11 @@
                 <div>
                     <h4 class="text-white font-bold mb-6 tracking-wide text-xs uppercase">Menu</h4>
                     <ul class="space-y-4">
-                        <li><a href="{{ route('home') }}" class="hover:text-white transition">Home</a></li>
-                        <li><a href="{{ asset('katalog.pdf') }}" target="_blank" class="hover:text-white transition">Katalog</a></li>
-                        <li><a href="{{ route('public.order') }}" class="hover:text-white transition">Pesan Sekarang</a></li>
-                        <li><a href="#lacak-pesanan" class="hover:text-white transition">Tracking Pesanan</a></li>
-                        <li><a href="#" class="hover:text-white transition">Testimoni</a></li>
+                        <li><a href="{{ route('home') }}" class="text-gray-400 hover:text-brand-400 hover:translate-x-1 inline-block transition-all duration-300">Home</a></li>
+                        <li><a href="{{ asset('katalog.pdf') }}" target="_blank" class="text-gray-400 hover:text-brand-400 hover:translate-x-1 inline-block transition-all duration-300">Katalog</a></li>
+                        <li><a href="{{ route('public.order') }}" class="text-gray-400 hover:text-brand-400 hover:translate-x-1 inline-block transition-all duration-300">Pesan Sekarang</a></li>
+                        <li><a href="#lacak-pesanan" class="text-gray-400 hover:text-brand-400 hover:translate-x-1 inline-block transition-all duration-300">Tracking Pesanan</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-brand-400 hover:translate-x-1 inline-block transition-all duration-300">Testimoni</a></li>
                     </ul>
                 </div>
 
@@ -312,10 +312,10 @@
                 <div>
                     <h4 class="text-white font-bold mb-6 tracking-wide text-xs uppercase">Layanan</h4>
                     <ul class="space-y-4">
-                        <li><a href="{{ route('public.order') }}" class="hover:text-white transition">Kaos Polo</a></li>
-                        <li><a href="{{ route('public.order') }}" class="hover:text-white transition">Jaket & Hoodie</a></li>
-                        <li><a href="{{ route('public.order') }}" class="hover:text-white transition">Seragam & Kemeja</a></li>
-                        <li><a href="{{ route('public.order') }}" class="hover:text-white transition">Barang Custom</a></li>
+                        <li><a href="{{ route('public.order') }}" class="text-gray-400 hover:text-brand-400 hover:translate-x-1 inline-block transition-all duration-300">Kaos Polo</a></li>
+                        <li><a href="{{ route('public.order') }}" class="text-gray-400 hover:text-brand-400 hover:translate-x-1 inline-block transition-all duration-300">Jaket & Hoodie</a></li>
+                        <li><a href="{{ route('public.order') }}" class="text-gray-400 hover:text-brand-400 hover:translate-x-1 inline-block transition-all duration-300">Seragam & Kemeja</a></li>
+                        <li><a href="{{ route('public.order') }}" class="text-gray-400 hover:text-brand-400 hover:translate-x-1 inline-block transition-all duration-300">Barang Custom</a></li>
                     </ul>
                 </div>
 
@@ -323,17 +323,17 @@
                 <div>
                     <h4 class="text-white font-bold mb-6 tracking-wide text-xs uppercase">Kontak</h4>
                     <ul class="space-y-4">
-                        <li class="flex gap-3">
-                            <i data-lucide="phone" class="w-4 h-4 mt-1 text-gray-500"></i>
-                            <a href="https://wa.me/6281234567890" target="_blank" class="hover:text-white transition">+62 812 3456 7890</a>
+                        <li class="flex gap-3 group">
+                            <i data-lucide="phone" class="w-4 h-4 mt-1 text-gray-500 group-hover:text-brand-400 transition-colors duration-300"></i>
+                            <a href="https://wa.me/6281234567890" target="_blank" class="text-gray-400 group-hover:text-brand-400 group-hover:translate-x-1 inline-block transition-all duration-300">+62 812 3456 7890</a>
                         </li>
-                        <li class="flex gap-3">
-                            <i data-lucide="mail" class="w-4 h-4 mt-1 text-gray-500"></i>
-                            <a href="mailto:order@sentaprint.com" class="hover:text-white transition">order@sentaprint.com</a>
+                        <li class="flex gap-3 group">
+                            <i data-lucide="mail" class="w-4 h-4 mt-1 text-gray-500 group-hover:text-brand-400 transition-colors duration-300"></i>
+                            <a href="mailto:order@sentaprint.com" class="text-gray-400 group-hover:text-brand-400 group-hover:translate-x-1 inline-block transition-all duration-300">order@sentaprint.com</a>
                         </li>
-                        <li class="flex gap-3">
-                            <i data-lucide="map-pin" class="w-4 h-4 mt-1 text-gray-500 shrink-0"></i>
-                            <span>Jl. Sendang Utara 2, Gemah, Kec. Pedurungan, Kota Semarang, Jawa Tengah 50246</span>
+                        <li class="flex gap-3 group cursor-default">
+                            <i data-lucide="map-pin" class="w-4 h-4 mt-1 text-gray-500 group-hover:text-brand-400 transition-colors duration-300 shrink-0"></i>
+                            <span class="text-gray-400 group-hover:text-gray-300 transition-colors duration-300">Jl. Sendang Utara 2, Gemah, Kec. Pedurungan, Kota Semarang, Jawa Tengah 50246</span>
                         </li>
                     </ul>
                 </div>
