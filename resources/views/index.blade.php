@@ -300,10 +300,10 @@
                 <div>
                     <h4 class="text-white font-bold mb-6 tracking-wide text-xs uppercase">Menu</h4>
                     <ul class="space-y-4">
-                        <li><a href="#" class="hover:text-white transition">Home</a></li>
-                        <li><a href="#" class="hover:text-white transition">Katalog</a></li>
-                        <li><a href="#" class="hover:text-white transition">Fasilitas Kami</a></li>
-                        <li><a href="#" class="hover:text-white transition">Tracking Pesanan</a></li>
+                        <li><a href="{{ route('home') }}" class="hover:text-white transition">Home</a></li>
+                        <li><a href="{{ asset('katalog.pdf') }}" target="_blank" class="hover:text-white transition">Katalog</a></li>
+                        <li><a href="{{ route('public.order') }}" class="hover:text-white transition">Pesan Sekarang</a></li>
+                        <li><a href="#lacak-pesanan" class="hover:text-white transition">Tracking Pesanan</a></li>
                         <li><a href="#" class="hover:text-white transition">Testimoni</a></li>
                     </ul>
                 </div>
@@ -312,10 +312,10 @@
                 <div>
                     <h4 class="text-white font-bold mb-6 tracking-wide text-xs uppercase">Layanan</h4>
                     <ul class="space-y-4">
-                        <li><a href="#" class="hover:text-white transition">Kaos Polo</a></li>
-                        <li><a href="#" class="hover:text-white transition">Jaket & Hoodie</a></li>
-                        <li><a href="#" class="hover:text-white transition">Seragam & Kemeja</a></li>
-                        <li><a href="#" class="hover:text-white transition">Barang Custom</a></li>
+                        <li><a href="{{ route('public.order') }}" class="hover:text-white transition">Kaos Polo</a></li>
+                        <li><a href="{{ route('public.order') }}" class="hover:text-white transition">Jaket & Hoodie</a></li>
+                        <li><a href="{{ route('public.order') }}" class="hover:text-white transition">Seragam & Kemeja</a></li>
+                        <li><a href="{{ route('public.order') }}" class="hover:text-white transition">Barang Custom</a></li>
                     </ul>
                 </div>
 
@@ -325,7 +325,7 @@
                     <ul class="space-y-4">
                         <li class="flex gap-3">
                             <i data-lucide="phone" class="w-4 h-4 mt-1 text-gray-500"></i>
-                            <a href="#" class="hover:text-white transition">+62 812 3456 7890</a>
+                            <a href="https://wa.me/6281234567890" target="_blank" class="hover:text-white transition">+62 812 3456 7890</a>
                         </li>
                         <li class="flex gap-3">
                             <i data-lucide="mail" class="w-4 h-4 mt-1 text-gray-500"></i>
