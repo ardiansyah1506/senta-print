@@ -29,7 +29,7 @@
     <x-public-navbar />
 
     <!-- Hero Section -->
-    <section class="bg-white pt-20 pb-16">
+    <section class="bg-white pt-28 pb-16">
         <div class="max-w-4xl mx-auto px-4 text-center">
             <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-gray-900 leading-tight tracking-tight mb-6">
                 Wujudkan Desain Impian<br>
@@ -71,44 +71,113 @@
         </div>
     </section>
 
-
-
     <!-- Catalog Section -->
     <section class="py-20 bg-gray-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-col lg:flex-row items-center gap-16">
-                <!-- Text Content -->
-                <div class="lg:w-1/2">
-                    <h2 class="text-4xl font-extrabold text-gray-900 mb-6 leading-tight">
+            <div class="flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
+                <!-- Text Content (On desktop: Title, text, button; On mobile: Title & text only) -->
+                <div class="lg:w-1/2 w-full flex flex-col items-start">
+                    <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-6 leading-tight">
                         Pilih Produk Favoritmu<br>
                         dari <span class="text-brand-600">Katalog Kami</span>
                     </h2>
-                    <p class="text-lg text-gray-600 mb-8 leading-relaxed">
+                    <p class="text-base sm:text-lg text-gray-600 mb-6 lg:mb-8 leading-relaxed">
                         Beragam pilihan produk konveksi tersedia untuk kebutuhan komunitas, perusahaan, sekolah, hingga event. Semua dapat dikustom sesuai desain, warna, dan kebutuhan Anda.
                     </p>
-                    <a href="katalog.pdf" target="_blank" class="inline-flex items-center justify-center px-8 py-3.5 bg-brand-900 text-white rounded-full font-semibold hover:bg-brand-950 transition shadow-lg shadow-gray-200">
+                    <a href="katalog.pdf" target="_blank" class="hidden lg:inline-flex items-center justify-center px-8 py-3.5 bg-brand-900 text-white rounded-full font-semibold hover:bg-brand-950 transition shadow-lg shadow-gray-200">
                         Lihat Katalog Kami
                     </a>
                 </div>
-                <!-- Image Content -->
+
+                <!-- Image Content (Slider with 3 photos) -->
                 <div class="lg:w-1/2 w-full">
-                    <div class="relative bg-gray-100 rounded-3xl p-8 shadow-sm">
+                    <div class="relative bg-gray-100 rounded-3xl p-4 sm:p-8 shadow-sm overflow-hidden">
                         <!-- Red Badge -->
-                        <div class="absolute -top-4 -right-4 bg-red-600 text-white rounded-full w-16 h-16 flex items-center justify-center shadow-lg shadow-red-200 z-10 border-4 border-white">
-                            <i data-lucide="award" class="w-8 h-8"></i>
+                        <div class="absolute -top-3 -right-3 sm:-top-4 sm:-right-4 bg-red-600 text-white rounded-full w-14 h-14 sm:w-16 sm:h-16 flex items-center justify-center shadow-lg shadow-red-200 z-10 border-4 border-white">
+                            <i data-lucide="award" class="w-6 h-6 sm:w-8 sm:h-8"></i>
                         </div>
-                        <img src="https://images.unsplash.com/photo-1581655353564-df123a1eb820?auto=format&fit=crop&q=80&w=800&h=600" alt="Polo Shirt Senta Print" class="w-full h-80 object-cover rounded-xl shadow-md mix-blend-multiply filter contrast-125" style="object-position: center;">
+
+                        <!-- 3 Photo Carousel Container -->
+                        <div class="relative w-full h-72 sm:h-80 overflow-hidden rounded-xl">
+                            <!-- Slide 1 -->
+                            <div class="catalog-slide absolute inset-0 transition-opacity duration-700 ease-in-out opacity-100" data-index="0">
+                                <img src="https://images.unsplash.com/photo-1581655353564-df123a1eb820?auto=format&fit=crop&q=80&w=800&h=600" alt="Polo Shirt Senta Print" class="w-full h-full object-cover rounded-xl shadow-md mix-blend-multiply filter contrast-125">
+                                <div class="absolute bottom-3 left-3 bg-black/60 backdrop-blur-xs text-white text-xs px-3 py-1 rounded-full font-semibold">Kaos & Polo Custom</div>
+                            </div>
+                            <!-- Slide 2 -->
+                            <div class="catalog-slide absolute inset-0 transition-opacity duration-700 ease-in-out opacity-0" data-index="1">
+                                <img src="https://images.unsplash.com/photo-1556905055-8f358a7a47b2?auto=format&fit=crop&q=80&w=800&h=600" alt="Jaket Hoodie Senta Print" class="w-full h-full object-cover rounded-xl shadow-md mix-blend-multiply filter contrast-125">
+                                <div class="absolute bottom-3 left-3 bg-black/60 backdrop-blur-xs text-white text-xs px-3 py-1 rounded-full font-semibold">Jaket & Hoodie Komunitas</div>
+                            </div>
+                            <!-- Slide 3 -->
+                            <div class="catalog-slide absolute inset-0 transition-opacity duration-700 ease-in-out opacity-0" data-index="2">
+                                <img src="https://images.unsplash.com/photo-1618354691373-d851c5c3a990?auto=format&fit=crop&q=80&w=800&h=600" alt="Seragam Kemeja Senta Print" class="w-full h-full object-cover rounded-xl shadow-md mix-blend-multiply filter contrast-125">
+                                <div class="absolute bottom-3 left-3 bg-black/60 backdrop-blur-xs text-white text-xs px-3 py-1 rounded-full font-semibold">Seragam & Kemeja PDH</div>
+                            </div>
+                        </div>
                     </div>
-                    <!-- Dots -->
+
+                    <!-- Dots Indicators -->
                     <div class="flex justify-center gap-2 mt-6">
-                        <div class="w-2.5 h-2.5 rounded-full bg-brand-600"></div>
-                        <div class="w-2.5 h-2.5 rounded-full bg-gray-300"></div>
-                        <div class="w-2.5 h-2.5 rounded-full bg-gray-300"></div>
+                        <button type="button" class="catalog-dot w-3 h-3 rounded-full bg-brand-600 transition-all cursor-pointer" onclick="setCatalogSlide(0)"></button>
+                        <button type="button" class="catalog-dot w-3 h-3 rounded-full bg-gray-300 transition-all cursor-pointer" onclick="setCatalogSlide(1)"></button>
+                        <button type="button" class="catalog-dot w-3 h-3 rounded-full bg-gray-300 transition-all cursor-pointer" onclick="setCatalogSlide(2)"></button>
+                    </div>
+
+                    <!-- Mobile View Only: Button placed BELOW photos -->
+                    <div class="mt-8 text-center lg:hidden">
+                        <a href="katalog.pdf" target="_blank" class="inline-flex items-center justify-center w-full px-8 py-3.5 bg-brand-900 text-white rounded-full font-semibold hover:bg-brand-950 transition shadow-lg shadow-gray-200">
+                            Lihat Katalog Kami
+                        </a>
                     </div>
                 </div>
             </div>
         </div>
     </section>
+
+    <!-- Catalog Slider Script -->
+    <script>
+        let currentCatalogIndex = 0;
+        let catalogInterval;
+
+        function setCatalogSlide(index) {
+            currentCatalogIndex = index;
+            const slides = document.querySelectorAll('.catalog-slide');
+            const dots = document.querySelectorAll('.catalog-dot');
+
+            slides.forEach((slide, i) => {
+                if (i === index) {
+                    slide.classList.remove('opacity-0');
+                    slide.classList.add('opacity-100');
+                } else {
+                    slide.classList.remove('opacity-100');
+                    slide.classList.add('opacity-0');
+                }
+            });
+
+            dots.forEach((dot, i) => {
+                if (i === index) {
+                    dot.classList.remove('bg-gray-300');
+                    dot.classList.add('bg-brand-600', 'w-6');
+                } else {
+                    dot.classList.remove('bg-brand-600', 'w-6');
+                    dot.classList.add('bg-gray-300', 'w-3');
+                }
+            });
+        }
+
+        function startCatalogAutoSlide() {
+            catalogInterval = setInterval(() => {
+                currentCatalogIndex = (currentCatalogIndex + 1) % 3;
+                setCatalogSlide(currentCatalogIndex);
+            }, 4000);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            setCatalogSlide(0);
+            startCatalogAutoSlide();
+        });
+    </script>
 
     <!-- Features Section -->
     <section class="py-24 bg-white">
@@ -201,7 +270,7 @@
         </div>
     </section>
 
-    <!-- Testimonial Section -->
+    <!-- Testimonial Section (Updated for Konveksi & Sablon) -->
     <section class="py-24 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
@@ -209,52 +278,79 @@
                     Apa Kata <span class="text-brand-600">Pelanggan Kami?</span>
                 </h2>
                 <p class="text-gray-500 text-lg">
-                    Ratusan pelanggan puas dengan layanan Senta Print.
+                    Ratusan pelanggan puas dengan kualitas konveksi & ketepatan waktu Senta Print.
                 </p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <!-- Testimonial 1 -->
-                <div class="bg-gray-50 rounded-3xl p-8 border border-gray-100 relative group hover:bg-white hover:shadow-xl transition duration-300">
-                    <h3 class="font-bold text-gray-900 mb-3">The best Figma Templates</h3>
-                    <p class="text-sm text-gray-600 mb-8 leading-relaxed">
-                        These templates saved me tons of sweet time. They're modern, flexible, and extremely just better to style on my project.
-                    </p>
-                    <div class="flex items-center gap-4 mt-auto">
-                        <img src="https://i.pravatar.cc/150?img=11" alt="Avatar" class="w-12 h-12 rounded-full object-cover">
+                <div class="bg-gray-50 rounded-3xl p-8 border border-gray-100 relative group hover:bg-white hover:shadow-xl transition duration-300 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center gap-1 text-amber-400 mb-3">
+                            <i data-lucide="star" class="w-4 h-4 fill-amber-400"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-amber-400"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-amber-400"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-amber-400"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-amber-400"></i>
+                        </div>
+                        <h3 class="font-bold text-gray-900 mb-3">Kualitas Sablon & Jahitan Sangat Rapi</h3>
+                        <p class="text-sm text-gray-600 mb-8 leading-relaxed">
+                            "Pesan 100 pcs kaos event kantor di Senta Print hasilnya sangat memuaskan! Sablon tajam, bahan combed halus, dan pengerjaan tepat waktu."
+                        </p>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <img src="https://i.pravatar.cc/150?img=11" alt="Avatar Rina" class="w-12 h-12 rounded-full object-cover">
                         <div>
                             <div class="font-bold text-gray-900 text-sm">Rina Sugiharti</div>
-                            <div class="text-xs text-gray-500">PT. Semesta</div>
+                            <div class="text-xs text-gray-500">PT. Semesta Media</div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Testimonial 2 -->
-                <div class="bg-gray-50 rounded-3xl p-8 border border-gray-100 relative group hover:bg-white hover:shadow-xl transition duration-300">
-                    <h3 class="font-bold text-gray-900 mb-3">The best Figma Templates</h3>
-                    <p class="text-sm text-gray-600 mb-8 leading-relaxed">
-                        These templates saved me tons of sweet time. They're modern, flexible, and extremely just better to style on my project.
-                    </p>
-                    <div class="flex items-center gap-4 mt-auto">
-                        <img src="https://i.pravatar.cc/150?img=33" alt="Avatar" class="w-12 h-12 rounded-full object-cover">
+                <div class="bg-gray-50 rounded-3xl p-8 border border-gray-100 relative group hover:bg-white hover:shadow-xl transition duration-300 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center gap-1 text-amber-400 mb-3">
+                            <i data-lucide="star" class="w-4 h-4 fill-amber-400"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-amber-400"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-amber-400"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-amber-400"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-amber-400"></i>
+                        </div>
+                        <h3 class="font-bold text-gray-900 mb-3">Seragam Kemeja & Jaket Mantap</h3>
+                        <p class="text-sm text-gray-600 mb-8 leading-relaxed">
+                            "Pesanan seragam kemeja bordir dan jaket hoodie komunitas hasilnya sesuai mockup 100%. Paling suka ada fitur tracking status produksi real-time!"
+                        </p>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <img src="https://i.pravatar.cc/150?img=33" alt="Avatar Siti" class="w-12 h-12 rounded-full object-cover">
                         <div>
                             <div class="font-bold text-gray-900 text-sm">Siti Rahayu</div>
-                            <div class="text-xs text-gray-500">PT. Makmur</div>
+                            <div class="text-xs text-gray-500">Komunitas Runner Semarang</div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Testimonial 3 -->
-                <div class="bg-gray-50 rounded-3xl p-8 border border-gray-100 relative group hover:bg-white hover:shadow-xl transition duration-300">
-                    <h3 class="font-bold text-gray-900 mb-3">The best Figma Templates</h3>
-                    <p class="text-sm text-gray-600 mb-8 leading-relaxed">
-                        These templates saved me tons of sweet time. They're modern, flexible, and extremely just better to style on my project.
-                    </p>
-                    <div class="flex items-center gap-4 mt-auto">
-                        <img src="https://i.pravatar.cc/150?img=68" alt="Avatar" class="w-12 h-12 rounded-full object-cover">
+                <div class="bg-gray-50 rounded-3xl p-8 border border-gray-100 relative group hover:bg-white hover:shadow-xl transition duration-300 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center gap-1 text-amber-400 mb-3">
+                            <i data-lucide="star" class="w-4 h-4 fill-amber-400"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-amber-400"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-amber-400"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-amber-400"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-amber-400"></i>
+                        </div>
+                        <h3 class="font-bold text-gray-900 mb-3">Pelayanan Fast Respon & Bergaransi</h3>
+                        <p class="text-sm text-gray-600 mb-8 leading-relaxed">
+                            "Dapat garansi 100% dan konsultasi desain gratis. Tim Senta Print sangat kooperatif dari pemilihan bahan sampai pengiriman kilat."
+                        </p>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <img src="https://i.pravatar.cc/150?img=68" alt="Avatar Alex" class="w-12 h-12 rounded-full object-cover">
                         <div>
                             <div class="font-bold text-gray-900 text-sm">Alex Pratama</div>
-                            <div class="text-xs text-gray-500">Founder</div>
+                            <div class="text-xs text-gray-500">Owner Distro & Merchandise</div>
                         </div>
                     </div>
                 </div>
@@ -275,7 +371,7 @@
                 <a href="{{ route('public.order') }}" class="w-full sm:w-auto px-8 py-3.5 bg-brand-600 text-white rounded-full font-semibold hover:bg-brand-500 transition shadow-lg shadow-brand-900/50 flex items-center justify-center gap-2">
                     Pesan Sekarang <i data-lucide="arrow-right" class="w-4 h-4"></i>
                 </a>
-                <a href="https://wa.me/6281234567890" target="_blank" class="w-full sm:w-auto px-8 py-3.5 bg-transparent text-white border-2 border-gray-600 rounded-full font-semibold hover:border-gray-400 hover:bg-gray-800 transition flex items-center justify-center gap-2">
+                <a href="https://wa.me/6281380069798" target="_blank" class="w-full sm:w-auto px-8 py-3.5 bg-transparent text-white border-2 border-gray-600 rounded-full font-semibold hover:border-gray-400 hover:bg-gray-800 transition flex items-center justify-center gap-2">
                     <i data-lucide="message-circle" class="w-5 h-5"></i> Hubungi Kami
                 </a>
             </div>
@@ -325,7 +421,7 @@
                     <ul class="space-y-4">
                         <li class="flex gap-3 group">
                             <i data-lucide="phone" class="w-4 h-4 mt-1 text-gray-500 group-hover:text-brand-400 transition-colors duration-300"></i>
-                            <a href="https://wa.me/6281234567890" target="_blank" class="text-gray-400 group-hover:text-brand-400 group-hover:translate-x-1 inline-block transition-all duration-300">+62 812 3456 7890</a>
+                            <a href="https://wa.me/6281380069798" target="_blank" class="text-gray-400 group-hover:text-brand-400 group-hover:translate-x-1 inline-block transition-all duration-300">+62 813 8006 9798</a>
                         </li>
                         <li class="flex gap-3 group">
                             <i data-lucide="mail" class="w-4 h-4 mt-1 text-gray-500 group-hover:text-brand-400 transition-colors duration-300"></i>

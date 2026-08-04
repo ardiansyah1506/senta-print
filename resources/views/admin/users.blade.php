@@ -46,7 +46,8 @@
             </div>
         </div>
 
-        <div class="overflow-x-auto">
+        <!-- Desktop Table View -->
+        <div class="hidden md:block overflow-x-auto">
             <table class="w-full text-left border-collapse">
                 <thead>
                     <tr class="bg-white">
@@ -95,6 +96,42 @@
                     @endforelse
                 </tbody>
             </table>
+        </div>
+
+        <!-- Mobile Card View -->
+        <div class="block md:hidden divide-y divide-gray-100 text-sm font-medium text-gray-700 bg-white">
+            @forelse($users as $user)
+            <div class="p-4 space-y-2">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <div class="text-gray-900 font-extrabold text-base">{{ $user->name }}</div>
+                        <span class="text-xs text-gray-400">#{{ str_pad($user->id, 3, '0', STR_PAD_LEFT) }} &bull; {{ $user->created_at->format('d M Y') }}</span>
+                    </div>
+                    <div>
+                        @if($user->role === 'admin')
+                            <span class="bg-indigo-50 text-indigo-600 px-2.5 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider border border-indigo-100"><i class="fa-solid fa-shield-halved mr-1"></i> Admin</span>
+                        @else
+                            <span class="bg-amber-50 text-amber-600 px-2.5 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider border border-amber-100"><i class="fa-solid fa-clipboard-user mr-1"></i> Operator</span>
+                        @endif
+                    </div>
+                </div>
+                <div class="flex justify-between items-center bg-gray-50/80 p-3 rounded-xl border border-gray-100">
+                    <span class="text-xs text-gray-500">No. WA / Login:</span>
+                    <span class="text-brand-blue font-bold text-sm">{{ $user->phone }}</span>
+                </div>
+                <div class="flex justify-end pt-1">
+                    <form action="{{ route('admin.manajemen-user.destroy', $user->id) }}" method="POST" onsubmit="return confirm('Hapus user ini?');">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="px-3 py-1.5 rounded-xl border border-red-200 text-red-600 hover:bg-red-50 text-xs font-bold transition flex items-center gap-1.5">
+                            <i class="fa-regular fa-trash-can"></i> Hapus User
+                        </button>
+                    </form>
+                </div>
+            </div>
+            @empty
+            <div class="p-8 text-center text-gray-400 font-semibold text-xs">Belum ada user terdaftar.</div>
+            @endforelse
         </div>
     </div>
 </div>

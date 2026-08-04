@@ -24,7 +24,7 @@
     <!-- Navbar -->
     <x-public-navbar />
 
-    <div class="max-w-6xl mx-auto pb-10 px-4 sm:px-6 pt-24 mt-4">
+    <div class="max-w-6xl mx-auto pb-10 px-4 sm:px-6 pt-20">
         <div class="mb-8">
             <h1 class="text-2xl font-extrabold text-gray-900 mb-1">Buat Pesanan Custom <span class="bg-brand-blue text-white text-xs px-3 py-1 rounded-full font-bold ml-2">Jalur Public</span></h1>
             <p class="text-gray-500 text-sm font-medium">Bebas antrian, kustomisasi sebebas mungkin. Langsung terhubung dengan Tim Produksi.</p>

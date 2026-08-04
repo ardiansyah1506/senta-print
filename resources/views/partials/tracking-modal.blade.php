@@ -1,5 +1,13 @@
 <!-- Order Success Modal (Triggered when session('order_success') is set) -->
 @if(session('order_success'))
+@php
+    $waName = session('order_success.nama_pemesan');
+    $waInv = session('order_success.invoice_no');
+    $waPhone = session('order_success.no_whatsapp');
+    $waTotal = 'Rp ' . number_format(session('order_success.total_price'), 0, ',', '.');
+    $waText = "Halo Kak {$waName}, Terima kasih telah memesan di Senta Print!\nNomor Invoice Anda: *{$waInv}*\n\n🔑 *Informasi Akun Member Anda:*\nAnda dapat login ke website kami menggunakan:\n• Username (No. WA): *{$waPhone}*\n• Password Default: *password*\n\nTotal Biaya: *{$waTotal}*\nSilakan melakukan pembayaran/DP agar pesanan Anda dapat segera kami proses ke tahap produksi. Anda dapat melacak pesanan kapan saja di website kami dengan Nomor Invoice & WA ini. Terima kasih!";
+    $waUrl = "https://wa.me/6281380069798?text=" . urlencode($waText);
+@endphp
 <div id="orderSuccessModal" class="fixed inset-0 z-[100] bg-gray-900/60 backdrop-blur-sm flex items-center justify-center p-4 transition-opacity duration-300">
     <div class="bg-white rounded-3xl shadow-2xl max-w-lg w-full p-8 text-center relative transform transition-all scale-100 border border-gray-100">
         <button type="button" onclick="document.getElementById('orderSuccessModal').remove()" class="absolute top-5 right-5 text-gray-400 hover:text-gray-600 transition">
@@ -30,6 +38,14 @@
                 <span class="font-extrabold text-gray-800">{{ session('order_success.no_whatsapp') }}</span>
             </div>
             <div class="flex justify-between items-center text-gray-600">
+                <span>Username Akun:</span>
+                <span class="font-extrabold text-gray-800">{{ session('order_success.no_whatsapp') }}</span>
+            </div>
+            <div class="flex justify-between items-center text-gray-600">
+                <span>Password Default:</span>
+                <span class="font-extrabold text-brand-blue">password</span>
+            </div>
+            <div class="flex justify-between items-center text-gray-600">
                 <span>Total Items:</span>
                 <span class="font-extrabold text-gray-800">{{ session('order_success.total_qty') }} pcs</span>
             </div>
@@ -39,8 +55,12 @@
             </div>
         </div>
 
+        <a href="{{ $waUrl }}" target="_blank" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl py-3 text-xs transition shadow-md shadow-emerald-600/20 flex items-center justify-center gap-2 mb-4">
+            <i data-lucide="message-circle" class="w-4 h-4"></i> Konfirmasi Pesanan Via WhatsApp
+        </a>
+
         <p class="text-[11px] text-gray-400 font-medium mb-6 leading-relaxed">
-            💡 Akun Anda telah dibuat secara otomatis di sistem kami dengan Nomor WhatsApp ini. Simpan nomor invoice ini untuk melacak status pengerjaan pesanan Anda kapan saja.
+            💡 Akun Anda telah dibuat secara otomatis di sistem kami dengan Username (Nomor WhatsApp) dan Password: <b>password</b>. Simpan nomor invoice ini untuk melacak status pengerjaan pesanan Anda kapan saja.
         </p>
 
         <div class="flex flex-col sm:flex-row gap-3">

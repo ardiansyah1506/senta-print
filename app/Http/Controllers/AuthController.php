@@ -32,7 +32,7 @@ class AuthController extends Controller
         Auth::login($user);
         
         if ($user->role === 'admin') {
-            return redirect()->intended('/admin/data-master');
+            return redirect()->route('admin.dashboard');
         } elseif ($user->role === 'operator') {
             return redirect()->intended('/operator/kelolaproduksi');
         } else {
@@ -51,7 +51,7 @@ class AuthController extends Controller
             
             $user = Auth::user();
             if ($user->role === 'admin') {
-                return redirect()->intended('/admin/data-master');
+                return redirect()->route('admin.dashboard');
             } elseif ($user->role === 'operator') {
                 return redirect()->intended('/operator/kelolaproduksi');
             } else {

@@ -17,8 +17,8 @@
                         <p class="text-gray-500 text-sm font-medium">Pilih pesanan untuk memperbarui status dan melampirkan bukti</p>
                     </div>
 
-                    <!-- Table -->
-                    <div class="overflow-x-auto">
+                    <!-- Table (Desktop View) -->
+                    <div class="hidden md:block overflow-x-auto">
                         <table class="w-full text-left border-collapse whitespace-nowrap">
                             <thead>
                                 <tr class="bg-gray-50/50 border-b border-gray-100">
@@ -68,6 +68,51 @@
                                 @endforelse
                             </tbody>
                         </table>
+                    </div>
+
+                    <!-- Card View (Mobile View) -->
+                    <div class="block md:hidden divide-y divide-gray-100 font-semibold text-gray-700 bg-white">
+                        @forelse($orders as $order)
+                        @php
+                            $completedSteps = $order->production ? $order->production->logs->unique('production_step_id')->count() : 0;
+                            $progressPercent = $totalSteps > 0 ? ($completedSteps / $totalSteps) * 100 : 0;
+                        @endphp
+                        <div class="py-4 space-y-3">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <span class="font-extrabold text-brand-blue block text-sm">{{ $order->invoice_no }}</span>
+                                    <span class="text-xs text-gray-600 block">{{ $order->items->first()->product->name ?? 'Produk' }}</span>
+                                </div>
+                                <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-indigo-50 text-brand-blue text-[10px] font-bold border border-indigo-100">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-brand-blue"></span> Produksi
+                                </div>
+                            </div>
+                            <div class="bg-gray-50/80 p-3 rounded-xl space-y-1.5 text-xs border border-gray-100">
+                                <div class="flex justify-between">
+                                    <span class="text-gray-500">Customer:</span>
+                                    <span class="font-bold text-gray-900">{{ $order->customer->name ?? '-' }}</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-500">Deadline:</span>
+                                    <span class="font-medium text-gray-700">{{ $order->deadline ? \Carbon\Carbon::parse($order->deadline)->format('d M Y') : '-' }}</span>
+                                </div>
+                                <div class="flex justify-between items-center pt-1 border-t border-gray-200/60">
+                                    <span class="text-gray-500">Tahap Kemajuan:</span>
+                                    <div class="flex items-center gap-2">
+                                        <div class="w-20 bg-gray-200 rounded-full h-1.5 overflow-hidden">
+                                            <div class="bg-brand-blue h-1.5 rounded-full" style="width: {{ $progressPercent }}%"></div>
+                                        </div>
+                                        <span class="text-xs text-brand-blue font-extrabold">{{ $completedSteps }}/{{ $totalSteps }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <a href="{{ route('operator.tracking', $order->id) }}" class="w-full py-2.5 rounded-xl border border-brand-blue text-brand-blue hover:bg-brand-blue hover:text-white transition inline-flex items-center justify-center gap-2 text-xs font-extrabold uppercase tracking-wide">
+                                <i class="fa-regular fa-eye"></i> Update Progress Produksi
+                            </a>
+                        </div>
+                        @empty
+                        <div class="py-8 text-center text-gray-400 font-semibold text-xs">Belum ada pesanan dalam proses produksi.</div>
+                        @endforelse
                     </div>
                     
                     <!-- Pagination -->

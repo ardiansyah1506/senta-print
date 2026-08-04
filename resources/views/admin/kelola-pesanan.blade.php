@@ -2,17 +2,74 @@
 @section('content')
 <div class="max-w-7xl mx-auto">
     
-    <!-- Page Header -->
-    <div class="mb-6">
-        <h1 class="text-3xl font-extrabold text-gray-900 mb-1">Kelola Pesanan</h1>
-        <p class="text-gray-500 text-sm font-medium">Lihat detail lengkap, konfirmasi pembayaran, dan kirim notifikasi WhatsApp ke customer</p>
-    </div>
+    <!-- Filter Bar -->
+    <form action="{{ route('admin.order.index') }}" method="GET" class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 mb-6">
+        <div class="flex flex-wrap items-center gap-3 w-full md:w-auto">
+            <!-- Search Input -->
+            <div class="relative flex-1 sm:w-64">
+                <input type="text" name="search" value="{{ $search ?? '' }}" placeholder="Cari invoice/customer..." class="w-full pl-9 pr-3 py-2 border border-gray-200 rounded-xl text-xs outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue font-medium bg-gray-50/50">
+                <i class="fa-solid fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
+            </div>
+
+            <!-- Filter Mode Selector -->
+            <select name="filter_type" id="orderFilterType" onchange="toggleOrderFilterMode(this.value)" class="text-xs font-bold border border-gray-200 rounded-xl px-3 py-2 bg-gray-50 text-gray-800 outline-none focus:border-brand-blue">
+                <option value="all" {{ ($filterType ?? 'all') === 'all' ? 'selected' : '' }}>Semua Tanggal</option>
+                <option value="month" {{ ($filterType ?? '') === 'month' ? 'selected' : '' }}>Per Bulan & Tahun</option>
+                <option value="range" {{ ($filterType ?? '') === 'range' ? 'selected' : '' }}>Rentang Tanggal Custom</option>
+            </select>
+
+            <!-- Inputs per Month & Year -->
+            <div id="orderMonthYearInputs" class="flex items-center gap-2 {{ ($filterType ?? '') === 'month' ? '' : 'hidden' }}">
+                <select name="month" class="text-xs font-bold border border-gray-200 rounded-xl px-3 py-2 bg-white text-gray-800 outline-none focus:border-brand-blue">
+                    @foreach([1=>'Januari', 2=>'Februari', 3=>'Maret', 4=>'April', 5=>'Mei', 6=>'Juni', 7=>'Juli', 8=>'Agustus', 9=>'September', 10=>'Oktober', 11=>'November', 12=>'Desember'] as $mNum => $mName)
+                        <option value="{{ $mNum }}" {{ ($month ?? date('n')) == $mNum ? 'selected' : '' }}>{{ $mName }}</option>
+                    @endforeach
+                </select>
+                <select name="year" class="text-xs font-bold border border-gray-200 rounded-xl px-3 py-2 bg-white text-gray-800 outline-none focus:border-brand-blue">
+                    @for($y = date('Y') + 1; $y >= 2024; $y--)
+                        <option value="{{ $y }}" {{ ($year ?? date('Y')) == $y ? 'selected' : '' }}>{{ $y }}</option>
+                    @endfor
+                </select>
+            </div>
+
+            <!-- Inputs per Date Range -->
+            <div id="orderDateRangeInputs" class="flex items-center gap-2 {{ ($filterType ?? '') === 'range' ? '' : 'hidden' }}">
+                <input type="date" name="start_date" value="{{ $startDateStr ?? '' }}" class="text-xs font-bold border border-gray-200 rounded-xl px-3 py-2 bg-white text-gray-800 outline-none focus:border-brand-blue">
+                <span class="text-gray-400 text-xs font-bold">s/d</span>
+                <input type="date" name="end_date" value="{{ $endDateStr ?? '' }}" class="text-xs font-bold border border-gray-200 rounded-xl px-3 py-2 bg-white text-gray-800 outline-none focus:border-brand-blue">
+            </div>
+        </div>
+
+        <div class="flex items-center gap-2 shrink-0 justify-end">
+            <button type="submit" class="bg-brand-blue text-white px-4 py-2 rounded-xl text-xs font-bold hover:bg-indigo-700 transition shadow-sm flex items-center gap-1.5">
+                <i class="fa-solid fa-filter text-[10px]"></i> Filter
+            </button>
+            <a href="{{ route('admin.order.index') }}" class="bg-gray-100 text-gray-600 px-3 py-2 rounded-xl text-xs font-bold hover:bg-gray-200 transition">Reset</a>
+        </div>
+    </form>
+
+    <script>
+        function toggleOrderFilterMode(mode) {
+            const monthInputs = document.getElementById('orderMonthYearInputs');
+            const rangeInputs = document.getElementById('orderDateRangeInputs');
+            if (mode === 'month') {
+                monthInputs.classList.remove('hidden');
+                rangeInputs.classList.add('hidden');
+            } else if (mode === 'range') {
+                monthInputs.classList.add('hidden');
+                rangeInputs.classList.remove('hidden');
+            } else {
+                monthInputs.classList.add('hidden');
+                rangeInputs.classList.add('hidden');
+            }
+        }
+    </script>
 
     <!-- Table Container -->
     <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden text-sm flex flex-col">
         
-        <!-- Table -->
-        <div class="overflow-x-auto">
+        <!-- Desktop Table View -->
+        <div class="hidden md:block overflow-x-auto">
             <table class="w-full text-left border-collapse whitespace-nowrap">
                 <thead>
                     <tr class="bg-gray-50/70 border-b border-gray-100">
@@ -75,14 +132,12 @@
                         </td>
                         <td class="py-4 px-6 text-center">
                             <div class="flex items-center justify-center gap-2">
-                                <!-- Direct WhatsApp Link -->
-                                <a href="{{ $order->wa_link }}" target="_blank" class="inline-flex items-center gap-1.5 bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-600 hover:text-white px-3 py-1.5 rounded-xl text-xs font-bold transition shadow-2xs" title="Kirim Notifikasi WhatsApp dengan Template Autofill">
+                                <a href="{{ $order->wa_link }}" target="_blank" class="inline-flex items-center gap-1.5 bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-600 hover:text-white px-3 py-1.5 rounded-xl text-xs font-bold transition shadow-2xs" title="Kirim Notifikasi WhatsApp">
                                     <i class="fa-brands fa-whatsapp text-sm"></i> Chat WA
                                 </a>
 
-                                <!-- Confirm Payment Button -->
                                 @if(!$isPaid)
-                                <form action="{{ route('admin.order.confirmPayment', $order->id) }}" method="POST" class="inline" onsubmit="return confirm('Konfirmasi bahwa pembayaran untuk invoice {{ $order->invoice_no }} telah diterima? Pesanan akan langsung diteruskan ke tahap Produksi.')">
+                                <form action="{{ route('admin.order.confirmPayment', $order->id) }}" method="POST" class="inline" onsubmit="return confirm('Konfirmasi bahwa pembayaran untuk invoice {{ $order->invoice_no }} telah diterima?')">
                                     @csrf
                                     <button type="submit" class="inline-flex items-center gap-1 bg-brand-blue text-white hover:bg-indigo-700 px-3 py-1.5 rounded-xl text-xs font-bold transition shadow-2xs">
                                         <i class="fa-solid fa-check text-[10px]"></i> Konfirmasi Lunas
@@ -90,7 +145,6 @@
                                 </form>
                                 @endif
 
-                                <!-- Open Detail Pop-up Modal Button -->
                                 <button type="button" onclick="openOrderDetailModal({{ $order->id }})" class="w-8 h-8 rounded-xl border border-gray-200 text-gray-500 hover:text-brand-blue hover:bg-indigo-50 transition inline-flex items-center justify-center cursor-pointer" title="Lihat Detail Pesanan">
                                     <i class="fa-regular fa-eye"></i>
                                 </button>
@@ -104,6 +158,85 @@
                     @endforelse
                 </tbody>
             </table>
+        </div>
+
+        <!-- Mobile Card View -->
+        <div class="block md:hidden divide-y divide-gray-100 font-semibold text-gray-700 bg-white">
+            @forelse($orders as $order)
+            @php
+                $payStatus = strtoupper($order->payment_status ?? 'PENDING');
+                $isPaid = ($payStatus === 'PAID' || $payStatus === 'LUNAS');
+                
+                $currentStepName = 'Menunggu Pembayaran';
+                if ($order->production && $order->production->logs->isNotEmpty()) {
+                    $lastLog = $order->production->logs->last();
+                    if ($lastLog && $lastLog->step) {
+                        $currentStepName = $lastLog->step->name;
+                    }
+                }
+            @endphp
+            <div class="p-4 space-y-3">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <span class="font-extrabold text-brand-blue block text-sm">{{ $order->invoice_no }}</span>
+                        <span class="text-[10px] text-gray-400 font-medium">{{ $order->created_at->format('d M Y, H:i') }}</span>
+                    </div>
+                    <div>
+                        @if($isPaid)
+                            <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-50 text-emerald-600 border border-emerald-200">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> LUNAS
+                            </span>
+                        @else
+                            <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-amber-50 text-amber-600 border border-amber-200">
+                                <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span> BELUM LUNAS
+                            </span>
+                        @endif
+                    </div>
+                </div>
+
+                <div class="bg-gray-50/80 p-3 rounded-xl space-y-1.5 text-xs border border-gray-100">
+                    <div class="flex justify-between">
+                        <span class="text-gray-500">Customer:</span>
+                        <span class="font-bold text-gray-900">{{ $order->customer->name ?? '-' }} ({{ $order->customer->phone ?? '-' }})</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-500">Total Item:</span>
+                        <span class="font-bold text-gray-800">{{ $order->items->sum('qty') }} pcs</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-500">Estimasi Biaya:</span>
+                        <span class="font-bold text-brand-blue text-sm">Rp {{ number_format($order->grand_total, 0, ',', '.') }}</span>
+                    </div>
+                    <div class="flex justify-between items-center pt-1 border-t border-gray-200/60">
+                        <span class="text-gray-500">Tahap Produksi:</span>
+                        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg text-[10px] font-extrabold bg-indigo-50 text-indigo-700 border border-indigo-100">
+                            {{ $currentStepName }}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-2 pt-1">
+                    <a href="{{ $order->wa_link }}" target="_blank" class="flex-1 inline-flex items-center justify-center gap-1.5 bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-600 hover:text-white py-2 rounded-xl text-xs font-bold transition">
+                        <i class="fa-brands fa-whatsapp text-sm"></i> Chat WA
+                    </a>
+
+                    @if(!$isPaid)
+                    <form action="{{ route('admin.order.confirmPayment', $order->id) }}" method="POST" class="flex-1" onsubmit="return confirm('Konfirmasi lunas?')">
+                        @csrf
+                        <button type="submit" class="w-full inline-flex items-center justify-center gap-1 bg-brand-blue text-white py-2 rounded-xl text-xs font-bold transition">
+                            <i class="fa-solid fa-check text-[10px]"></i> Lunas
+                        </button>
+                    </form>
+                    @endif
+
+                    <button type="button" onclick="openOrderDetailModal({{ $order->id }})" class="px-3 py-2 rounded-xl border border-gray-200 text-gray-500 hover:text-brand-blue hover:bg-indigo-50 transition inline-flex items-center justify-center cursor-pointer" title="Lihat Detail">
+                        <i class="fa-regular fa-eye"></i>
+                    </button>
+                </div>
+            </div>
+            @empty
+            <div class="p-8 text-center text-gray-400 font-semibold text-xs">Belum ada data pesanan.</div>
+            @endforelse
         </div>
         
         <!-- Pagination -->

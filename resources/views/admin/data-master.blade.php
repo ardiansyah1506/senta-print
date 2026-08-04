@@ -63,7 +63,8 @@
                                 </a>
                             </div>
                             
-                            <div class="overflow-x-auto">
+                            <!-- Desktop Table View -->
+                            <div class="hidden md:block overflow-x-auto">
                                 <table class="w-full text-left border-collapse">
                                     <thead>
                                         <tr class="bg-white border-b border-gray-100">
@@ -91,6 +92,25 @@
                                         @endforelse
                                     </tbody>
                                 </table>
+                            </div>
+
+                            <!-- Mobile Card View -->
+                            <div class="block md:hidden divide-y divide-gray-100 font-semibold text-gray-800 bg-white">
+                                @forelse($addons as $addon)
+                                <div class="p-4 flex items-center justify-between">
+                                    <span class="font-bold text-gray-900 text-sm">{{ $addon->name }}</span>
+                                    <div class="flex items-center gap-2">
+                                        <button type="button" data-url="{{ route('admin.data-master.update', $addon->id) }}" data-name="{{ $addon->name }}" onclick="openEditModal(this)" class="text-gray-500 hover:text-brand-blue transition w-8 h-8 rounded-xl bg-gray-50 hover:bg-gray-100 border border-gray-100 inline-flex items-center justify-center"><i class="fa-regular fa-pen-to-square"></i></button>
+                                        <form action="{{ route('admin.data-master.destroy', $addon->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Hapus data ini?');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="text-red-500 hover:text-red-600 transition w-8 h-8 rounded-xl bg-red-50 hover:bg-red-100 border border-red-100 inline-flex items-center justify-center"><i class="fa-regular fa-trash-can"></i></button>
+                                        </form>
+                                    </div>
+                                </div>
+                                @empty
+                                <div class="py-8 text-center text-gray-500 text-xs">Belum ada Add On yang ditambahkan.</div>
+                                @endforelse
                             </div>
                             
                             <!-- Pagination -->

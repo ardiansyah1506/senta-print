@@ -58,6 +58,7 @@ Route::middleware('auth')->group(function () {
         Route::post('kelola-pesanan/{order}/confirm-payment', [OrderController::class, 'confirmPayment'])->name('order.confirmPayment');
         Route::resource('kelola-pesanan', OrderController::class)->parameters(['kelola-pesanan' => 'order'])->names('order');
         Route::get('/laporan', [ReportController::class, 'index'])->name('report.index');
+        Route::get('/laporan/export', [ReportController::class, 'exportExcel'])->name('report.export');
         Route::post('/laporan/target', [ReportController::class, 'setTarget'])->name('report.target');
     });
 

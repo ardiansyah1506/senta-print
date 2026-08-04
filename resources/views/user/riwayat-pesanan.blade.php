@@ -24,8 +24,8 @@
                         </div>
                     </div>
                     
-                    <!-- Table -->
-                    <div class="overflow-x-auto">
+                    <!-- Table (Desktop View) -->
+                    <div class="hidden md:block overflow-x-auto">
                         <table class="w-full text-left border-collapse whitespace-nowrap">
                             <thead>
                                 <tr class="bg-white border-b border-gray-100">
@@ -67,6 +67,47 @@
                                 </tr>
                             </tbody>
                         </table>
+                    </div>
+
+                    <!-- Cards (Mobile View) -->
+                    <div class="block md:hidden divide-y divide-gray-100 bg-white font-semibold text-gray-700">
+                        <div class="p-4 space-y-3">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <span class="font-extrabold text-brand-blue block text-sm">ORD-007</span>
+                                    <span class="text-xs text-gray-600 block">Seragam Sekolah</span>
+                                </div>
+                                <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-50 text-emerald-600 border border-emerald-200">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Shipped
+                                </div>
+                            </div>
+                            <div class="bg-gray-50/80 p-3 rounded-xl space-y-1.5 text-xs border border-gray-100">
+                                <div class="flex justify-between">
+                                    <span class="text-gray-500">Jumlah:</span>
+                                    <span class="font-bold text-gray-800">150 pcs</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-500">Total Biaya:</span>
+                                    <span class="font-bold text-gray-900 text-sm">Rp 11.250.000</span>
+                                </div>
+                                <div class="flex justify-between items-center pt-1 border-t border-gray-200/60">
+                                    <span class="text-gray-500">Progress:</span>
+                                    <div class="flex items-center gap-2">
+                                        <div class="w-16 bg-gray-200 rounded-full h-1.5 overflow-hidden">
+                                            <div class="bg-brand-blue h-1.5 rounded-full" style="width: 100%"></div>
+                                        </div>
+                                        <span class="text-xs text-gray-400 font-extrabold">100%</span>
+                                    </div>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-500">Deadline:</span>
+                                    <span class="font-medium text-gray-600">1 Agu 2026</span>
+                                </div>
+                            </div>
+                            <button class="w-full py-2 rounded-xl border border-brand-blue text-brand-blue hover:bg-brand-blue hover:text-white transition inline-flex items-center justify-center gap-1.5 text-xs font-bold">
+                                <i class="fa-regular fa-eye"></i> Lihat Detail Pesanan
+                            </button>
+                        </div>
                     </div>
                     <!-- Pagination -->
                     <div class="px-6 py-4 border-t border-gray-100 flex items-center justify-between text-xs font-bold">

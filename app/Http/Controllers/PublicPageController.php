@@ -31,28 +31,29 @@ class PublicPageController extends Controller
         $rawPhone = trim($request->no_whatsapp);
         $cleanPhone = preg_replace('/[^0-9]/', '', $rawPhone);
 
-        // 1. Find or create Customer record
-        $customer = Customer::firstOrCreate(
-            ['phone' => $rawPhone],
-            ['name' => trim($request->nama_pemesan)]
-        );
-        if ($customer->name !== trim($request->nama_pemesan)) {
-            $customer->update(['name' => trim($request->nama_pemesan)]);
+        // 1. Find or create Customer record (checks phone matching raw or clean digits)
+        $customer = Customer::where('phone', $rawPhone)
+            ->orWhere('phone', $cleanPhone)
+            ->first();
+
+        if (!$customer) {
+            $customer = Customer::create([
+                'name' => trim($request->nama_pemesan),
+                'phone' => $rawPhone,
+            ]);
         }
 
         // 2. Find or create User account for customer portal
         $user = User::where('phone', $rawPhone)
             ->orWhere('phone', $cleanPhone)
-            ->orWhere('name', $rawPhone)
             ->first();
 
         if (!$user) {
-            $randomPassword = Str::random(10);
             $user = User::create([
                 'name' => trim($request->nama_pemesan),
                 'phone' => $rawPhone,
                 'email' => $cleanPhone . '@customer.sentaprint.com',
-                'password' => Hash::make($randomPassword),
+                'password' => Hash::make('password'),
                 'role' => 'customer',
             ]);
         }

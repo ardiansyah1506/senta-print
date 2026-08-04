@@ -95,5 +95,6 @@
             @endforeach
         @endif
     </script>
+    @include('partials.tracking-modal')
 </body>
 </html>
