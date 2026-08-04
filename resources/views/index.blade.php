@@ -13,9 +13,7 @@
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
     <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('logo/logo_mark.png') }}">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('logo/logo_mark.png') }}">
-    <link rel="apple-touch-icon" href="{{ asset('logo/logo_mark.png') }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <script src="https://unpkg.com/lucide@latest"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
@@ -98,7 +96,7 @@
                         <div class="absolute -top-4 -right-4 bg-red-600 text-white rounded-full w-16 h-16 flex items-center justify-center shadow-lg shadow-red-200 z-10 border-4 border-white">
                             <i data-lucide="award" class="w-8 h-8"></i>
                         </div>
-                        <img src="https://images.unsplash.com/photo-1581655353564-df123a1eb820?auto=format&fit=crop&q=80&w=800&h=600" alt="Polo Shirt Senta Print" class="w-full h-80 object-cover rounded-xl shadow-md mix-blend-multiply filter contrast-125" style="object-position: center;">
+                        <img src="https://images.unsplash.com/photo-1581655353564-df123a1eb820?auto=format&fit=crop&fm=webp&q=75&w=600&h=450" width="600" height="450" loading="lazy" decoding="async" alt="Polo Shirt Senta Print" class="w-full h-80 object-cover rounded-xl shadow-md mix-blend-multiply filter contrast-125" style="object-position: center;">
                     </div>
                     <!-- Dots -->
                     <div class="flex justify-center gap-2 mt-6">
@@ -345,9 +343,9 @@
             </div>
         </div>
     </footer>
-    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" defer></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" media="print" onload="this.media='all'">
     <script>
         toastr.options = { "positionClass": "toast-top-right", "timeOut": "3000" };
         @if(session('success')) toastr.success("{{ session('success') }}"); @endif
