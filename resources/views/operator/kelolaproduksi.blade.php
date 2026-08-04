@@ -1,4 +1,5 @@
 @extends('layouts.operator')
+@section('title', 'Kelola Produksi')
 @section('content')
 <div class="max-w-7xl mx-auto">
                 

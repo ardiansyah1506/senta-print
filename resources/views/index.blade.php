@@ -90,10 +90,10 @@
 
                 <!-- Image Content (Slider with 3 photos) -->
                 <div class="lg:w-1/2 w-full">
-                    <div class="relative bg-gray-100 rounded-3xl p-4 sm:p-8 shadow-sm overflow-hidden">
+                    <div class="relative bg-gray-100 rounded-3xl p-4 sm:p-8 shadow-sm">
                         <!-- Red Badge -->
-                        <div class="absolute -top-3 -right-3 sm:-top-4 sm:-right-4 bg-red-600 text-white rounded-full w-14 h-14 sm:w-16 sm:h-16 flex items-center justify-center shadow-lg shadow-red-200 z-10 border-4 border-white">
-                            <i data-lucide="award" class="w-6 h-6 sm:w-8 sm:h-8"></i>
+                        <div class="absolute -top-3 -right-3 sm:-top-4 sm:-right-4 bg-red-600 text-white rounded-full w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center shadow-lg shadow-red-500/30 z-20 border-4 border-white">
+                            <i data-lucide="award" class="w-5 h-5 sm:w-7 sm:h-7"></i>
                         </div>
 
                         <!-- 3 Photo Carousel Container -->

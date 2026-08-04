@@ -12,13 +12,16 @@ use Illuminate\Support\Facades\DB;
 class ReportController extends Controller
 {
     private function resolveDateRange(Request $request) {
-        $filterType = $request->input('filter_type', 'month');
+        $filterType = $request->input('filter_type', 'all');
         $month = (int) $request->input('month', date('n'));
         $year = (int) $request->input('year', date('Y'));
         $startDateStr = $request->input('start_date');
         $endDateStr = $request->input('end_date');
 
-        if ($filterType === 'range' && $startDateStr && $endDateStr) {
+        if ($filterType === 'all') {
+            $startDate = Carbon::create(2024, 1, 1)->startOfDay();
+            $endDate = Carbon::now()->endOfDay();
+        } elseif ($filterType === 'range' && $startDateStr && $endDateStr) {
             $startDate = Carbon::parse($startDateStr)->startOfDay();
             $endDate = Carbon::parse($endDateStr)->endOfDay();
         } elseif ($filterType === 'month') {
@@ -29,8 +32,9 @@ class ReportController extends Controller
             $endDate = Carbon::parse($endDateStr)->endOfDay();
             $filterType = 'range';
         } else {
-            $startDate = Carbon::createFromDate($year, $month, 1)->startOfDay();
-            $endDate = Carbon::createFromDate($year, $month, 1)->endOfMonth()->endOfDay();
+            $startDate = Carbon::create(2024, 1, 1)->startOfDay();
+            $endDate = Carbon::now()->endOfDay();
+            $filterType = 'all';
         }
 
         return [$startDate, $endDate, $filterType, $month, $year, $startDateStr, $endDateStr];

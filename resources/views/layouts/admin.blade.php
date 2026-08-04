@@ -3,8 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    @php
+        $pageTitle = trim($__env->yieldContent('title', 'Dashboard'));
+        $fullTitle = $pageTitle . ' - Dashboard Admin Senta Print';
+    @endphp
     @include('partials.seo-meta', [
-        'title' => 'Dashboard Admin - Senta Print',
+        'title' => $fullTitle,
         'description' => 'Panel administrator Senta Print untuk pengelolaan pesanan, master data, ukuran, dan laporan.',
         'robots' => 'noindex, nofollow'
     ])
@@ -25,7 +29,7 @@
     <!-- Main Content -->
     <main class="flex-1 flex flex-col h-full overflow-hidden bg-[#f4f7f9] z-0 relative">
         <!-- Topbar -->
-        <x-dashboard-topbar role="Admin" title="Dasbor" />
+        <x-dashboard-topbar role="Admin" :title="$pageTitle" :parentTitle="trim($__env->yieldContent('parent_title')) ?: null" />
 
         <!-- Content Area -->
         <div class="flex-1 overflow-y-auto p-4 md:p-8">

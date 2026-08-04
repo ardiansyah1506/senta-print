@@ -826,6 +826,11 @@
                 return false;
             }
 
+            const submitBtn = document.querySelector('#orderForm button[type="submit"]');
+            if(submitBtn && window.setButtonLoading) {
+                window.setButtonLoading(submitBtn, 'Mengirim...');
+            }
+
             document.getElementById('orderForm').submit();
         };
     </script>

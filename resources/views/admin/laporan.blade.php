@@ -1,4 +1,5 @@
 @extends('layouts.admin')
+@section('title', 'Laporan')
 @section('content')
 @php
     $progressWidth = min($achievementPercentage, 100);
@@ -37,7 +38,7 @@
     <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-4">
         <div>
             <h1 class="text-3xl font-extrabold text-gray-900 mb-1">Laporan</h1>
-            <p class="text-gray-500 text-sm font-medium">Analisis pesanan dan pendapatan periode {{ $startDate->format('d M Y') }} - {{ $endDate->format('d M Y') }}</p>
+            <p class="text-gray-500 text-sm font-medium">Analisis pesanan dan pendapatan {{ $filterType === 'all' ? 'sepanjang masa' : 'periode ' . $startDate->format('d M Y') . ' - ' . $endDate->format('d M Y') }}</p>
         </div>
         <div class="flex items-center gap-2">
             <button onclick="document.getElementById('targetModal').classList.remove('hidden')" class="flex items-center gap-2 border border-brand-blue text-brand-blue bg-blue-50/50 hover:bg-brand-bluelight transition px-4 py-2.5 rounded-xl text-xs font-bold shadow-sm">
@@ -54,12 +55,13 @@
         <div class="flex flex-wrap items-center gap-3">
             <span class="text-xs font-extrabold text-gray-500 uppercase tracking-wider whitespace-nowrap"><i class="fa-solid fa-filter text-brand-blue mr-1"></i> Filter Periode:</span>
             <select name="filter_type" id="laporanFilterType" onchange="toggleLaporanFilterMode(this.value)" class="text-xs font-bold border border-gray-200 rounded-xl px-3 py-2 bg-gray-50 text-gray-800 outline-none focus:border-brand-blue">
-                <option value="month" {{ ($filterType ?? 'month') === 'month' ? 'selected' : '' }}>Per Bulan & Tahun</option>
+                <option value="all" {{ ($filterType ?? 'all') === 'all' ? 'selected' : '' }}>Semua Tanggal</option>
+                <option value="month" {{ ($filterType ?? '') === 'month' ? 'selected' : '' }}>Per Bulan & Tahun</option>
                 <option value="range" {{ ($filterType ?? '') === 'range' ? 'selected' : '' }}>Rentang Tanggal Custom</option>
             </select>
 
             <!-- Inputs per Month & Year -->
-            <div id="laporanMonthYearInputs" class="flex items-center gap-2 {{ ($filterType ?? 'month') === 'month' ? '' : 'hidden' }}">
+            <div id="laporanMonthYearInputs" class="flex items-center gap-2 {{ ($filterType ?? '') === 'month' ? '' : 'hidden' }}">
                 <select name="month" class="text-xs font-bold border border-gray-200 rounded-xl px-3 py-2 bg-white text-gray-800 outline-none focus:border-brand-blue">
                     @foreach([1=>'Januari', 2=>'Februari', 3=>'Maret', 4=>'April', 5=>'Mei', 6=>'Juni', 7=>'Juli', 8=>'Agustus', 9=>'September', 10=>'Oktober', 11=>'November', 12=>'Desember'] as $mNum => $mName)
                         <option value="{{ $mNum }}" {{ ($month ?? date('n')) == $mNum ? 'selected' : '' }}>{{ $mName }}</option>
@@ -82,7 +84,7 @@
 
         <div class="flex items-center gap-2 shrink-0 justify-end">
             <button type="submit" class="bg-brand-blue text-white px-4 py-2 rounded-xl text-xs font-bold hover:bg-indigo-700 transition shadow-sm flex items-center gap-1.5">
-                <i class="fa-solid fa-check text-[10px]"></i> Terapkan Filter
+                <i class="fa-solid fa-filter text-[10px]"></i> Filter
             </button>
             <a href="{{ route('admin.report.index') }}" class="bg-gray-100 text-gray-600 px-3 py-2 rounded-xl text-xs font-bold hover:bg-gray-200 transition">Reset</a>
         </div>
@@ -95,9 +97,12 @@
             if (mode === 'month') {
                 monthInputs.classList.remove('hidden');
                 rangeInputs.classList.add('hidden');
-            } else {
+            } else if (mode === 'range') {
                 monthInputs.classList.add('hidden');
                 rangeInputs.classList.remove('hidden');
+            } else {
+                monthInputs.classList.add('hidden');
+                rangeInputs.classList.add('hidden');
             }
         }
     </script>

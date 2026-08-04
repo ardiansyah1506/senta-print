@@ -1,4 +1,6 @@
 @extends('layouts.admin')
+@section('title', 'Master Kategori')
+@section('parent_title', 'Data Master')
 @section('content')
 <div class="max-w-6xl mx-auto">
                 

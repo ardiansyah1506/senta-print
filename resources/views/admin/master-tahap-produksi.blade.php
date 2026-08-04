@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-
+@section('title', 'Master Tahap Produksi')
 @section('content')
 <div class="max-w-7xl mx-auto">
     <!-- Header -->

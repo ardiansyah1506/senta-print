@@ -1,4 +1,5 @@
 @extends('layouts.user')
+@section('title', 'Buat Pesanan')
 @section('content')
 <div class="max-w-7xl mx-auto">
     <!-- Page Header -->
@@ -782,6 +783,11 @@
         if(window.cart.length === 0) {
             if(typeof toastr !== 'undefined') toastr.error('Keranjang masih kosong, lengkapi list pesanan minimal 1!');
             return false;
+        }
+
+        const submitBtn = document.querySelector('#orderForm button[type="submit"]');
+        if(submitBtn && window.setButtonLoading) {
+            window.setButtonLoading(submitBtn, 'Mengirim...');
         }
 
         document.getElementById('orderForm').submit();

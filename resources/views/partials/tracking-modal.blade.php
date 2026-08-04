@@ -233,6 +233,9 @@
             return;
         }
 
+        const btn = document.querySelector('#pageTrackForm button[type="submit"]') || document.querySelector('button[onclick*="startPublicTrackFromPage"]');
+        if (btn && window.setButtonLoading) window.setButtonLoading(btn, 'Memproses...');
+
         fetch('{{ route("public.order.search") }}', {
             method: 'POST',
             headers: {
@@ -267,6 +270,9 @@
         .catch(err => {
             if(typeof toastr !== 'undefined') toastr.error('Terjadi kesalahan sistem.');
             else alert('Terjadi kesalahan sistem.');
+        })
+        .finally(() => {
+            if (btn && window.resetButtonLoading) window.resetButtonLoading(btn);
         });
     }
 
@@ -277,6 +283,9 @@
             else alert('Masukkan Nomor Invoice terlebih dahulu.');
             return;
         }
+
+        const btn = document.querySelector('#trackStepInvoice button[type="submit"]');
+        if (btn && window.setButtonLoading) window.setButtonLoading(btn, 'Memproses...');
 
         fetch('{{ route("public.order.search") }}', {
             method: 'POST',
@@ -300,6 +309,9 @@
         .catch(err => {
             if(typeof toastr !== 'undefined') toastr.error('Terjadi kesalahan sistem.');
             else alert('Terjadi kesalahan sistem.');
+        })
+        .finally(() => {
+            if (btn && window.resetButtonLoading) window.resetButtonLoading(btn);
         });
     }
 
@@ -310,6 +322,9 @@
             else alert('Masukkan Nomor WhatsApp pemesan terlebih dahulu.');
             return;
         }
+
+        const btn = document.querySelector('#trackStepVerifyPhone button[type="submit"]');
+        if (btn && window.setButtonLoading) window.setButtonLoading(btn, 'Verifikasi...');
 
         fetch('{{ route("public.order.verify") }}', {
             method: 'POST',
@@ -465,6 +480,9 @@
         .catch(err => {
             if(typeof toastr !== 'undefined') toastr.error('Terjadi kesalahan verifikasi.');
             else alert('Terjadi kesalahan verifikasi.');
+        })
+        .finally(() => {
+            if (btn && window.resetButtonLoading) window.resetButtonLoading(btn);
         });
     }
 </script>

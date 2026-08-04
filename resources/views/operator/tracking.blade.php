@@ -1,4 +1,6 @@
 @extends('layouts.operator')
+@section('title', 'Tracking Pesanan: ' . $order->invoice_no)
+@section('parent_title', 'Kelola Produksi')
 @section('content')
 <div class="max-w-7xl mx-auto p-8">
     <div class="mb-6 flex items-center justify-between">

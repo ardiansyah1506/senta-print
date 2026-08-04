@@ -1,5 +1,7 @@
 @extends('layouts.admin')
 
+@section('title', 'Kelola Users')
+
 @section('content')
 <div class="max-w-7xl mx-auto">
     <!-- Header -->

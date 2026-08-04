@@ -1,4 +1,6 @@
 @extends('layouts.admin')
+@section('title', 'Detail Kategori: ' . $category->name)
+@section('parent_title', 'Master Kategori')
 @section('content')
             <div class="max-w-6xl mx-auto">
                 

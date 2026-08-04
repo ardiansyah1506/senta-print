@@ -1,4 +1,5 @@
 @extends('layouts.user')
+@section('title', 'Lacak Pesanan')
 @section('content')
 <div class="max-w-7xl mx-auto">
                 
