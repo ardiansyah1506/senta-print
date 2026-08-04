@@ -9,6 +9,7 @@
         'keywords' => 'buat pesanan senta print, pesan kaos custom online, cetak seragam custom, pesan hoodie semarang, kustomisasi produk konveksi',
         'robots' => 'noindex, follow'
     ])
+    @include('partials.google-analytics')
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
     <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('logo/logo_mark.png') }}">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('logo/logo_mark.png') }}">

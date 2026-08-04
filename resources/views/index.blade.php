@@ -9,12 +9,11 @@
         'keywords' => 'senta print, konveksi semarang, pesan kaos custom, cetak seragam, jaket hoodie custom, polo shirt custom, merchandise custom, tracking pesanan',
         'robots' => 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1'
     ])
+    @include('partials.google-analytics')
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
     <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('logo/logo_mark.png') }}">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('logo/logo_mark.png') }}">
-    <link rel="apple-touch-icon" href="{{ asset('logo/logo_mark.png') }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <script src="https://unpkg.com/lucide@latest"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
@@ -440,9 +439,9 @@
             </div>
         </div>
     </footer>
-    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" defer></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" media="print" onload="this.media='all'">
     <script>
         toastr.options = { "positionClass": "toast-top-right", "timeOut": "3000" };
         @if(session('success')) toastr.success("{{ session('success') }}"); @endif

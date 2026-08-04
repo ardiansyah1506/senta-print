@@ -1,9 +1,8 @@
 import './bootstrap';
-import { createIcons, icons } from 'lucide';
 
 export function initLucideIcons() {
-    if (typeof createIcons === 'function') {
-        createIcons({ icons });
+    if (typeof window.lucide !== 'undefined' && typeof window.lucide.createIcons === 'function') {
+        window.lucide.createIcons();
     }
 }
 
