@@ -57,13 +57,12 @@ class ReportController extends Controller
         $productPopularity = [];
         foreach ($allOrders as $order) {
             foreach ($order->items as $item) {
-                if ($item->product) {
-                    $name = $item->product->name;
-                    if (!isset($productPopularity[$name])) {
-                        $productPopularity[$name] = 0;
-                    }
-                    $productPopularity[$name] += $item->quantity;
+                $name = $item->product_name ?? ($item->product->name ?? 'Produk');
+                $qty = $item->qty ?? ($item->quantity ?? 1);
+                if (!isset($productPopularity[$name])) {
+                    $productPopularity[$name] = 0;
                 }
+                $productPopularity[$name] += $qty;
             }
         }
         arsort($productPopularity);
@@ -193,6 +192,12 @@ class ReportController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
+        $validOrders = $orders->where('status', '!=', 'rejected');
+        $sumSubtotal = $orders->sum('subtotal');
+        $sumGrandTotal = $validOrders->sum('grand_total');
+        $countOrders = $orders->count();
+        $countCompleted = $orders->where('status', 'completed')->count();
+
         $fileName = 'Laporan_Pesanan_SentaPrint_' . $startDate->format('Ymd') . '_' . $endDate->format('Ymd') . '.xls';
 
         $headers = [
@@ -203,7 +208,7 @@ class ReportController extends Controller
             "Expires" => "0"
         ];
 
-        $callback = function() use ($orders, $startDate, $endDate) {
+        $callback = function() use ($orders, $startDate, $endDate, $sumSubtotal, $sumGrandTotal, $countOrders, $countCompleted) {
             echo '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">';
             echo '<head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" />';
             echo '<!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>Laporan Pesanan</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]-->';
@@ -212,15 +217,28 @@ class ReportController extends Controller
             echo 'td { border: 1px solid #D1D5DB; padding: 8px; vertical-align: top; font-family: Arial, sans-serif; font-size: 11px; }';
             echo '.text { mso-number-format:"\@"; }';
             echo '.num { mso-number-format:"\#\,\#\#0"; text-align: right; }';
-            echo '.title { font-size: 16px; font-weight: bold; color: #111827; margin-bottom: 4px; font-family: Arial, sans-serif; }';
-            echo '.subtitle { font-size: 12px; color: #6B7280; margin-bottom: 12px; font-family: Arial, sans-serif; }';
+            echo '.title { font-size: 18px; font-weight: bold; color: #1E3A8A; margin-bottom: 4px; font-family: Arial, sans-serif; }';
+            echo '.subtitle { font-size: 12px; color: #4B5563; margin-bottom: 12px; font-family: Arial, sans-serif; }';
+            echo '.rekap-total { background-color: #FEF3C7; font-weight: bold; color: #92400E; border-top: 2px solid #1E3A8A; font-size: 12px; }';
             echo '</style></head>';
             echo '<body>';
-            echo '<div class="title">LAPORAN PENJUALAN SENTA PRINT</div>';
-            echo '<div class="subtitle">Periode: ' . $startDate->format('d/m/Y') . ' s/d ' . $endDate->format('d/m/Y') . ' | Total Pesanan: ' . count($orders) . '</div>';
-            echo '<table border="1">';
+            echo '<div class="title">LAPORAN PENJUALAN & PESANAN SENTA PRINT</div>';
+            echo '<div class="subtitle">Periode Laporan: <b>' . $startDate->format('d/m/Y') . '</b> s/d <b>' . $endDate->format('d/m/Y') . '</b> | Total Pesanan: <b>' . $countOrders . '</b></div>';
+            
+            // Executive Summary Table
+            echo '<table border="1" style="margin-bottom: 16px; width: 100%; border-collapse: collapse;">';
+            echo '<tr>';
+            echo '<td style="background-color:#EFF6FF; font-weight:bold;">Total Transaksi: ' . $countOrders . ' Pesanan</td>';
+            echo '<td style="background-color:#ECFDF5; font-weight:bold;">Pesanan Selesai: ' . $countCompleted . ' Pesanan</td>';
+            echo '<td style="background-color:#FEF3C7; font-weight:bold;">Total Subtotal: Rp ' . number_format($sumSubtotal, 0, ',', '.') . '</td>';
+            echo '<td style="background-color:#DBEAFE; font-weight:bold;">Total Omset (Grand Total): Rp ' . number_format($sumGrandTotal, 0, ',', '.') . '</td>';
+            echo '</tr>';
+            echo '</table><br/>';
+
+            echo '<table border="1" style="width: 100%; border-collapse: collapse;">';
             echo '<thead><tr>';
             echo '<th>No Invoice</th>';
+            echo '<th>Tanggal Pesanan</th>';
             echo '<th>Nama Customer</th>';
             echo '<th>No WhatsApp</th>';
             echo '<th>Detail Produk & Qty</th>';
@@ -228,31 +246,40 @@ class ReportController extends Controller
             echo '<th>Grand Total (Rp)</th>';
             echo '<th>Status Pembayaran</th>';
             echo '<th>Status Pesanan</th>';
-            echo '<th>Tanggal Pesanan</th>';
             echo '</tr></thead>';
             echo '<tbody>';
 
-            foreach ($orders as $order) {
+            foreach ($orders as $index => $order) {
                 $itemsDetail = [];
                 foreach ($order->items as $item) {
-                    $prodName = $item->product->name ?? 'Produk';
-                    $itemsDetail[] = $prodName . ' (' . $item->quantity . ' pcs)';
+                    $prodName = $item->product_name ?? ($item->product->name ?? 'Produk');
+                    $itemQty = $item->qty ?? ($item->quantity ?? 1);
+                    $itemsDetail[] = $prodName . ' (' . $itemQty . ' pcs)';
                 }
                 $itemsStr = implode(', ', $itemsDetail);
                 $custPhone = $order->customer->phone ?? '-';
+                $rowBg = ($index % 2 == 1) ? 'background-color: #F9FAFB;' : '';
 
-                echo '<tr>';
-                echo '<td class="text">' . htmlspecialchars($order->invoice_no) . '</td>';
+                echo '<tr style="' . $rowBg . '">';
+                echo '<td class="text" style="font-weight: bold; color: #1E3A8A;">' . htmlspecialchars($order->invoice_no) . '</td>';
+                echo '<td>' . htmlspecialchars($order->created_at->format('d/m/Y H:i')) . '</td>';
                 echo '<td>' . htmlspecialchars($order->customer->name ?? '-') . '</td>';
                 echo '<td class="text">' . htmlspecialchars($custPhone) . '</td>';
                 echo '<td>' . htmlspecialchars($itemsStr) . '</td>';
                 echo '<td class="num">' . number_format($order->subtotal, 0, ',', '.') . '</td>';
-                echo '<td class="num">' . number_format($order->grand_total, 0, ',', '.') . '</td>';
-                echo '<td>' . htmlspecialchars(strtoupper($order->payment_status ?? 'PENDING')) . '</td>';
-                echo '<td>' . htmlspecialchars(ucfirst($order->status)) . '</td>';
-                echo '<td>' . htmlspecialchars($order->created_at->format('d/m/Y H:i')) . '</td>';
+                echo '<td class="num" style="font-weight: bold;">' . number_format($order->grand_total, 0, ',', '.') . '</td>';
+                echo '<td style="text-align: center;">' . htmlspecialchars(strtoupper($order->payment_status ?? 'PENDING')) . '</td>';
+                echo '<td style="text-align: center;">' . htmlspecialchars(ucfirst($order->status)) . '</td>';
                 echo '</tr>';
             }
+
+            // REKAP TOTAL FOOTER ROW
+            echo '<tr class="rekap-total">';
+            echo '<td colspan="5" style="text-align: right; padding: 10px; font-weight: bold;">REKAP TOTAL (' . $countOrders . ' PESANAN) :</td>';
+            echo '<td class="num" style="font-weight: bold;">' . number_format($sumSubtotal, 0, ',', '.') . '</td>';
+            echo '<td class="num" style="font-weight: bold; font-size: 12px; color: #1E3A8A;">' . number_format($sumGrandTotal, 0, ',', '.') . '</td>';
+            echo '<td colspan="2" style="text-align: center; font-size: 11px;">Omset Bersih Periode ini</td>';
+            echo '</tr>';
 
             echo '</tbody></table></body></html>';
         };
