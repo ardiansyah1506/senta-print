@@ -254,7 +254,11 @@
                         <td class="py-3.5 px-6">{{ $order->customer->name ?? 'Unknown' }}</td>
                         <td class="py-3.5 px-6">
                             @foreach($order->items as $item)
-                                <div class="text-xs truncate max-w-[150px]" title="{{ $item->product->name ?? 'Unknown' }}">{{ $item->product->name ?? 'Unknown' }} ({{ $item->quantity }})</div>
+                                @php
+                                    $pName = $item->product_name ?? ($item->product->name ?? 'Produk');
+                                    $pQty = $item->qty ?? ($item->quantity ?? 1);
+                                @endphp
+                                <div class="text-xs truncate max-w-[150px]" title="{{ $pName }}">{{ $pName }} ({{ $pQty }} pcs)</div>
                             @endforeach
                         </td>
                         <td class="py-3.5 px-6 font-bold text-gray-900">Rp {{ number_format($order->grand_total, 0, ',', '.') }}</td>
@@ -328,7 +332,11 @@
                         <span class="text-gray-500">Produk:</span>
                         <span class="font-medium text-gray-800">
                             @foreach($order->items as $item)
-                                {{ $item->product->name ?? 'Unknown' }} ({{ $item->quantity }}){{ !$loop->last ? ', ' : '' }}
+                                @php
+                                    $pName = $item->product_name ?? ($item->product->name ?? 'Produk');
+                                    $pQty = $item->qty ?? ($item->quantity ?? 1);
+                                @endphp
+                                {{ $pName }} ({{ $pQty }} pcs){{ !$loop->last ? ', ' : '' }}
                             @endforeach
                         </span>
                     </div>
