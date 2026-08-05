@@ -21,8 +21,8 @@
             <p class="text-xs text-indigo-100 font-medium mb-4">Masukkan nomor invoice Anda di bawah ini untuk melihat detail progres produksi dan foto pengerjaan langsung.</p>
             
             <div class="flex flex-col sm:flex-row gap-2">
-                <input type="text" id="userPageInvoiceInput" placeholder="Contoh: INV-ST-20260805-1234" class="w-full px-4 py-3 rounded-xl border-0 text-sm font-extrabold text-gray-900 outline-none focus:ring-2 focus:ring-amber-400 placeholder:text-gray-400 uppercase">
-                <button type="button" onclick="trackFromUserPage()" class="bg-amber-400 hover:bg-amber-500 text-gray-900 font-extrabold px-6 py-3 rounded-xl text-xs transition shrink-0 flex items-center justify-center gap-2 shadow-sm">
+                <input type="text" id="userPageInvoiceInput" placeholder="Contoh: INV-ST-20260805-1234" class="w-full px-4 py-3 rounded-xl border-0 text-sm font-extrabold text-gray-900 bg-white outline-none focus:ring-2 focus:ring-amber-400 placeholder:text-gray-400 uppercase shadow-sm">
+                <button type="button" onclick="trackFromUserPage()" class="bg-amber-400 hover:bg-amber-500 text-gray-900 font-extrabold px-6 py-3 rounded-xl text-xs transition shrink-0 flex items-center justify-center gap-2 shadow-sm cursor-pointer">
                     <i class="fa-solid fa-magnifying-glass"></i> Lacak Sekarang
                 </button>
             </div>
