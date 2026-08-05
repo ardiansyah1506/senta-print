@@ -22,7 +22,22 @@
     --color-sidebarhover: #252e42;
 }
 
-@utility bg-gradient-to-r {
-    background-image: linear-gradient(to right, var(--color-brand-blue, #4f46e5), #312e81);
+/* Explicit Utility Banner & Color Classes */
+.bg-gradient-to-r,
+.bg-gradient-banner {
+    background-color: #4f46e5 !important;
+    background-image: linear-gradient(to right, #4f46e5, #312e81) !important;
+}
+
+.bg-brand-blue {
+    background-color: #4f46e5 !important;
+}
+
+.bg-blue-500 {
+    background-color: #3b82f6 !important;
+}
+
+.bg-red-500 {
+    background-color: #ef4444 !important;
 }
 

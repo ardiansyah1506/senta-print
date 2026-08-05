@@ -15,7 +15,7 @@
     </div>
 
     <!-- Quick Search Box -->
-    <div class="bg-brand-blue bg-linear-to-r from-brand-blue to-indigo-900 rounded-2xl p-6 text-white shadow-md relative overflow-hidden" style="background: linear-gradient(to right, #4f46e5, #312e81);">
+    <div class="bg-gradient-banner bg-brand-blue bg-linear-to-r from-brand-blue to-indigo-900 rounded-2xl p-6 text-white shadow-md relative overflow-hidden" style="background-color: #4f46e5 !important; background-image: linear-gradient(to right, #4f46e5, #312e81) !important;">
         <div class="relative z-10 max-w-2xl">
             <h3 class="text-lg font-extrabold mb-1">Punya Nomor Invoice Pesanan?</h3>
             <p class="text-xs text-indigo-100 font-medium mb-4">Masukkan nomor invoice Anda di bawah ini untuk melihat detail progres produksi dan foto pengerjaan langsung.</p>
