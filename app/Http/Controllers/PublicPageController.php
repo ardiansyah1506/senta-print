@@ -99,7 +99,7 @@ class PublicPageController extends Controller
     public function verifyAndTrackOrder(Request $request) {
         $request->validate([
             'invoice_no' => 'required|string',
-            'no_whatsapp' => 'required|string'
+            'no_whatsapp' => 'nullable|string'
         ]);
 
         $invoiceNo = trim($request->invoice_no);
@@ -117,7 +117,10 @@ class PublicPageController extends Controller
         }
 
         $customerPhoneClean = preg_replace('/[^0-9]/', '', $order->customer->phone ?? '');
-        if ($customerPhoneClean !== $inputPhoneClean && $order->customer->phone !== trim($request->no_whatsapp)) {
+        $user = auth()->user();
+        $isAuthorizedUser = $user && ($user->role === 'admin' || $user->name === $order->customer->name || preg_replace('/[^0-9]/', '', $user->phone ?? '') === $customerPhoneClean);
+
+        if (!$isAuthorizedUser && $customerPhoneClean !== $inputPhoneClean && $order->customer->phone !== trim($request->no_whatsapp ?? '')) {
             return response()->json([
                 'success' => false,
                 'message' => 'Nomor WhatsApp tidak cocok dengan pemilik Invoice ini.'

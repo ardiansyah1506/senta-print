@@ -16,6 +16,23 @@ class OrderService
      * Parse the cart from the request, process each item, calculate totals,
      * manage file uploads for custom designs, and insert database records.
      */
+    public function generateInvoiceNo()
+    {
+        $todayDateStr = date('dmY');
+        $prefix = "INV-{$todayDateStr}-";
+
+        $todayCount = Order::whereDate('created_at', date('Y-m-d'))->count();
+        $seq = $todayCount + 1;
+        $invoiceNo = $prefix . str_pad($seq, 4, '0', STR_PAD_LEFT);
+
+        while (Order::where('invoice_no', $invoiceNo)->exists()) {
+            $seq++;
+            $invoiceNo = $prefix . str_pad($seq, 4, '0', STR_PAD_LEFT);
+        }
+
+        return $invoiceNo;
+    }
+
     public function createOrder(Request $request, $customerId, $invoicePrefix = 'INV-')
     {
         $cart = json_decode($request->cart, true);
@@ -26,7 +43,7 @@ class OrderService
         // Initialize Order object
         $order = Order::create([
             'customer_id' => $customerId,
-            'invoice_no' => $invoicePrefix . date('Ymd') . '-' . rand(1000, 9999),
+            'invoice_no' => $this->generateInvoiceNo(),
             'subtotal' => 0,
             'discount' => 0,
             'tax' => 0,

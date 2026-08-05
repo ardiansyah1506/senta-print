@@ -190,6 +190,184 @@
 <script>
     let activeTrackInvoice = '';
 
+    function openDirectCustomerTrackingModal(invoiceNo) {
+        const modal = document.getElementById('publicTrackingModal');
+        const content = document.getElementById('publicTrackingContent');
+        
+        activeTrackInvoice = invoiceNo;
+
+        document.getElementById('trackStepInvoice').classList.add('hidden');
+        document.getElementById('trackStepVerifyPhone').classList.add('hidden');
+        document.getElementById('trackStepResults').classList.remove('hidden');
+
+        document.getElementById('resCustomerName').innerText = 'Memuat...';
+        document.getElementById('resInvoiceNo').innerText = invoiceNo;
+        document.getElementById('resProductionStep').innerText = 'Memuat...';
+        document.getElementById('resGrandTotal').innerText = '...';
+        document.getElementById('resItemsList').innerHTML = '<div class="text-center py-8 text-gray-400 font-bold"><i class="fa-solid fa-spinner fa-spin text-2xl text-brand-blue"></i><p class="mt-2 text-xs">Memuat detail pesanan...</p></div>';
+        document.getElementById('resProductionSection').classList.add('hidden');
+
+        modal.classList.remove('hidden');
+        setTimeout(() => {
+            modal.style.opacity = '1';
+            content.classList.remove('scale-95');
+            content.classList.add('scale-100');
+        }, 10);
+
+        fetch('{{ route("public.order.verify") }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            body: JSON.stringify({
+                invoice_no: invoiceNo,
+                no_whatsapp: ''
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                const ord = data.order;
+                document.getElementById('resCustomerName').innerText = ord.customer_name;
+                document.getElementById('resInvoiceNo').innerText = ord.invoice_no;
+                document.getElementById('resProductionStep').innerText = ord.current_production_step;
+                document.getElementById('resGrandTotal').innerText = 'Rp ' + ord.grand_total.toLocaleString('id-ID');
+                
+                const payBadge = document.getElementById('resPaymentBadge');
+                payBadge.innerText = ord.payment_status;
+                if (ord.payment_status === 'PAID' || ord.payment_status === 'LUNAS') {
+                    payBadge.className = 'px-3 py-1 rounded-full text-xs font-extrabold bg-emerald-100 text-emerald-700';
+                } else {
+                    payBadge.className = 'px-3 py-1 rounded-full text-xs font-extrabold bg-amber-100 text-amber-700';
+                }
+
+                let itemsHtml = '';
+                ord.items.forEach(it => {
+                    let addonsHtml = '';
+                    if (it.addons && it.addons.length > 0) {
+                        addonsHtml = it.addons.map(a => {
+                            let priceFormatted = a.price < 0 
+                                ? `<span class="text-red-600 font-bold">- Rp ${Math.abs(a.price).toLocaleString('id-ID')}</span>`
+                                : `<span class="text-brand-blue font-bold">+ Rp ${a.price.toLocaleString('id-ID')}</span>`;
+                            return `
+                                <div class="flex justify-between items-center text-[11px] font-bold text-gray-700 bg-indigo-50/40 px-2.5 py-1 rounded-lg border border-indigo-100/60">
+                                    <span class="flex items-center gap-1.5"><i class="fa-solid fa-puzzle-piece text-brand-blue text-[10px]"></i> ${a.name}</span>
+                                    ${priceFormatted}
+                                </div>
+                            `;
+                        }).join('');
+                    } else {
+                        addonsHtml = `
+                            <div class="flex items-center gap-1.5 text-[11px] font-medium text-gray-500 bg-gray-50 px-2.5 py-1 rounded-lg border border-gray-200/60">
+                                <i class="fa-solid fa-minus text-gray-400 text-[10px]"></i>
+                                <span>Standar (Tanpa Add-on)</span>
+                            </div>
+                        `;
+                    }
+
+                    itemsHtml += `
+                        <div class="p-4 border border-gray-200/80 rounded-2xl bg-white space-y-3 shadow-2xs">
+                            <div class="flex justify-between items-start border-b border-gray-100 pb-2">
+                                <div>
+                                    <h4 class="font-extrabold text-sm text-gray-900">${it.product_name} (${it.size_name ? 'Ukuran ' + it.size_name : 'All Size'})</h4>
+                                    <span class="inline-block bg-indigo-50 text-brand-blue text-[10px] font-extrabold px-2.5 py-0.5 rounded-full mt-0.5">${it.qty} pcs</span>
+                                </div>
+                                <div class="text-right">
+                                    <span class="text-[10px] text-gray-400 font-bold uppercase tracking-wider block">Harga Dasar Baju</span>
+                                    <span class="font-extrabold text-xs text-gray-800">Rp ${it.base_price.toLocaleString('id-ID')} /pcs</span>
+                                </div>
+                            </div>
+
+                            <div class="space-y-1.5">
+                                <span class="text-[10px] font-extrabold text-gray-400 uppercase tracking-wider block">Rincian Layanan & Add-on:</span>
+                                ${addonsHtml}
+                            </div>
+
+                            <div class="bg-gray-50 border border-gray-100 rounded-xl p-3 text-xs space-y-1">
+                                <div class="flex justify-between items-center text-gray-600">
+                                    <span>Subtotal Baju (${it.qty} pcs x Rp ${it.base_price.toLocaleString('id-ID')}):</span>
+                                    <span class="font-bold text-gray-800">Rp ${it.subtotal_baju.toLocaleString('id-ID')}</span>
+                                </div>
+                                ${it.total_addon !== 0 ? `
+                                <div class="flex justify-between items-center text-gray-600">
+                                    <span>Total Layanan Add-on:</span>
+                                    <span class="font-bold ${it.total_addon < 0 ? 'text-red-600' : 'text-brand-blue'}">
+                                        ${it.total_addon < 0 ? '-' : '+'} Rp ${Math.abs(it.total_addon).toLocaleString('id-ID')}
+                                    </span>
+                                </div>` : ''}
+                                <div class="flex justify-between items-center border-t border-gray-200/80 pt-1.5 font-extrabold text-gray-900">
+                                    <span>Total Item Ini:</span>
+                                    <span class="text-brand-blue text-sm">Rp ${it.total_price.toLocaleString('id-ID')}</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+                document.getElementById('resItemsList').innerHTML = itemsHtml;
+
+                if (ord.sequential_steps && ord.sequential_steps.length > 0) {
+                    let stepsHtml = '';
+                    ord.sequential_steps.forEach((st, idx) => {
+                        let isDone = (st.status === 'completed');
+                        let isActive = (st.status === 'active');
+
+                        let iconHtml = isDone 
+                            ? `<i class="fa-solid fa-circle-check text-emerald-600 text-sm"></i>` 
+                            : (isActive ? `<span class="w-2.5 h-2.5 rounded-full bg-brand-blue animate-pulse"></span>` : `<i class="fa-regular fa-circle text-gray-300 text-xs"></i>`);
+
+                        let bgStyle = isDone 
+                            ? 'bg-emerald-50/60 border-emerald-200/80 text-emerald-900' 
+                            : (isActive ? 'bg-indigo-50 border-brand-blue text-brand-blue shadow-2xs' : 'bg-white border-gray-200/60 text-gray-400 opacity-60');
+
+                        let photosHtml = '';
+                        if (isDone && st.photos && st.photos.length > 0) {
+                            photosHtml = `
+                                <div class="grid grid-cols-3 sm:grid-cols-4 gap-2 pt-2">
+                                    ${st.photos.map(p => `
+                                        <a href="${p}" target="_blank" class="w-full h-16 rounded-xl overflow-hidden border border-gray-200 block shadow-2xs hover:opacity-90 transition">
+                                            <img src="${p}" class="w-full h-full object-cover">
+                                        </a>
+                                    `).join('')}
+                                </div>
+                            `;
+                        }
+
+                        stepsHtml += `
+                            <div class="p-3.5 border rounded-2xl ${bgStyle} space-y-1">
+                                <div class="flex justify-between items-center text-xs">
+                                    <span class="font-extrabold flex items-center gap-2">
+                                        ${iconHtml}
+                                        <span>Tahap ${idx + 1}: ${st.name}</span>
+                                    </span>
+                                    <span class="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full ${isDone ? 'bg-emerald-100 text-emerald-700' : (isActive ? 'bg-brand-blue text-white' : 'bg-gray-100 text-gray-400')}">
+                                        ${isDone ? 'Selesai' : (isActive ? 'Proses Sekarang' : 'Pending')}
+                                    </span>
+                                </div>
+                                ${st.notes ? `<p class="text-xs font-medium text-gray-700 bg-white p-2.5 rounded-xl border border-gray-100 mt-1">${st.notes}</p>` : ''}
+                                ${photosHtml}
+                            </div>
+                        `;
+                    });
+
+                    document.getElementById('resProductionLogs').innerHTML = stepsHtml;
+                    document.getElementById('resProductionSection').classList.remove('hidden');
+                } else {
+                    document.getElementById('resProductionSection').classList.add('hidden');
+                }
+            } else {
+                if(typeof toastr !== 'undefined') toastr.error(data.message);
+                else alert(data.message);
+                closePublicTrackingModal();
+            }
+        })
+        .catch(err => {
+            if(typeof toastr !== 'undefined') toastr.error('Terjadi kesalahan sistem.');
+            else alert('Terjadi kesalahan sistem.');
+            closePublicTrackingModal();
+        });
+    }
+
     function openPublicTrackingModal(prefillInvoice = '') {
         const modal = document.getElementById('publicTrackingModal');
         const content = document.getElementById('publicTrackingContent');
