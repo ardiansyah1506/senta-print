@@ -202,92 +202,141 @@ class ReportController extends Controller
         $countOrders = $orders->count();
         $countCompleted = $orders->where('status', 'completed')->count();
 
-        $fileName = 'Laporan_Pesanan_SentaPrint_' . $startDate->format('Ymd') . '_' . $endDate->format('Ymd') . '.xls';
+        $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setTitle('Laporan Pesanan');
 
-        $headers = [
-            "Content-Type" => "application/vnd.ms-excel; charset=UTF-8",
-            "Content-Disposition" => "attachment; filename=\"$fileName\"",
-            "Pragma" => "no-cache",
-            "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
-            "Expires" => "0"
+        // Title Row
+        $sheet->setCellValue('A1', 'LAPORAN PENJUALAN & PESANAN SENTA PRINT');
+        $sheet->getStyle('A1')->getFont()->setBold(true)->setSize(16)->setColor(new \PhpOffice\PhpSpreadsheet\Style\Color('1E3A8A'));
+        
+        $sheet->setCellValue('A2', 'Periode Laporan: ' . $startDate->format('d/m/Y') . ' s/d ' . $endDate->format('d/m/Y'));
+        $sheet->getStyle('A2')->getFont()->setItalic(true)->setColor(new \PhpOffice\PhpSpreadsheet\Style\Color('4B5563'));
+
+        // Executive Summary Box
+        $sheet->setCellValue('A4', 'RINGKASAN EKSEKUTIF');
+        $sheet->getStyle('A4')->getFont()->setBold(true);
+
+        $sheet->setCellValue('A5', 'Total Transaksi:');
+        $sheet->setCellValue('B5', $countOrders . ' Pesanan');
+        $sheet->setCellValue('D5', 'Total Subtotal:');
+        $sheet->setCellValue('E5', $sumSubtotal);
+
+        $sheet->setCellValue('A6', 'Pesanan Selesai:');
+        $sheet->setCellValue('B6', $countCompleted . ' Pesanan');
+        $sheet->setCellValue('D6', 'Total Omset (Grand Total):');
+        $sheet->setCellValue('E6', $sumGrandTotal);
+
+        $sheet->getStyle('E5:E6')->getNumberFormat()->setFormatCode('#,##0');
+        $sheet->getStyle('A5:E6')->getFont()->setBold(true);
+
+        // Header Table
+        $tableHeaders = [
+            'No Invoice',
+            'Tanggal Pesanan',
+            'Nama Customer',
+            'No WhatsApp',
+            'Detail Produk & Qty',
+            'Subtotal (Rp)',
+            'Grand Total (Rp)',
+            'Status Pembayaran',
+            'Status Pesanan'
         ];
 
-        $callback = function() use ($orders, $startDate, $endDate, $sumSubtotal, $sumGrandTotal, $countOrders, $countCompleted) {
-            echo '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">';
-            echo '<head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" />';
-            echo '<!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>Laporan Pesanan</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]-->';
-            echo '<style>';
-            echo 'th { background-color: #1E3A8A; color: #FFFFFF; font-weight: bold; border: 1px solid #000000; padding: 10px; text-align: center; font-family: Arial, sans-serif; font-size: 12px; }';
-            echo 'td { border: 1px solid #D1D5DB; padding: 8px; vertical-align: top; font-family: Arial, sans-serif; font-size: 11px; }';
-            echo '.text { mso-number-format:"\@"; }';
-            echo '.num { mso-number-format:"\#\,\#\#0"; text-align: right; }';
-            echo '.title { font-size: 18px; font-weight: bold; color: #1E3A8A; margin-bottom: 4px; font-family: Arial, sans-serif; }';
-            echo '.subtitle { font-size: 12px; color: #4B5563; margin-bottom: 12px; font-family: Arial, sans-serif; }';
-            echo '.rekap-total { background-color: #FEF3C7; font-weight: bold; color: #92400E; border-top: 2px solid #1E3A8A; font-size: 12px; }';
-            echo '</style></head>';
-            echo '<body>';
-            echo '<div class="title">LAPORAN PENJUALAN & PESANAN SENTA PRINT</div>';
-            echo '<div class="subtitle">Periode Laporan: <b>' . $startDate->format('d/m/Y') . '</b> s/d <b>' . $endDate->format('d/m/Y') . '</b> | Total Pesanan: <b>' . $countOrders . '</b></div>';
-            
-            // Executive Summary Table
-            echo '<table border="1" style="margin-bottom: 16px; width: 100%; border-collapse: collapse;">';
-            echo '<tr>';
-            echo '<td style="background-color:#EFF6FF; font-weight:bold;">Total Transaksi: ' . $countOrders . ' Pesanan</td>';
-            echo '<td style="background-color:#ECFDF5; font-weight:bold;">Pesanan Selesai: ' . $countCompleted . ' Pesanan</td>';
-            echo '<td style="background-color:#FEF3C7; font-weight:bold;">Total Subtotal: Rp ' . number_format($sumSubtotal, 0, ',', '.') . '</td>';
-            echo '<td style="background-color:#DBEAFE; font-weight:bold;">Total Omset (Grand Total): Rp ' . number_format($sumGrandTotal, 0, ',', '.') . '</td>';
-            echo '</tr>';
-            echo '</table><br/>';
+        $startRow = 9;
+        $sheet->fromArray($tableHeaders, null, "A{$startRow}");
 
-            echo '<table border="1" style="width: 100%; border-collapse: collapse;">';
-            echo '<thead><tr>';
-            echo '<th>No Invoice</th>';
-            echo '<th>Tanggal Pesanan</th>';
-            echo '<th>Nama Customer</th>';
-            echo '<th>No WhatsApp</th>';
-            echo '<th>Detail Produk & Qty</th>';
-            echo '<th>Subtotal (Rp)</th>';
-            echo '<th>Grand Total (Rp)</th>';
-            echo '<th>Status Pembayaran</th>';
-            echo '<th>Status Pesanan</th>';
-            echo '</tr></thead>';
-            echo '<tbody>';
+        // Style Table Header Row
+        $headerRange = "A{$startRow}:I{$startRow}";
+        $sheet->getStyle($headerRange)->applyFromArray([
+            'font' => [
+                'bold' => true,
+                'color' => ['rgb' => 'FFFFFF'],
+                'size' => 11,
+            ],
+            'fill' => [
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'startColor' => ['rgb' => '1E3A8A'],
+            ],
+            'alignment' => [
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+            ],
+        ]);
 
-            foreach ($orders as $index => $order) {
-                $itemsDetail = [];
-                foreach ($order->items as $item) {
-                    $prodName = $item->product_name ?? ($item->product->name ?? 'Produk');
-                    $itemQty = $item->qty ?? ($item->quantity ?? 1);
-                    $itemsDetail[] = $prodName . ' (' . $itemQty . ' pcs)';
-                }
-                $itemsStr = implode(', ', $itemsDetail);
-                $custPhone = $order->customer->phone ?? '-';
-                $rowBg = ($index % 2 == 1) ? 'background-color: #F9FAFB;' : '';
-
-                echo '<tr style="' . $rowBg . '">';
-                echo '<td class="text" style="font-weight: bold; color: #1E3A8A;">' . htmlspecialchars($order->invoice_no) . '</td>';
-                echo '<td>' . htmlspecialchars($order->created_at->format('d/m/Y H:i')) . '</td>';
-                echo '<td>' . htmlspecialchars($order->customer->name ?? '-') . '</td>';
-                echo '<td class="text">' . htmlspecialchars($custPhone) . '</td>';
-                echo '<td>' . htmlspecialchars($itemsStr) . '</td>';
-                echo '<td class="num">' . number_format($order->subtotal, 0, ',', '.') . '</td>';
-                echo '<td class="num" style="font-weight: bold;">' . number_format($order->grand_total, 0, ',', '.') . '</td>';
-                echo '<td style="text-align: center;">' . htmlspecialchars(strtoupper($order->payment_status ?? 'PENDING')) . '</td>';
-                echo '<td style="text-align: center;">' . htmlspecialchars(ucfirst($order->status)) . '</td>';
-                echo '</tr>';
+        $currentRow = $startRow + 1;
+        foreach ($orders as $order) {
+            $itemsDetail = [];
+            foreach ($order->items as $item) {
+                $prodName = $item->product_name ?? ($item->product->name ?? 'Produk');
+                $itemQty = $item->qty ?? ($item->quantity ?? 1);
+                $itemsDetail[] = $prodName . ' (' . $itemQty . ' pcs)';
             }
+            $itemsStr = implode(', ', $itemsDetail);
+            $custPhone = $order->customer->phone ?? '-';
 
-            // REKAP TOTAL FOOTER ROW
-            echo '<tr class="rekap-total">';
-            echo '<td colspan="5" style="text-align: right; padding: 10px; font-weight: bold;">REKAP TOTAL (' . $countOrders . ' PESANAN) :</td>';
-            echo '<td class="num" style="font-weight: bold;">' . number_format($sumSubtotal, 0, ',', '.') . '</td>';
-            echo '<td class="num" style="font-weight: bold; font-size: 12px; color: #1E3A8A;">' . number_format($sumGrandTotal, 0, ',', '.') . '</td>';
-            echo '<td colspan="2" style="text-align: center; font-size: 11px;">Omset Bersih Periode ini</td>';
-            echo '</tr>';
+            $sheet->setCellValueExplicit("A{$currentRow}", $order->invoice_no, \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue("B{$currentRow}", $order->created_at ? $order->created_at->format('d/m/Y H:i') : '-');
+            $sheet->setCellValue("C{$currentRow}", $order->customer->name ?? '-');
+            $sheet->setCellValueExplicit("D{$currentRow}", $custPhone, \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue("E{$currentRow}", $itemsStr);
+            $sheet->setCellValue("F{$currentRow}", $order->subtotal);
+            $sheet->setCellValue("G{$currentRow}", $order->grand_total);
+            $sheet->setCellValue("H{$currentRow}", strtoupper($order->payment_status ?? 'PENDING'));
+            $sheet->setCellValue("I{$currentRow}", ucfirst($order->status));
 
-            echo '</tbody></table></body></html>';
-        };
+            // Alignments & Number formatting
+            $sheet->getStyle("A{$currentRow}")->getFont()->setBold(true);
+            $sheet->getStyle("F{$currentRow}:G{$currentRow}")->getNumberFormat()->setFormatCode('#,##0');
+            $sheet->getStyle("H{$currentRow}:I{$currentRow}")->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
-        return response()->stream($callback, 200, $headers);
+            $currentRow++;
+        }
+
+        // Rekap Total Row
+        $rekapRow = $currentRow;
+        $sheet->setCellValue("A{$rekapRow}", "REKAP TOTAL ({$countOrders} PESANAN)");
+        $sheet->mergeCells("A{$rekapRow}:E{$rekapRow}");
+        $sheet->getStyle("A{$rekapRow}")->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+        
+        $sheet->setCellValue("F{$rekapRow}", $sumSubtotal);
+        $sheet->setCellValue("G{$rekapRow}", $sumGrandTotal);
+        $sheet->getStyle("F{$rekapRow}:G{$rekapRow}")->getNumberFormat()->setFormatCode('#,##0');
+
+        $sheet->setCellValue("H{$rekapRow}", "Omset Bersih");
+        $sheet->mergeCells("H{$rekapRow}:I{$rekapRow}");
+        $sheet->getStyle("H{$rekapRow}")->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+
+        $sheet->getStyle("A{$rekapRow}:I{$rekapRow}")->applyFromArray([
+            'font' => [
+                'bold' => true,
+                'color' => ['rgb' => '92400E'],
+            ],
+            'fill' => [
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'startColor' => ['rgb' => 'FEF3C7'],
+            ],
+            'borders' => [
+                'top' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_DOUBLE,
+                    'color' => ['rgb' => '1E3A8A'],
+                ],
+            ],
+        ]);
+
+        // Auto-fit column widths
+        foreach (range('A', 'I') as $col) {
+            $sheet->getColumnDimension($col)->setAutoSize(true);
+        }
+
+        $fileName = 'Laporan_Pesanan_SentaPrint_' . $startDate->format('Ymd') . '_' . $endDate->format('Ymd') . '.xlsx';
+
+        return response()->streamDownload(function() use ($spreadsheet) {
+            $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
+            $writer->save('php://output');
+        }, $fileName, [
+            'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            'Cache-Control' => 'max-age=0',
+        ]);
     }
 }
