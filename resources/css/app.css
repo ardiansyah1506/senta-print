@@ -21,3 +21,8 @@
     --color-sidebar: #1a2234;
     --color-sidebarhover: #252e42;
 }
+
+@utility bg-gradient-to-r {
+    background-image: linear-gradient(to right, var(--color-brand-blue, #4f46e5), #312e81);
+}
+
