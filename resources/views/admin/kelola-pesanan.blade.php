@@ -363,8 +363,10 @@
         if (!isPaid) {
             confirmForm.action = `{{ url('admin/kelola-pesanan') }}/${order.id}/confirm-payment`;
             confirmForm.classList.remove('hidden');
+            confirmForm.classList.add('inline');
         } else {
             confirmForm.classList.add('hidden');
+            confirmForm.classList.remove('inline');
         }
 
         // Render items breakdown
