@@ -352,7 +352,8 @@
 
         // Payment status badge
         const payBadge = document.getElementById('modalPayBadge');
-        const isPaid = (order.payment_status === 'PAID' || order.payment_status === 'LUNAS');
+        const payStatusStr = order.payment_status ? String(order.payment_status).toUpperCase() : 'PENDING';
+        const isPaid = (payStatusStr === 'PAID' || payStatusStr === 'LUNAS');
         payBadge.innerText = isPaid ? 'LUNAS (PAID)' : 'BELUM LUNAS';
         payBadge.className = isPaid 
             ? 'px-3 py-1 rounded-full text-xs font-extrabold bg-emerald-50 text-emerald-600 border border-emerald-200' 
@@ -360,7 +361,7 @@
 
         const confirmForm = document.getElementById('modalConfirmForm');
         if (!isPaid) {
-            confirmForm.action = `/admin/kelola-pesanan/${order.id}/confirm-payment`;
+            confirmForm.action = `{{ url('admin/kelola-pesanan') }}/${order.id}/confirm-payment`;
             confirmForm.classList.remove('hidden');
         } else {
             confirmForm.classList.add('hidden');
