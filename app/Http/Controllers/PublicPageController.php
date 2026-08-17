@@ -17,15 +17,14 @@ class PublicPageController extends Controller
     }
 
     public function buatPesanan() {
-        $categories = Category::with(['products.prices', 'sizes', 'addons'])->get();
-        return view('public-pesan', compact('categories'));
+        return view('public-pesan');
     }
 
     public function storeOrder(Request $request, \App\Services\OrderService $orderService) {
         $request->validate([
             'nama_pemesan' => 'required|string|max:255',
             'no_whatsapp' => 'required|string|max:20',
-            'cart' => 'required|string'
+            'notes' => 'nullable|string'
         ]);
 
         $rawPhone = trim($request->no_whatsapp);
@@ -59,14 +58,23 @@ class PublicPageController extends Controller
         }
 
         try {
-            $order = $orderService->createOrder($request, $customer->id, 'INV-PUB-');
+            $order = Order::create([
+                'customer_id' => $customer->id,
+                'invoice_no' => $orderService->generateInvoiceNo(),
+                'subtotal' => 0,
+                'discount' => 0,
+                'tax' => 0,
+                'grand_total' => 0,
+                'payment_status' => 'PENDING',
+                'notes' => $request->notes ?? ''
+            ]);
 
             return redirect()->route('public.order.buat')->with('order_success', [
                 'invoice_no' => $order->invoice_no,
                 'nama_pemesan' => trim($request->nama_pemesan),
                 'no_whatsapp' => $rawPhone,
-                'total_price' => (float)$order->grand_total,
-                'total_qty' => $order->items->sum('qty'),
+                'total_price' => 0,
+                'total_qty' => 0,
                 'created_at' => $order->created_at->format('d M Y H:i'),
             ]);
         } catch (\Exception $e) {

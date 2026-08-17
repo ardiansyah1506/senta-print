@@ -35,8 +35,12 @@ Route::middleware(['auth', \App\Http\Middleware\CheckRole::class . ':customer,ad
     Route::get('/riwayat-pesanan', [CustomerPortalController::class, 'orderHistory'])->name('order.history');
 });
 
-// Protected Admin & Operator Routes
+// Protected Admin, Operator, & User Profile Routes
 Route::middleware('auth')->group(function () {
+    // Profil / Ganti Password (Umum untuk semua yang login)
+    Route::get('/password/change', [\App\Http\Controllers\ProfileController::class, 'editPassword'])->name('password.edit');
+    Route::post('/password/change', [\App\Http\Controllers\ProfileController::class, 'updatePassword'])->name('password.update');
+
     // Admin Routes
     Route::middleware([\App\Http\Middleware\CheckRole::class . ':admin'])->prefix('admin')->name('admin.')->group(function () {
         Route::get('/dashboard', [\App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');

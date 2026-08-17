@@ -13,15 +13,12 @@ use App\Services\OrderService;
 class CustomerPortalController extends Controller
 {
     public function createOrder() {
-        $categories = Category::with(['products.prices', 'sizes', 'addons'])->get();
-        return view('user.buat-pesanan', compact('categories'));
+        return view('user.buat-pesanan');
     }
     
     public function storeOrder(Request $request, OrderService $orderService) {
         $request->validate([
-            'deadline' => 'nullable|date',
-            'notes' => 'nullable|string',
-            'cart' => 'required|string',
+            'notes' => 'nullable|string'
         ]);
         
         try {
@@ -44,7 +41,17 @@ class CustomerPortalController extends Controller
                 ]);
             }
 
-            $order = $orderService->createOrder($request, $customer->id, 'INV-ST-');
+            $order = Order::create([
+                'customer_id' => $customer->id,
+                'invoice_no' => $orderService->generateInvoiceNo(),
+                'subtotal' => 0,
+                'discount' => 0,
+                'tax' => 0,
+                'grand_total' => 0,
+                'payment_status' => 'PENDING',
+                'notes' => $request->notes ?? ''
+            ]);
+
             return redirect()->route('user.order.history')->with('success', 'Pesanan berhasil dibuat! Nomor Invoice Anda: ' . $order->invoice_no);
         } catch (\Exception $e) {
             return back()->with('error', $e->getMessage());

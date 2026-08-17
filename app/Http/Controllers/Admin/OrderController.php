@@ -98,18 +98,72 @@ class OrderController extends Controller
         return back()->with('success', 'Pembayaran pesanan '.$order->invoice_no.' berhasil dikonfirmasi & diteruskan ke Produksi!');
     }
 
+    public function edit($id)
+    {
+        $order = Order::with('items', 'customer')->findOrFail($id);
+        return view('admin.edit-pesanan', compact('order'));
+    }
+
     public function update(Request $request, $id)
     {
         $order = Order::findOrFail($id);
-        if ($request->has('status')) {
+        
+        // Quick update for Status from kelola-pesanan index
+        if ($request->has('status') && count($request->all()) <= 3) {
             $order->status = $request->status;
+            if ($request->has('payment_status')) {
+                $order->payment_status = $request->payment_status;
+            }
+            $order->save();
+            return back()->with('success', 'Status pesanan diperbarui');
         }
-        if ($request->has('payment_status')) {
-            $order->payment_status = $request->payment_status;
+
+        // Processing Full Data Input from Edit Order page
+        $request->validate([
+            'discount' => 'nullable|numeric',
+            'tax' => 'nullable|numeric',
+            'notes' => 'nullable|string',
+            'items' => 'array'
+        ]);
+
+        $subtotal = 0;
+        
+        // Remove existing lines and redefine
+        $order->items()->delete();
+
+        if (!empty($request->items) && is_array($request->items)) {
+            foreach ($request->items as $item) {
+                if (empty($item['product_name']) || empty($item['qty'])) continue;
+                
+                $qty = (int)$item['qty'];
+                $unitPrice = (float)$item['unit_price'];
+                $itemTotal = $qty * $unitPrice;
+                $subtotal += $itemTotal;
+
+                $order->items()->create([
+                    'product_name' => $item['product_name'],
+                    'qty' => $qty,
+                    'size_name' => $item['size_name'] ?? null,
+                    'base_price' => $unitPrice,
+                    'unit_price' => $unitPrice,
+                    'total_price' => $itemTotal,
+                    'notes' => $item['notes'] ?? null,
+                ]);
+            }
         }
+
+        $discount = (float)($request->discount ?? 0);
+        $tax = (float)($request->tax ?? 0);
+        $grandTotal = max(0, $subtotal - $discount + $tax);
+
+        $order->subtotal = $subtotal;
+        $order->discount = $discount;
+        $order->tax = $tax;
+        $order->grand_total = $grandTotal;
+        $order->notes = $request->notes ?? $order->notes;
         $order->save();
 
-        return back()->with('success', 'Status pesanan diperbarui');
+        return redirect()->route('admin.order.index')->with('success', 'Data pesanan berhasil diinput/perbarui!');
     }
 
     public function destroy($id)

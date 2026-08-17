@@ -45,6 +45,9 @@
             <a href="{{ route('admin.manajemen-user.index') }}" class="flex items-center gap-3 px-4 py-3 text-sm rounded-lg transition {{ Request::routeIs('admin.manajemen-user.*') ? 'font-bold bg-brand-yellow text-gray-900 shadow-sm' : 'font-medium hover:bg-sidebarhover hover:text-white' }}">
                 <i data-lucide="users" class="w-5 h-5"></i> Manajemen User
             </a>
+            <a href="{{ route('password.edit') }}" class="flex items-center gap-3 px-4 py-3 text-sm rounded-lg transition {{ Request::routeIs('password.*') ? 'font-bold bg-brand-yellow text-gray-900 shadow-sm' : 'font-medium hover:bg-sidebarhover hover:text-white' }}">
+                <i data-lucide="key" class="w-5 h-5"></i> Ganti Password
+            </a>
         </nav>
 
         <!-- Logout -->

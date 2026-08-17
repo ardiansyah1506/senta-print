@@ -146,6 +146,10 @@
                                 </form>
                                 @endif
 
+                                <a href="{{ route('admin.order.edit', $order->id) }}" class="inline-flex items-center gap-1 bg-indigo-50 text-brand-blue hover:bg-brand-blue hover:text-white px-3 py-1.5 rounded-xl text-xs font-bold transition shadow-2xs border border-indigo-100" title="Input/Edit Data Pesanan">
+                                    <i class="fa-solid fa-pen-to-square text-[10px]"></i> Edit
+                                </a>
+
                                 <button type="button" onclick="openOrderDetailModal({{ $order->id }})" class="w-8 h-8 rounded-xl border border-gray-200 text-gray-500 hover:text-brand-blue hover:bg-indigo-50 transition inline-flex items-center justify-center cursor-pointer" title="Lihat Detail Pesanan">
                                     <i class="fa-regular fa-eye"></i>
                                 </button>
@@ -229,6 +233,10 @@
                         </button>
                     </form>
                     @endif
+
+                    <a href="{{ route('admin.order.edit', $order->id) }}" class="flex-1 inline-flex items-center justify-center gap-1.5 bg-indigo-50 text-brand-blue border border-indigo-200 hover:bg-brand-blue hover:text-white py-2 rounded-xl text-xs font-bold transition" title="Input/Edit Data Pesanan">
+                        <i class="fa-solid fa-pen-to-square text-[10px]"></i> Edit
+                    </a>
 
                     <button type="button" onclick="openOrderDetailModal({{ $order->id }})" class="px-3 py-2 rounded-xl border border-gray-200 text-gray-500 hover:text-brand-blue hover:bg-indigo-50 transition inline-flex items-center justify-center cursor-pointer" title="Lihat Detail">
                         <i class="fa-regular fa-eye"></i>
