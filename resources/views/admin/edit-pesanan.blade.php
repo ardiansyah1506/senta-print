@@ -116,6 +116,35 @@
             </h3>
 
             <div id="addonsContainer" class="space-y-4 mb-6">
+                @php $globalAddonIndex = 0; @endphp
+                @foreach($order->items as $item)
+                    @foreach($item->addons as $addon)
+                    <div class="item-row flex items-center gap-3 bg-indigo-50/30 p-4 rounded-xl border border-indigo-50 relative">
+                        <div class="flex-1 space-y-3">
+                            <div class="grid grid-cols-12 gap-3 items-end">
+                                <div class="col-span-12 md:col-span-6">
+                                    <label class="block text-[10px] font-extrabold text-indigo-700 uppercase tracking-wider mb-1">Nama Add-on <span class="text-red-500">*</span></label>
+                                    <input type="text" name="addons[{{ $globalAddonIndex }}][addon_name]" value="{{ $addon->addon_name }}" required class="w-full text-sm border-gray-200 rounded-lg outline-none focus:border-brand-blue px-3 py-2 border font-semibold text-gray-800">
+                                </div>
+                                <div class="col-span-6 md:col-span-3">
+                                    <label class="block text-[10px] font-extrabold text-indigo-700 uppercase tracking-wider mb-1">Qty <span class="text-red-500">*</span></label>
+                                    <input type="number" name="addons[{{ $globalAddonIndex }}][qty]" min="1" value="1" required class="qty-input w-full text-sm border-gray-200 rounded-lg outline-none focus:border-brand-blue px-3 py-2 border font-semibold text-gray-800" onchange="calculateRow(this); calculateGrandTotal()">
+                                </div>
+                                <div class="col-span-6 md:col-span-3">
+                                    <label class="block text-[10px] font-extrabold text-indigo-700 uppercase tracking-wider mb-1">Biaya Tambahan (Rp) <span class="text-red-500">*</span></label>
+                                    <input type="number" name="addons[{{ $globalAddonIndex }}][unit_price]" min="0" value="{{ (int)$addon->addon_price }}" required class="price-input w-full text-sm border-gray-200 rounded-lg outline-none focus:border-brand-blue px-3 py-2 border font-semibold text-gray-800" onchange="calculateRow(this); calculateGrandTotal()">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex flex-col items-center justify-center shrink-0 border-l border-indigo-100 pl-4 ml-2">
+                            <span class="text-[10px] text-gray-400 font-extrabold uppercase mb-1">Sub:</span>
+                            <span class="row-total text-sm font-extrabold text-brand-blue mb-1">Rp {{ number_format($addon->addon_price, 0, ',', '.') }}</span>
+                            <button type="button" onclick="removeRow(this, true)" class="text-red-400 hover:text-red-600 p-1"><i class="fa-solid fa-trash-can"></i></button>
+                        </div>
+                    </div>
+                    @php $globalAddonIndex++; @endphp
+                    @endforeach
+                @endforeach
             </div>
 
             <!-- Summary Area -->
@@ -147,6 +176,7 @@
 
 <script>
     let rowIndex = {{ max($order->items->count(), 1) }};
+    let addonIndex = {{ max(1, isset($globalAddonIndex) ? $globalAddonIndex : 1) }};
 
     function formatRp(num) {
         return 'Rp ' + num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
@@ -201,15 +231,15 @@
                     <div class="grid grid-cols-12 gap-3 items-end">
                         <div class="col-span-12 md:col-span-6">
                             <label class="block text-[10px] font-extrabold text-indigo-700 uppercase tracking-wider mb-1">Nama Add-on <span class="text-red-500">*</span></label>
-                            <input type="text" name="items[${rowIndex}][product_name]" value="Add-on: " required class="w-full text-sm border-gray-200 rounded-lg outline-none focus:border-brand-blue px-3 py-2 border font-semibold text-gray-800" placeholder="Contoh: Add-on: Lengan Panjang">
+                            <input type="text" name="addons[${addonIndex}][addon_name]" value="Add-on: " required class="w-full text-sm border-gray-200 rounded-lg outline-none focus:border-brand-blue px-3 py-2 border font-semibold text-gray-800" placeholder="Contoh: Add-on: Lengan Panjang">
                         </div>
                         <div class="col-span-6 md:col-span-3">
                             <label class="block text-[10px] font-extrabold text-indigo-700 uppercase tracking-wider mb-1">Qty <span class="text-red-500">*</span></label>
-                            <input type="number" name="items[${rowIndex}][qty]" min="1" value="1" required class="qty-input w-full text-sm border-gray-200 rounded-lg outline-none focus:border-brand-blue px-3 py-2 border font-semibold text-gray-800" onchange="calculateRow(this); calculateGrandTotal()">
+                            <input type="number" name="addons[${addonIndex}][qty]" min="1" value="1" required class="qty-input w-full text-sm border-gray-200 rounded-lg outline-none focus:border-brand-blue px-3 py-2 border font-semibold text-gray-800" onchange="calculateRow(this); calculateGrandTotal()">
                         </div>
                         <div class="col-span-6 md:col-span-3">
                             <label class="block text-[10px] font-extrabold text-indigo-700 uppercase tracking-wider mb-1">Biaya Tambahan (Rp) <span class="text-red-500">*</span></label>
-                            <input type="number" name="items[${rowIndex}][unit_price]" min="0" value="0" required class="price-input w-full text-sm border-gray-200 rounded-lg outline-none focus:border-brand-blue px-3 py-2 border font-semibold text-gray-800" onchange="calculateRow(this); calculateGrandTotal()">
+                            <input type="number" name="addons[${addonIndex}][unit_price]" min="0" value="0" required class="price-input w-full text-sm border-gray-200 rounded-lg outline-none focus:border-brand-blue px-3 py-2 border font-semibold text-gray-800" onchange="calculateRow(this); calculateGrandTotal()">
                         </div>
                     </div>
                 </div>
@@ -221,7 +251,7 @@
             </div>
         `;
         container.insertAdjacentHTML('beforeend', rowHtml);
-        rowIndex++;
+        addonIndex++;
         calculateGrandTotal();
     }
 

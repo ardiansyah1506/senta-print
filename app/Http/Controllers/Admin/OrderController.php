@@ -123,13 +123,16 @@ class OrderController extends Controller
             'discount' => 'nullable|numeric',
             'tax' => 'nullable|numeric',
             'notes' => 'nullable|string',
-            'items' => 'array'
+            'items' => 'array',
+            'addons' => 'array'
         ]);
 
         $subtotal = 0;
         
         // Remove existing lines and redefine
         $order->items()->delete();
+
+        $firstItem = null;
 
         if (!empty($request->items) && is_array($request->items)) {
             foreach ($request->items as $item) {
@@ -140,7 +143,7 @@ class OrderController extends Controller
                 $itemTotal = $qty * $unitPrice;
                 $subtotal += $itemTotal;
 
-                $order->items()->create([
+                $createdItem = $order->items()->create([
                     'product_name' => $item['product_name'],
                     'qty' => $qty,
                     'size_name' => $item['size_name'] ?? null,
@@ -148,6 +151,29 @@ class OrderController extends Controller
                     'unit_price' => $unitPrice,
                     'total_price' => $itemTotal,
                     'notes' => $item['notes'] ?? null,
+                ]);
+
+                if (!$firstItem) $firstItem = $createdItem;
+            }
+        }
+
+        if ($firstItem && !empty($request->addons) && is_array($request->addons)) {
+            foreach ($request->addons as $addon) {
+                if (empty($addon['addon_name'])) continue;
+                
+                $qty = (int)($addon['qty'] ?? 1);
+                $unitPrice = (float)($addon['unit_price'] ?? 0);
+                $addonTotal = $qty * $unitPrice;
+                $subtotal += $addonTotal;
+
+                $addonName = trim($addon['addon_name']);
+                if ($qty > 1) {
+                    $addonName .= " ($qty x Rp " . number_format($unitPrice, 0, ',', '.') . ")";
+                }
+
+                $firstItem->addons()->create([
+                    'addon_name' => $addonName,
+                    'addon_price' => $addonTotal,
                 ]);
             }
         }
