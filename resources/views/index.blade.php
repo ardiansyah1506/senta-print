@@ -439,8 +439,8 @@
             </div>
         </div>
     </footer>
-    <script src="https://code.jquery.com/jquery-3.7.0.min.js" defer></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" defer></script>
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" media="print" onload="this.media='all'">
     <script>
         toastr.options = { "positionClass": "toast-top-right", "timeOut": "3000" };

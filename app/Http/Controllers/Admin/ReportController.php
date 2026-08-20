@@ -42,12 +42,31 @@ class ReportController extends Controller
 
     public function index(Request $request) {
         [$startDate, $endDate, $filterType, $month, $year, $startDateStr, $endDateStr] = $this->resolveDateRange($request);
+        
+        $search = $request->input('search');
+        $statusFilter = $request->input('status', 'all');
 
         // Fetch Orders within range
         $ordersQuery = Order::with(['customer', 'items.product'])
             ->whereBetween('created_at', [$startDate, $endDate]);
 
+        if (!empty($search)) {
+            $ordersQuery->where(function ($q) use ($search) {
+                $q->where('invoice_no', 'like', "%{$search}%")
+                  ->orWhereHas('customer', function ($cq) use ($search) {
+                      $cq->where('name', 'like', "%{$search}%")
+                         ->orWhere('phone', 'like', "%{$search}%");
+                  });
+            });
+        }
+
+        if ($statusFilter !== 'all') {
+            $ordersQuery->where('status', $statusFilter);
+        }
+
         $allOrders = $ordersQuery->get();
+        $paginatedOrders = $ordersQuery->latest()->paginate(5)->withQueryString();
+        
         $totalOrdersCount = $allOrders->count();
         
         // Exclude rejected/cancelled for revenue? Let's say we only count non-rejected for revenue.
@@ -89,7 +108,10 @@ class ReportController extends Controller
             'year',
             'startDateStr',
             'endDateStr',
+            'search',
+            'statusFilter',
             'allOrders',
+            'paginatedOrders',
             'totalOrdersCount',
             'totalRevenue',
             'completedOrdersCount',

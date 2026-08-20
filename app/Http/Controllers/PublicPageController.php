@@ -13,7 +13,8 @@ use Illuminate\Support\Str;
 class PublicPageController extends Controller
 {
     public function index() {
-        return view('index');
+        $banner = \App\Models\Banner::where('is_active', true)->latest()->first();
+        return view('index', compact('banner'));
     }
 
     public function catalog() {

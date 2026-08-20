@@ -79,6 +79,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/kelolaproduksi', [ProductionController::class, 'index'])->name('production.index');
         Route::get('/tracking/{id}', [ProductionController::class, 'tracking'])->name('tracking');
         Route::post('/tracking/{id}', [ProductionController::class, 'storeLog'])->name('tracking.store');
+        Route::post('/tracking/{id}/confirm-payment', [ProductionController::class, 'confirmPayment'])->name('tracking.confirmPayment');
     });
 });
 

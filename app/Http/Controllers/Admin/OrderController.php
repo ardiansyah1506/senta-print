@@ -50,7 +50,7 @@ class OrderController extends Controller
             });
         }
 
-        $orders = $query->latest()->paginate(10)->withQueryString();
+        $orders = $query->latest()->paginate(8)->withQueryString();
 
         foreach ($orders as $order) {
             $order->wa_link = $this->buildWaLink($order);
@@ -202,6 +202,15 @@ class OrderController extends Controller
                 $order->payment_status = $request->payment_status;
             }
             $order->save();
+            
+            // Allow entering production even if not fully paid
+            if ($order->status === 'production') {
+                $production = Production::firstOrCreate(
+                    ['order_id' => $order->id],
+                    ['started_at' => now()]
+                );
+            }
+            
             return back()->with('success', 'Status pesanan diperbarui');
         }
 

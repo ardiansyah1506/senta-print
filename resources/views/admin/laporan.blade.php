@@ -53,7 +53,17 @@
     <!-- Filter Bar -->
     <form action="{{ route('admin.report.index') }}" method="GET" class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 mb-6">
         <div class="flex flex-wrap items-center gap-3">
-            <span class="text-xs font-extrabold text-gray-500 uppercase tracking-wider whitespace-nowrap"><i class="fa-solid fa-filter text-brand-blue mr-1"></i> Filter Periode:</span>
+            <span class="text-xs font-extrabold text-gray-500 uppercase tracking-wider whitespace-nowrap"><i class="fa-solid fa-filter text-brand-blue mr-1"></i> Mode & Filter:</span>
+
+            <!-- Status Filter -->
+            <select name="status" class="text-xs font-bold border border-gray-200 rounded-xl px-3 py-2 bg-gray-50 text-gray-800 outline-none focus:border-brand-blue">
+                <option value="all">Semua Status</option>
+                <option value="pending" {{ ($statusFilter ?? '') === 'pending' ? 'selected' : '' }}>Pending</option>
+                <option value="production" {{ ($statusFilter ?? '') === 'production' ? 'selected' : '' }}>Produksi</option>
+                <option value="completed" {{ ($statusFilter ?? '') === 'completed' ? 'selected' : '' }}>Selesai</option>
+                <option value="rejected" {{ ($statusFilter ?? '') === 'rejected' ? 'selected' : '' }}>Ditolak</option>
+            </select>
+
             <select name="filter_type" id="laporanFilterType" onchange="toggleLaporanFilterMode(this.value)" class="text-xs font-bold border border-gray-200 rounded-xl px-3 py-2 bg-gray-50 text-gray-800 outline-none focus:border-brand-blue">
                 <option value="all" {{ ($filterType ?? 'all') === 'all' ? 'selected' : '' }}>Semua Tanggal</option>
                 <option value="month" {{ ($filterType ?? '') === 'month' ? 'selected' : '' }}>Per Bulan & Tahun</option>
@@ -79,6 +89,13 @@
                 <input type="date" name="start_date" value="{{ $startDate->format('Y-m-d') }}" class="text-xs font-bold border border-gray-200 rounded-xl px-3 py-2 bg-white text-gray-800 outline-none focus:border-brand-blue">
                 <span class="text-gray-400 text-xs font-bold">s/d</span>
                 <input type="date" name="end_date" value="{{ $endDate->format('Y-m-d') }}" class="text-xs font-bold border border-gray-200 rounded-xl px-3 py-2 bg-white text-gray-800 outline-none focus:border-brand-blue">
+            </div>
+            </div>
+            
+            <!-- Search -->
+            <div class="relative w-full md:w-48 xl:w-64">
+                <input type="text" name="search" value="{{ $search ?? '' }}" placeholder="Cari invoice/customer..." class="w-full pl-9 pr-3 py-2 border border-gray-200 rounded-xl text-xs outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue font-medium bg-gray-50/50">
+                <i class="fa-solid fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
             </div>
         </div>
 
@@ -253,7 +270,7 @@
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-100 font-semibold text-gray-700 bg-white">
-                    @forelse($allOrders as $order)
+                    @forelse($paginatedOrders as $order)
                     <tr class="hover:bg-gray-50/50 transition">
                         <td class="py-3.5 px-6 font-extrabold text-brand-blue">{{ $order->invoice_no }}</td>
                         <td class="py-3.5 px-6">{{ $order->customer->name ?? 'Unknown' }}</td>
@@ -301,7 +318,7 @@
 
         <!-- Mobile Card View -->
         <div class="block md:hidden divide-y divide-gray-100 font-semibold text-gray-700 bg-white">
-            @forelse($allOrders as $order)
+            @forelse($paginatedOrders as $order)
             @php
                 $statusColors = [
                     'pending' => 'bg-amber-50 text-amber-600 border-amber-100',
@@ -355,6 +372,13 @@
             <div class="p-8 text-center text-gray-400 font-semibold text-xs">Tidak ada pesanan di periode ini.</div>
             @endforelse
         </div>
+        
+        <!-- Pagination -->
+        @if($paginatedOrders->hasPages())
+        <div class="p-4 border-t border-gray-100 bg-white">
+            {{ $paginatedOrders->links() }}
+        </div>
+        @endif
     </div>
 </div>
 

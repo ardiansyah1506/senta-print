@@ -4,10 +4,48 @@
 <div class="max-w-7xl mx-auto">
                 
                 <!-- Page Header -->
-                <div class="mb-8">
-                    <h1 class="text-3xl font-extrabold text-gray-900 mb-1">Kelola Produksi</h1>
-                    <p class="text-gray-500 text-sm font-medium">Daftar pesanan aktif dan pembaruan progres</p>
+                <div class="mb-6 flex flex-col md:flex-row md:items-end justify-between gap-4">
+                    <div>
+                        <h1 class="text-3xl font-extrabold text-gray-900 mb-1">Kelola Produksi</h1>
+                        <p class="text-gray-500 text-sm font-medium">Daftar pesanan aktif dan pembaruan progres</p>
+                    </div>
                 </div>
+
+                <!-- Filter & Search Bar -->
+                <form action="{{ route('operator.production.index') }}" method="GET" class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 mb-6">
+                    <div class="flex flex-wrap items-center gap-3 w-full md:w-auto">
+                        <span class="text-xs font-extrabold text-gray-500 uppercase tracking-wider whitespace-nowrap"><i class="fa-solid fa-filter text-brand-blue mr-1"></i> Mode & Filter:</span>
+                        
+                        <select name="status" class="text-xs font-bold border border-gray-200 rounded-xl px-3 py-2.5 bg-gray-50 text-gray-800 outline-none focus:border-brand-blue w-full md:w-auto">
+                            <option value="all">Semua Status</option>
+                            <option value="pending" {{ ($statusFilter ?? '') === 'pending' ? 'selected' : '' }}>Pending</option>
+                            <option value="production" {{ ($statusFilter ?? '') === 'production' ? 'selected' : '' }}>Produksi</option>
+                            <option value="completed" {{ ($statusFilter ?? '') === 'completed' ? 'selected' : '' }}>Selesai</option>
+                            <option value="rejected" {{ ($statusFilter ?? '') === 'rejected' ? 'selected' : '' }}>Ditolak</option>
+                        </select>
+
+                        <select name="time_filter" class="text-xs font-bold border border-gray-200 rounded-xl px-3 py-2.5 bg-gray-50 text-gray-800 outline-none focus:border-brand-blue w-full md:w-auto">
+                            <option value="all" {{ ($timeFilter ?? '') === 'all' ? 'selected' : '' }}>Semua Waktu</option>
+                            <option value="today" {{ ($timeFilter ?? '') === 'today' ? 'selected' : '' }}>Hari Ini</option>
+                            <option value="week" {{ ($timeFilter ?? '') === 'week' ? 'selected' : '' }}>Pekan Ini</option>
+                            <option value="month" {{ ($timeFilter ?? '') === 'month' ? 'selected' : '' }}>Bulan Ini</option>
+                            <option value="year" {{ ($timeFilter ?? '') === 'year' ? 'selected' : '' }}>Tahun Ini</option>
+                        </select>
+                    </div>
+                    
+                    <div class="flex flex-col md:flex-row items-stretch md:items-center gap-3 w-full md:w-auto shrink-0 justify-end">
+                        <div class="relative w-full md:w-56 xl:w-72">
+                            <input type="text" name="search" value="{{ $search ?? '' }}" placeholder="Cari invoice/customer..." class="w-full pl-9 pr-3 py-2 border border-gray-200 rounded-xl text-xs outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue font-medium bg-gray-50/50">
+                            <i class="fa-solid fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button type="submit" class="bg-brand-blue text-white px-4 py-2 rounded-xl text-xs font-bold hover:bg-indigo-700 transition shadow-sm flex items-center justify-center gap-1.5 flex-1 md:flex-none">
+                                <i class="fa-solid fa-magnifying-glass text-[10px]"></i> Terapkan
+                            </button>
+                            <a href="{{ route('operator.production.index') }}" class="bg-gray-100 text-gray-600 px-3 py-2 rounded-xl text-xs font-bold hover:bg-gray-200 transition text-center flex-1 md:flex-none flex items-center justify-center">Reset</a>
+                        </div>
+                    </div>
+                </form>
 
                 <!-- Table Container Box -->
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 flex flex-col">
