@@ -70,7 +70,11 @@
                         <div class="p-4 border border-gray-200/80 rounded-2xl bg-gray-50/50 space-y-2.5">
                             <div class="flex justify-between items-center text-xs">
                                 <span class="font-extrabold text-brand-blue text-sm flex items-center gap-1.5">
-                                    <i class="fa-solid fa-circle-check text-emerald-500 text-xs"></i> {{ $log->step->name ?? 'Tahap' }} Selesai
+                                    @if($log->status === 'completed')
+                                        <i class="fa-solid fa-circle-check text-emerald-500 text-xs"></i> {{ $log->step->name ?? 'Tahap' }} Selesai
+                                    @else
+                                        <i class="fa-solid fa-spinner text-yellow-500 text-xs"></i> Progress: {{ $log->step->name ?? 'Tahap' }}
+                                    @endif
                                 </span>
                                 <span class="text-[10px] text-gray-400 font-bold">{{ $log->created_at->format('d M Y, H:i') }}</span>
                             </div>
@@ -129,8 +133,16 @@
                     <form action="{{ route('operator.tracking.store', $order->id) }}" method="POST" enctype="multipart/form-data" class="space-y-5">
                         @csrf
                         <div>
-                            <label class="block text-xs font-bold text-gray-700 mb-2">Catatan Pengerjaan Tahap {{ $nextStep->name }} <span class="text-red-500">*</span></label>
-                            <textarea name="notes" rows="3" required placeholder="Jelaskan detail pengerjaan tahap {{ $nextStep->name }}..." class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm font-medium text-gray-700 outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition resize-none bg-white"></textarea>
+                            <label class="block text-xs font-bold text-gray-700 mb-2">Catatan/Update Tahap {{ $nextStep->name }} <span class="text-red-500">*</span></label>
+                            <textarea name="notes" rows="3" required placeholder="Contoh: Sedang memotong kain pola..." class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm font-medium text-gray-700 outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition resize-none bg-white"></textarea>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-gray-700 mb-2">Status Pengerjaan <span class="text-red-500">*</span></label>
+                            <select name="status" class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm font-medium text-gray-700 outline-none focus:border-brand-blue bg-white" required>
+                                <option value="progress">Sedang Dalam Pengerjaan (Update Progress)</option>
+                                <option value="completed">Tahap Selesai (Pindah ke Tahap Selanjutnya)</option>
+                            </select>
                         </div>
                         
                         <div>
@@ -141,7 +153,7 @@
                         
                         <div class="pt-2">
                             <button type="submit" class="px-5 py-3.5 rounded-xl bg-brand-blue text-white hover:bg-indigo-700 transition shadow-md shadow-brand-blue/20 text-xs font-bold w-full text-center flex items-center justify-center gap-2">
-                                Selesaikan Tahap {{ $nextStep->name }} <i class="fa-solid fa-check"></i>
+                                Simpan Update/Tahap <i class="fa-solid fa-share-from-square"></i>
                             </button>
                         </div>
                     </form>

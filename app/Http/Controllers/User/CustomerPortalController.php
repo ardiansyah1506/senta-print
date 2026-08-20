@@ -110,7 +110,8 @@ class CustomerPortalController extends Controller
             } else {
                 $completedLogsCount = 0;
                 if ($order->production && $order->production->logs) {
-                    $completedLogsCount = $order->production->logs->pluck('production_step_id')->unique()->count();
+                    // Hanya hitung step yang benar-benar memiliki status 'completed'
+                    $completedLogsCount = $order->production->logs->where('status', 'completed')->pluck('production_step_id')->unique()->count();
                 }
                 $calculated = round(($completedLogsCount / $totalMasterSteps) * 100);
                 $order->progress_percent = max(5, min(95, $calculated));
@@ -134,7 +135,8 @@ class CustomerPortalController extends Controller
     }
 
     public function orderHistory(Request $request) {
-        [$orders, $search] = $this->getCustomerOrders($request, true);
+        // Tampilkan semua pesanan di Riwayat (false) agar pesanan terbaru langsung muncul
+        [$orders, $search] = $this->getCustomerOrders($request, false);
         return view('user.riwayat-pesanan', compact('orders', 'search'));
     }
 }

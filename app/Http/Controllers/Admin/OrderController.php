@@ -98,10 +98,97 @@ class OrderController extends Controller
         return back()->with('success', 'Pembayaran pesanan '.$order->invoice_no.' berhasil dikonfirmasi & diteruskan ke Produksi!');
     }
 
+    public function create()
+    {
+        $products = \App\Models\Product::orderBy('product_name')->get();
+        $categories = \App\Models\Category::with('products')->orderBy('name')->get();
+        return view('admin.create-pesanan', compact('products', 'categories'));
+    }
+
+    public function store(Request $request, \App\Services\OrderService $orderService)
+    {
+        $request->validate([
+            'customer_name' => 'required|string',
+            'customer_phone' => 'required|string',
+            'discount' => 'nullable|numeric',
+            'deposit' => 'nullable|numeric',
+            'tax' => 'nullable|numeric',
+            'notes' => 'nullable|string',
+            'items' => 'required|array',
+            'design_photo' => 'nullable|image|max:5120'
+        ]);
+
+        $rawPhone = trim($request->customer_phone);
+        $cleanPhone = preg_replace('/[^0-9]/', '', $rawPhone);
+
+        $customer = \App\Models\Customer::where('phone', $rawPhone)
+            ->orWhere('phone', $cleanPhone)
+            ->orWhere('name', $request->customer_name)
+            ->first();
+
+        if (!$customer) {
+            $customer = \App\Models\Customer::create([
+                'name' => $request->customer_name,
+                'phone' => $rawPhone
+            ]);
+        }
+
+        $order = new Order();
+        $order->customer_id = $customer->id;
+        $order->invoice_no = $orderService->generateInvoiceNo();
+        $order->status = 'pending';
+        $order->payment_status = 'PENDING';
+        $order->subtotal = 0;
+        $order->discount = (float)($request->discount ?? 0);
+        $order->deposit = (float)($request->deposit ?? 0);
+        $order->tax = (float)($request->tax ?? 0);
+        $order->grand_total = 0;
+        $order->notes = $request->notes ?? '';
+
+        if ($request->hasFile('design_photo')) {
+            $order->design_photo = $request->file('design_photo')->store('orders/designs', 'public');
+        }
+
+        $order->save();
+
+        $subtotal = 0;
+
+        if (!empty($request->items) && is_array($request->items)) {
+            foreach ($request->items as $item) {
+                if (empty($item['product_name']) || empty($item['qty'])) continue;
+                
+                $qty = (int)$item['qty'];
+                $unitPrice = (float)$item['unit_price'];
+                $itemTotal = $qty * $unitPrice;
+                $subtotal += $itemTotal;
+
+                $order->items()->create([
+                    'category_id' => !empty($item['category_id']) ? $item['category_id'] : null,
+                    'product_name' => $item['product_name'],
+                    'qty' => $qty,
+                    'size_name' => $item['size_name'] ?? null,
+                    'base_price' => $unitPrice,
+                    'unit_price' => $unitPrice,
+                    'total_price' => $itemTotal,
+                    'notes' => $item['notes'] ?? null,
+                ]);
+            }
+        }
+
+        $grandTotal = max(0, $subtotal - $order->discount + $order->tax);
+        $order->subtotal = $subtotal;
+        $order->grand_total = $grandTotal;
+        $order->save();
+
+        return redirect()->route('admin.order.index')->with('success', 'Pesanan baru berhasil dibuat!');
+    }
+
     public function edit($id)
     {
         $order = Order::with('items', 'customer')->findOrFail($id);
-        return view('admin.edit-pesanan', compact('order'));
+        $products = \App\Models\Product::orderBy('product_name')->get();
+        $categories = \App\Models\Category::with('products')->orderBy('name')->get();
+        return view('admin.edit-pesanan', compact('order', 'products', 'categories'));
     }
 
     public function update(Request $request, $id)
@@ -118,21 +205,19 @@ class OrderController extends Controller
             return back()->with('success', 'Status pesanan diperbarui');
         }
 
-        // Processing Full Data Input from Edit Order page
         $request->validate([
             'discount' => 'nullable|numeric',
+            'deposit' => 'nullable|numeric',
             'tax' => 'nullable|numeric',
             'notes' => 'nullable|string',
             'items' => 'array',
-            'addons' => 'array'
+            'design_photo' => 'nullable|image|max:5120'
         ]);
 
         $subtotal = 0;
         
         // Remove existing lines and redefine
         $order->items()->delete();
-
-        $firstItem = null;
 
         if (!empty($request->items) && is_array($request->items)) {
             foreach ($request->items as $item) {
@@ -143,7 +228,8 @@ class OrderController extends Controller
                 $itemTotal = $qty * $unitPrice;
                 $subtotal += $itemTotal;
 
-                $createdItem = $order->items()->create([
+                $order->items()->create([
+                    'category_id' => !empty($item['category_id']) ? $item['category_id'] : null,
                     'product_name' => $item['product_name'],
                     'qty' => $qty,
                     'size_name' => $item['size_name'] ?? null,
@@ -152,38 +238,24 @@ class OrderController extends Controller
                     'total_price' => $itemTotal,
                     'notes' => $item['notes'] ?? null,
                 ]);
-
-                if (!$firstItem) $firstItem = $createdItem;
             }
         }
 
-        if ($firstItem && !empty($request->addons) && is_array($request->addons)) {
-            foreach ($request->addons as $addon) {
-                if (empty($addon['addon_name'])) continue;
-                
-                $qty = (int)($addon['qty'] ?? 1);
-                $unitPrice = (float)($addon['unit_price'] ?? 0);
-                $addonTotal = $qty * $unitPrice;
-                $subtotal += $addonTotal;
-
-                $addonName = trim($addon['addon_name']);
-                if ($qty > 1) {
-                    $addonName .= " ($qty x Rp " . number_format($unitPrice, 0, ',', '.') . ")";
-                }
-
-                $firstItem->addons()->create([
-                    'addon_name' => $addonName,
-                    'addon_price' => $addonTotal,
-                ]);
+        if ($request->hasFile('design_photo')) {
+            if ($order->design_photo && \Illuminate\Support\Facades\Storage::disk('public')->exists($order->design_photo)) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($order->design_photo);
             }
+            $order->design_photo = $request->file('design_photo')->store('orders/designs', 'public');
         }
 
         $discount = (float)($request->discount ?? 0);
+        $deposit = (float)($request->deposit ?? 0);
         $tax = (float)($request->tax ?? 0);
         $grandTotal = max(0, $subtotal - $discount + $tax);
 
         $order->subtotal = $subtotal;
         $order->discount = $discount;
+        $order->deposit = $deposit;
         $order->tax = $tax;
         $order->grand_total = $grandTotal;
         $order->notes = $request->notes ?? $order->notes;

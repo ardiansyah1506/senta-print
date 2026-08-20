@@ -14,6 +14,8 @@ use App\Http\Controllers\AuthController;
 
 // Public Pages
 Route::get('/', [PublicPageController::class, 'index'])->name('home');
+Route::get('/katalog', [PublicPageController::class, 'catalog'])->name('public.catalog');
+Route::get('/katalog/{id}', [PublicPageController::class, 'catalogDetail'])->name('public.catalog.detail');
 Route::get('/pesan-sekarang', [PublicPageController::class, 'buatPesanan'])->name('public.order');
 Route::get('/pesan-sekarang/buat', [PublicPageController::class, 'buatPesanan'])->name('public.order.buat');
 Route::post('/pesan-sekarang', [PublicPageController::class, 'storeOrder'])->name('public.order.store');
@@ -58,6 +60,12 @@ Route::middleware('auth')->group(function () {
         Route::resource('ukuran', SizeController::class);
         Route::resource('tahap-produksi', ProductionStepController::class);
         Route::resource('manajemen-user', \App\Http\Controllers\Admin\UserController::class)->except(['create', 'show', 'edit', 'update']);
+        
+        Route::get('/banner', [\App\Http\Controllers\Admin\BannerController::class, 'index'])->name('banner.index');
+        Route::post('/banner', [\App\Http\Controllers\Admin\BannerController::class, 'store'])->name('banner.store');
+        Route::delete('/banner/{id}', [\App\Http\Controllers\Admin\BannerController::class, 'destroy'])->name('banner.destroy');
+        Route::post('/banner/{id}/activate', [\App\Http\Controllers\Admin\BannerController::class, 'activate'])->name('banner.activate');
+        Route::post('/banner/{id}/deactivate', [\App\Http\Controllers\Admin\BannerController::class, 'deactivate'])->name('banner.deactivate');
         
         Route::post('kelola-pesanan/{order}/confirm-payment', [OrderController::class, 'confirmPayment'])->name('order.confirmPayment');
         Route::resource('kelola-pesanan', OrderController::class)->parameters(['kelola-pesanan' => 'order'])->names('order');

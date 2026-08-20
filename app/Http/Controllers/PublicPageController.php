@@ -16,6 +16,16 @@ class PublicPageController extends Controller
         return view('index');
     }
 
+    public function catalog() {
+        $categories = Category::with(['products.prices'])->get();
+        return view('public-katalog', compact('categories'));
+    }
+
+    public function catalogDetail($id) {
+        $product = \App\Models\Product::with(['category.sizes', 'category.addons', 'prices'])->findOrFail($id);
+        return view('public-katalog-detail', compact('product'));
+    }
+
     public function buatPesanan() {
         return view('public-pesan');
     }
@@ -139,28 +149,36 @@ class PublicPageController extends Controller
         $completedLogsMap = [];
         if ($order->production && $order->production->logs) {
             foreach ($order->production->logs as $log) {
-                $completedLogsMap[$log->production_step_id] = [
+                if (!isset($completedLogsMap[$log->production_step_id])) {
+                    $completedLogsMap[$log->production_step_id] = [];
+                }
+                $completedLogsMap[$log->production_step_id][] = [
                     'notes' => $log->notes,
                     'created_at' => $log->created_at->format('d M Y, H:i'),
+                    'status' => $log->status,
                     'photos' => $log->photos->map(fn($p) => asset('storage/' . $p->file_path))->toArray()
                 ];
             }
         }
 
-        $completedIds = array_keys($completedLogsMap);
+        $completedIds = [];
+        foreach($completedLogsMap as $stepId => $logs) {
+            if (collect($logs)->where('status', 'completed')->isNotEmpty()) {
+                $completedIds[] = $stepId;
+            }
+        }
+
         $nextRequiredStep = $allMasterSteps->first(fn($s) => !in_array($s->id, $completedIds));
 
-        $sequentialSteps = $allMasterSteps->map(function($st) use ($completedLogsMap, $nextRequiredStep) {
-            $isDone = isset($completedLogsMap[$st->id]);
+        $sequentialSteps = $allMasterSteps->map(function($st) use ($completedLogsMap, $completedIds, $nextRequiredStep) {
+            $isDone = in_array($st->id, $completedIds);
             $isActive = ($nextRequiredStep && $nextRequiredStep->id == $st->id);
             
             return [
                 'id' => $st->id,
                 'name' => $st->name,
                 'status' => $isDone ? 'completed' : ($isActive ? 'active' : 'pending'),
-                'notes' => $isDone ? $completedLogsMap[$st->id]['notes'] : null,
-                'created_at' => $isDone ? $completedLogsMap[$st->id]['created_at'] : null,
-                'photos' => $isDone ? $completedLogsMap[$st->id]['photos'] : []
+                'logs' => $completedLogsMap[$st->id] ?? []
             ];
         });
 

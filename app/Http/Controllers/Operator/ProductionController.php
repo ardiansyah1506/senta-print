@@ -26,7 +26,7 @@ class ProductionController extends Controller
         
         $completedStepIds = [];
         if ($order->production && $order->production->logs) {
-            $completedStepIds = array_unique($order->production->logs->pluck('production_step_id')->toArray());
+            $completedStepIds = array_unique($order->production->logs->where('status', 'completed')->pluck('production_step_id')->toArray());
         }
 
         // Determine next required step in sequential order
@@ -47,6 +47,7 @@ class ProductionController extends Controller
     public function storeLog(Request $request, $id) {
         $request->validate([
             'notes' => 'required|string',
+            'status' => 'required|in:progress,completed',
             'photos.*' => 'nullable|image|max:10240'
         ]);
 
@@ -62,7 +63,7 @@ class ProductionController extends Controller
             return back()->with('error', 'Belum ada data Master Tahap Produksi.');
         }
 
-        $completedStepIds = array_unique($production->logs()->pluck('production_step_id')->toArray());
+        $completedStepIds = array_unique($production->logs()->where('status', 'completed')->pluck('production_step_id')->toArray());
 
         // Calculate expected next step in sequential order
         $nextStep = $allSteps->first(function($step) use ($completedStepIds) {
@@ -77,7 +78,7 @@ class ProductionController extends Controller
             'production_step_id' => $nextStep->id,
             'notes' => trim($request->notes),
             'created_by' => auth()->id() ?? 1,
-            'status' => 'completed'
+            'status' => $request->status
         ]);
 
         if ($request->hasFile('photos')) {
@@ -93,12 +94,17 @@ class ProductionController extends Controller
         }
 
         // Check if all steps are completed
-        $updatedCompletedCount = count($completedStepIds) + 1;
+        $updatedCompletedCount = count($completedStepIds);
+        if ($request->status === 'completed') {
+            $updatedCompletedCount++;
+        }
+        
         if ($updatedCompletedCount >= $allSteps->count()) {
             $order->status = 'completed';
             $order->save();
         }
 
-        return back()->with('success', 'Tahap "' . $nextStep->name . '" berhasil diselesaikan!');
+        $msg = $request->status === 'completed' ? 'Selesai!' : 'Diperbarui!';
+        return back()->with('success', 'Tahap "' . $nextStep->name . '" berhasil ' . $msg);
     }
 }

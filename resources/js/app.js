@@ -1,5 +1,9 @@
 import './bootstrap';
 
+import Alpine from 'alpinejs';
+window.Alpine = Alpine;
+Alpine.start();
+
 export function initLucideIcons() {
     if (typeof window.lucide !== 'undefined' && typeof window.lucide.createIcons === 'function') {
         window.lucide.createIcons();

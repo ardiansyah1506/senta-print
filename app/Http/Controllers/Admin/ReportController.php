@@ -73,49 +73,11 @@ class ReportController extends Controller
         $topProducts = array_slice($productPopularity, 0, 6, true);
 
         // Target calculation
-        $daysCount = $startDate->diffInDays($endDate) + 1;
-        
         $target = Target::where('start_date', $startDate->format('Y-m-d'))
             ->where('end_date', $endDate->format('Y-m-d'))
             ->first();
 
-        $targetAmount = 0;
-        
-        if ($target) {
-            $targetAmount = $target->target_amount;
-        } else {
-            $defaults = Target::whereNull('start_date')->get()->keyBy('type');
-            
-            if ($daysCount == 1) {
-                if (isset($defaults['daily'])) $targetAmount = $defaults['daily']->target_amount;
-                elseif (isset($defaults['monthly'])) $targetAmount = ($defaults['monthly']->target_amount / 30);
-            } elseif ($daysCount == 7) {
-                if (isset($defaults['weekly'])) $targetAmount = $defaults['weekly']->target_amount;
-                elseif (isset($defaults['daily'])) $targetAmount = $defaults['daily']->target_amount * 7;
-                elseif (isset($defaults['monthly'])) $targetAmount = ($defaults['monthly']->target_amount / 30) * 7;
-            } elseif ($startDate->copy()->startOfMonth()->isSameDay($startDate) && $endDate->copy()->endOfMonth()->isSameDay($endDate)) {
-                $monthsCount = $startDate->diffInMonths($endDate->copy()->addDay()); // diffInMonths needs the end date to be precisely 1 month apart, addDay ensures it counts full month
-                if ($monthsCount == 0) $monthsCount = 1;
-                
-                if (isset($defaults['monthly'])) {
-                    $targetAmount = $defaults['monthly']->target_amount * $monthsCount;
-                } elseif (isset($defaults['daily'])) {
-                    $targetAmount = $defaults['daily']->target_amount * $daysCount;
-                }
-            } elseif ($startDate->copy()->startOfYear()->isSameDay($startDate) && $endDate->copy()->endOfYear()->isSameDay($endDate)) {
-                if (isset($defaults['yearly'])) $targetAmount = $defaults['yearly']->target_amount;
-                elseif (isset($defaults['monthly'])) $targetAmount = $defaults['monthly']->target_amount * 12;
-                elseif (isset($defaults['daily'])) $targetAmount = $defaults['daily']->target_amount * $daysCount;
-            } else {
-                if (isset($defaults['daily'])) {
-                    $targetAmount = $defaults['daily']->target_amount * $daysCount;
-                } elseif (isset($defaults['monthly'])) {
-                    $targetAmount = ($defaults['monthly']->target_amount / 30) * $daysCount;
-                } elseif (isset($defaults['yearly'])) {
-                    $targetAmount = ($defaults['yearly']->target_amount / 365) * $daysCount;
-                }
-            }
-        }
+        $targetAmount = $target ? $target->target_amount : 0;
 
         $achievementPercentage = $targetAmount > 0 ? ($totalRevenue / $targetAmount) * 100 : 0;
 
@@ -141,48 +103,28 @@ class ReportController extends Controller
 
     public function setTarget(Request $request) {
         $request->validate([
-            'type' => 'required|string',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:start_date',
             'target_amount' => 'required|numeric|min:0'
         ]);
 
-        $type = $request->input('type');
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
         $targetAmount = $request->input('target_amount');
 
-        if ($type === 'custom') {
-            $request->validate([
-                'start_date' => 'required|date',
-                'end_date' => 'required|date|after_or_equal:start_date'
-            ]);
-            
-            $startDate = $request->input('start_date');
-            $endDate = $request->input('end_date');
+        $target = Target::where('start_date', $startDate)
+            ->where('end_date', $endDate)
+            ->first();
 
-            $target = Target::where('start_date', $startDate)
-                ->where('end_date', $endDate)
-                ->first();
-
-            if ($target) {
-                $target->update(['target_amount' => $targetAmount]);
-            } else {
-                Target::create([
-                    'type' => 'custom',
-                    'start_date' => $startDate,
-                    'end_date' => $endDate,
-                    'target_amount' => $targetAmount
-                ]);
-            }
+        if ($target) {
+            $target->update(['target_amount' => $targetAmount]);
         } else {
-            $target = Target::where('type', $type)->whereNull('start_date')->first();
-            if ($target) {
-                $target->update(['target_amount' => $targetAmount]);
-            } else {
-                Target::create([
-                    'type' => $type,
-                    'start_date' => null,
-                    'end_date' => null,
-                    'target_amount' => $targetAmount
-                ]);
-            }
+            Target::create([
+                'type' => 'custom',
+                'start_date' => $startDate,
+                'end_date' => $endDate,
+                'target_amount' => $targetAmount
+            ]);
         }
 
         return redirect()->back()->with('success', 'Target berhasil disimpan.');

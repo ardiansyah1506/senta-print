@@ -534,63 +534,28 @@
 
                 let itemsHtml = '';
                 ord.items.forEach(it => {
-                    let addonsHtml = '';
-                    if (it.addons && it.addons.length > 0) {
-                        addonsHtml = it.addons.map(a => {
-                            let priceFormatted = a.price < 0 
-                                ? `<span class="text-red-600 font-bold">- Rp ${Math.abs(a.price).toLocaleString('id-ID')}</span>`
-                                : `<span class="text-brand-blue font-bold">+ Rp ${a.price.toLocaleString('id-ID')}</span>`;
-                            return `
-                                <div class="flex justify-between items-center text-[11px] font-bold text-gray-700 bg-indigo-50/40 px-2.5 py-1 rounded-lg border border-indigo-100/60">
-                                    <span class="flex items-center gap-1.5"><i class="fa-solid fa-puzzle-piece text-brand-blue text-[10px]"></i> ${a.name}</span>
-                                    ${priceFormatted}
-                                </div>
-                            `;
-                        }).join('');
-                    } else {
-                        addonsHtml = `
-                            <div class="flex items-center gap-1.5 text-[11px] font-medium text-gray-500 bg-gray-50 px-2.5 py-1 rounded-lg border border-gray-200/60">
-                                <i class="fa-solid fa-minus text-gray-400 text-[10px]"></i>
-                                <span>Standar (Tanpa Add-on)</span>
-                            </div>
-                        `;
-                    }
-
                     itemsHtml += `
-                        <div class="p-4 border border-gray-200/80 rounded-2xl bg-white space-y-3 shadow-2xs">
-                            <div class="flex justify-between items-start border-b border-gray-100 pb-2">
+                        <div class="p-5 border border-gray-200/80 rounded-2xl bg-white space-y-4 shadow-2xs">
+                            <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-3 border-b border-gray-100 pb-3">
                                 <div>
-                                    <h4 class="font-extrabold text-sm text-gray-900">${it.product_name} (${it.size_name ? 'Ukuran ' + it.size_name : 'All Size'})</h4>
-                                    <span class="inline-block bg-indigo-50 text-brand-blue text-[10px] font-extrabold px-2.5 py-0.5 rounded-full mt-0.5">${it.qty} pcs</span>
+                                    <h4 class="font-extrabold text-lg text-gray-900">${it.product_name} (${it.size_name ? 'Ukuran ' + it.size_name : 'All Size'})</h4>
+                                    <span class="inline-block bg-indigo-50 text-brand-blue text-xs font-extrabold px-3 py-1 rounded-full mt-1.5">${it.qty} pcs</span>
                                 </div>
-                                <div class="text-right">
-                                    <span class="text-[10px] text-gray-400 font-bold uppercase tracking-wider block">Harga Dasar Baju</span>
-                                    <span class="font-extrabold text-xs text-gray-800">Rp ${it.base_price.toLocaleString('id-ID')} /pcs</span>
+                                <div class="text-left sm:text-right">
+                                    <span class="text-xs text-gray-400 font-bold uppercase tracking-wider block mb-0.5">Harga Satuan</span>
+                                    <span class="font-extrabold text-lg text-gray-800">Rp ${it.base_price.toLocaleString('id-ID')}</span>
                                 </div>
                             </div>
 
-                            <!-- List Addons -->
-                            <div class="space-y-1.5">
-                                <span class="text-[10px] font-extrabold text-gray-400 uppercase tracking-wider block">Rincian Layanan & Add-on:</span>
-                                ${addonsHtml}
-                            </div>
-
-                            <!-- Breakdown Calculations -->
-                            <div class="bg-gray-50 border border-gray-100 rounded-xl p-3 text-xs space-y-1">
+                            <!-- Breakdown Calculations (No Addons as per request) -->
+                            <div class="bg-gray-50 border border-gray-100 rounded-xl p-4 text-base space-y-2">
                                 <div class="flex justify-between items-center text-gray-600">
-                                    <span>Subtotal Baju (${it.qty} pcs x Rp ${it.base_price.toLocaleString('id-ID')}):</span>
+                                    <span>Subtotal (${it.qty} pcs x Rp ${it.base_price.toLocaleString('id-ID')}):</span>
                                     <span class="font-bold text-gray-800">Rp ${it.subtotal_baju.toLocaleString('id-ID')}</span>
                                 </div>
-                                ${it.total_addon !== 0 ? `
-                                <div class="flex justify-between items-center text-gray-600">
-                                    <span>Total Layanan Add-on:</span>
-                                    <span class="font-bold ${it.total_addon < 0 ? 'text-red-600' : 'text-brand-blue'}">
-                                        ${it.total_addon < 0 ? '-' : '+'} Rp ${Math.abs(it.total_addon).toLocaleString('id-ID')}
-                                    </span>
-                                </div>` : ''}
-                                <div class="flex justify-between items-center border-t border-gray-200/80 pt-1.5 font-extrabold text-gray-900">
+                                <div class="flex justify-between items-center border-t border-gray-200/80 pt-2.5 font-extrabold text-gray-900 mt-2">
                                     <span>Total Item Ini:</span>
-                                    <span class="text-brand-blue text-sm">Rp ${it.total_price.toLocaleString('id-ID')}</span>
+                                    <span class="text-brand-blue text-lg">Rp ${(it.base_price * it.qty).toLocaleString('id-ID')}</span>
                                 </div>
                             </div>
                         </div>
@@ -612,21 +577,49 @@
                             ? 'bg-emerald-50/60 border-emerald-200/80 text-emerald-900' 
                             : (isActive ? 'bg-indigo-50 border-brand-blue text-brand-blue shadow-2xs' : 'bg-white border-gray-200/60 text-gray-400 opacity-60');
 
-                        let photosHtml = '';
-                        if (isDone && st.photos && st.photos.length > 0) {
-                            photosHtml = `
-                                <div class="grid grid-cols-3 sm:grid-cols-4 gap-2 pt-2">
-                                    ${st.photos.map(p => `
-                                        <a href="${p}" target="_blank" class="w-full h-16 rounded-xl overflow-hidden border border-gray-200 block shadow-2xs hover:opacity-90 transition">
-                                            <img src="${p}" class="w-full h-full object-cover">
-                                        </a>
-                                    `).join('')}
-                                </div>
+                        let logsHtml = '';
+                        if (st.logs && st.logs.length > 0) {
+                            let detailedLogs = '';
+                            st.logs.forEach(log => {
+                                let localPhotosHtml = '';
+                                if (log.photos && log.photos.length > 0) {
+                                    localPhotosHtml = `
+                                        <div class="grid grid-cols-3 sm:grid-cols-4 gap-2 pt-2">
+                                            ${log.photos.map(p => `
+                                                <a href="${p}" target="_blank" class="w-full h-16 rounded-xl overflow-hidden border border-gray-200 block shadow-2xs hover:opacity-90 transition">
+                                                    <img src="${p}" class="w-full h-full object-cover">
+                                                </a>
+                                            `).join('')}
+                                        </div>
+                                    `;
+                                }
+                                detailedLogs += `
+                                    <div class="mt-2 text-left pt-2 border-t border-black/5">
+                                        <div class="flex justify-between items-center text-[10px] font-bold text-gray-400 mb-1 px-1">
+                                            <span class="uppercase tracking-wider">${log.status === 'completed' ? 'Selesai' : 'Update Pengerjaan'}</span>
+                                            <span>${log.created_at}</span>
+                                        </div>
+                                        ${log.notes ? `<p class="text-xs font-medium text-gray-700 bg-white p-2.5 rounded-xl border border-gray-100">${log.notes}</p>` : ''}
+                                        ${localPhotosHtml}
+                                    </div>
+                                `;
+                            });
+                            
+                            logsHtml = `
+                                <details class="group mt-2 outline-none">
+                                    <summary class="flex items-center justify-between cursor-pointer list-none text-[11px] bg-white/60 border border-white px-3 py-1.5 rounded-lg shadow-sm font-bold text-gray-500 hover:text-brand-blue select-none">
+                                        <span class="flex items-center gap-1.5"><i class="fa-solid fa-clock-rotate-left"></i> Riwayat Progress (${st.logs.length})</span>
+                                        <i class="fa-solid fa-chevron-down shrink-0 transition-transform group-open:rotate-180 text-[10px]"></i>
+                                    </summary>
+                                    <div class="pt-1 opacity-0 group-open:opacity-100 transition-opacity duration-300">
+                                        ${detailedLogs}
+                                    </div>
+                                </details>
                             `;
                         }
 
                         stepsHtml += `
-                            <div class="p-3.5 border rounded-2xl ${bgStyle} space-y-1">
+                            <div class="p-3.5 border rounded-2xl ${bgStyle}">
                                 <div class="flex justify-between items-center text-xs">
                                     <span class="font-extrabold flex items-center gap-2">
                                         ${iconHtml}
@@ -636,8 +629,7 @@
                                         ${isDone ? 'Selesai' : (isActive ? 'Proses Sekarang' : 'Pending')}
                                     </span>
                                 </div>
-                                ${st.notes ? `<p class="text-xs font-medium text-gray-700 bg-white p-2.5 rounded-xl border border-gray-100 mt-1">${st.notes}</p>` : ''}
-                                ${photosHtml}
+                                ${logsHtml}
                             </div>
                         `;
                     });

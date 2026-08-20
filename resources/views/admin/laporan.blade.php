@@ -370,32 +370,22 @@
         <form action="{{ route('admin.report.target') }}" method="POST">
             @csrf
             <div class="p-6 space-y-4 text-sm">
-                <div>
-                    <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Jenis Target</label>
-                    <select name="type" id="targetType" onchange="toggleCustomDates()" class="w-full bg-white border border-gray-200 rounded-lg px-4 py-2.5 text-gray-900 font-semibold focus:outline-none focus:ring-2 focus:ring-brand-blue/20 focus:border-brand-blue transition">
-                        <option value="custom">Spesifik Rentang Tanggal</option>
-                        <option value="daily">Default Harian</option>
-                        <option value="weekly">Default Mingguan</option>
-                        <option value="monthly">Default Bulanan</option>
-                        <option value="yearly">Default Tahunan</option>
-                    </select>
-                </div>
-                <div id="customDateFields" class="space-y-4">
+                <div class="space-y-4">
                     <div>
                         <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Tanggal Mulai</label>
-                        <input type="date" name="start_date" id="start_date" value="{{ $startDate->format('Y-m-d') }}" class="w-full bg-white border border-gray-200 rounded-lg px-4 py-2.5 text-gray-900 font-semibold focus:outline-none focus:ring-2 focus:ring-brand-blue/20 focus:border-brand-blue transition">
+                        <input type="date" name="start_date" required value="{{ \Carbon\Carbon::createFromDate($year, $month, 1)->startOfMonth()->format('Y-m-d') }}" class="w-full bg-white border border-gray-200 rounded-lg px-4 py-2.5 text-gray-900 font-semibold focus:outline-none focus:ring-2 focus:ring-brand-blue/20 focus:border-brand-blue transition">
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Tanggal Selesai</label>
-                        <input type="date" name="end_date" id="end_date" value="{{ $endDate->format('Y-m-d') }}" class="w-full bg-white border border-gray-200 rounded-lg px-4 py-2.5 text-gray-900 font-semibold focus:outline-none focus:ring-2 focus:ring-brand-blue/20 focus:border-brand-blue transition">
+                        <input type="date" name="end_date" required value="{{ \Carbon\Carbon::createFromDate($year, $month, 1)->endOfMonth()->format('Y-m-d') }}" class="w-full bg-white border border-gray-200 rounded-lg px-4 py-2.5 text-gray-900 font-semibold focus:outline-none focus:ring-2 focus:ring-brand-blue/20 focus:border-brand-blue transition">
                     </div>
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Jumlah Target (Rp)</label>
                     <input type="number" name="target_amount" value="{{ $targetAmount > 0 ? (int)$targetAmount : '' }}" placeholder="Contoh: 50000000" class="w-full bg-white border border-gray-200 rounded-lg px-4 py-2.5 text-gray-900 font-semibold focus:outline-none focus:ring-2 focus:ring-brand-blue/20 focus:border-brand-blue transition" required>
                 </div>
-                <p class="text-xs text-gray-400 mt-2">
-                    <i class="fa-solid fa-circle-info text-brand-blue mr-1"></i> Target default otomatis diakumulasi berdasarkan jumlah hari yang Anda pilih di laporan.
+                <p class="text-xs text-gray-500 mt-2 bg-indigo-50 p-3 rounded-lg border border-indigo-100 font-medium">
+                    <i class="fa-solid fa-circle-info text-brand-blue mr-1"></i> Target akan disimpan khusus untuk periode tanggal di atas, menjaga <b class="text-gray-700">Histori Target</b> lampau agar tidak berubah.
                 </p>
             </div>
             <div class="px-6 py-4 border-t border-gray-100 bg-gray-50/50 flex justify-end gap-3">
@@ -405,22 +395,4 @@
         </form>
     </div>
 </div>
-
-<script>
-function toggleCustomDates() {
-    const type = document.getElementById('targetType').value;
-    const customFields = document.getElementById('customDateFields');
-    if(type === 'custom') {
-        customFields.style.display = 'block';
-        document.getElementById('start_date').required = true;
-        document.getElementById('end_date').required = true;
-    } else {
-        customFields.style.display = 'none';
-        document.getElementById('start_date').required = false;
-        document.getElementById('end_date').required = false;
-    }
-}
-// Run once on load to set initial state
-toggleCustomDates();
-</script>
 @endsection

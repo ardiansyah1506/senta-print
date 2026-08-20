@@ -461,5 +461,6 @@
         setTimeout(renderLucide, 500);
     </script>
     @include('partials.tracking-modal')
+    <x-public-promo-banner />
 </body>
 </html>

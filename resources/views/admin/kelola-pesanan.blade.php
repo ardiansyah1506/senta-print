@@ -3,6 +3,23 @@
 @section('content')
 <div class="max-w-7xl mx-auto">
     
+    <!-- Page Header -->
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+        <div>
+            <h1 class="text-3xl font-extrabold text-gray-900 mb-1">Kelola Pesanan</h1>
+            <p class="text-gray-500 text-sm font-medium">Manajemen seluruh data pesanan, status pembayaran, dan invoice pelanggan.</p>
+        </div>
+        <a href="{{ route('admin.order.create') }}" class="inline-flex items-center justify-center gap-2 bg-brand-blue hover:bg-indigo-700 text-white font-bold px-4 py-2.5 rounded-xl text-xs transition shadow-sm shadow-brand-blue/20 self-start md:self-auto">
+            <i class="fa-solid fa-plus text-xs text-indigo-200"></i> Buat Pesanan Baru
+        </a>
+    </div>
+
+    @if(session('success'))
+        <div class="mb-6 p-4 text-sm text-emerald-800 rounded-2xl bg-emerald-50 border border-emerald-100 font-bold" role="alert">
+            <i class="fa-solid fa-circle-check mr-1.5 text-emerald-600"></i> {{ session('success') }}
+        </div>
+    @endif
+
     <!-- Filter Bar -->
     <form action="{{ route('admin.order.index') }}" method="GET" class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 mb-6">
         <div class="flex flex-wrap items-center gap-3 w-full md:w-auto">
@@ -311,9 +328,12 @@
 
             <!-- Order Items Breakdown -->
             <div>
-                <h4 class="text-xs font-extrabold text-gray-900 uppercase tracking-wider mb-3 flex items-center gap-1.5">
-                    <i class="fa-solid fa-boxes-stacked text-brand-blue"></i> Rincian Produk & Add-on:
-                </h4>
+                <div class="flex justify-between items-center mb-3">
+                    <h4 class="text-xs font-extrabold text-gray-900 uppercase tracking-wider flex items-center gap-1.5">
+                        <i class="fa-solid fa-boxes-stacked text-brand-blue"></i> Rincian Produk & Add-on:
+                    </h4>
+                    <div id="modalDesignPhotoArea"></div>
+                </div>
                 <div id="modalItemsList" class="space-y-3"></div>
             </div>
 
@@ -323,13 +343,21 @@
                     <span>Subtotal Produk Baju:</span>
                     <span id="modalSubtotalBaju" class="font-extrabold text-gray-800">Rp 0</span>
                 </div>
-                <div class="flex justify-between items-center text-gray-600">
-                    <span>Subtotal Layanan Add-on:</span>
+                <div class="flex justify-between items-center text-gray-600 mb-2">
+                    <span>Total Diskon & Add-on:</span>
                     <span id="modalSubtotalAddons" class="font-extrabold text-brand-blue">Rp 0</span>
                 </div>
                 <div class="flex justify-between items-center border-t border-gray-200 pt-2 font-extrabold text-base text-gray-900">
                     <span>Grand Total Biaya:</span>
                     <span id="modalGrandTotal" class="text-brand-blue text-lg">Rp 0</span>
+                </div>
+                <div class="flex justify-between items-center text-gray-600 pt-2 border-t border-gray-100">
+                    <span>Deposit / DP:</span>
+                    <span id="modalDeposit" class="font-extrabold text-gray-800">Rp 0</span>
+                </div>
+                <div class="flex justify-between items-center text-gray-900 pt-2">
+                    <span class="font-bold">Sisa Pembayaran:</span>
+                    <span id="modalSisaBayar" class="font-extrabold text-red-600 text-base">Rp 0</span>
                 </div>
             </div>
 
@@ -416,12 +444,6 @@
             grandTotalAddons += itemAddonTotal;
             let lineFinalTotal = subtotalBaju + itemAddonTotal;
 
-            let designLink = it.design_file 
-                ? `<a href="/storage/${it.design_file}" target="_blank" class="inline-flex items-center gap-1.5 text-xs text-brand-blue font-bold hover:underline bg-indigo-50 px-3 py-1 rounded-lg border border-indigo-100">
-                    <i class="fa-solid fa-file-image"></i> Lihat Desain
-                   </a>`
-                : `<span class="text-xs text-gray-400 italic">(Tidak ada file)</span>`;
-
             itemsHtml += `
                 <div class="p-4 border border-gray-200/80 rounded-2xl bg-white space-y-3 shadow-2xs">
                     <div class="flex justify-between items-start border-b border-gray-100 pb-2">
@@ -438,11 +460,6 @@
                     <div class="space-y-1.5">
                         <span class="text-[10px] font-extrabold text-gray-400 uppercase tracking-wider block">Rincian Layanan & Add-on:</span>
                         ${addonsHtml}
-                    </div>
-
-                    <div class="flex justify-between items-center pt-1 border-t border-gray-100 text-xs">
-                        <span class="text-gray-500 font-medium">File Desain Produk:</span>
-                        ${designLink}
                     </div>
 
                     <div class="bg-gray-50 border border-gray-100 rounded-xl p-3 text-xs space-y-1">
@@ -469,7 +486,21 @@
         document.getElementById('modalItemsList').innerHTML = itemsHtml;
         document.getElementById('modalSubtotalBaju').innerText = 'Rp ' + grandSubtotalBaju.toLocaleString('id-ID');
         document.getElementById('modalSubtotalAddons').innerText = (grandTotalAddons >= 0 ? '+' : '') + 'Rp ' + grandTotalAddons.toLocaleString('id-ID');
-        document.getElementById('modalGrandTotal').innerText = 'Rp ' + parseFloat(order.grand_total).toLocaleString('id-ID');
+        
+        let grandTotal = parseFloat(order.grand_total || 0);
+        let deposit = parseFloat(order.deposit || 0);
+        let sisaBayar = grandTotal - deposit;
+        
+        document.getElementById('modalGrandTotal').innerText = 'Rp ' + grandTotal.toLocaleString('id-ID');
+        document.getElementById('modalDeposit').innerText = 'Rp ' + deposit.toLocaleString('id-ID');
+        document.getElementById('modalSisaBayar').innerText = 'Rp ' + (sisaBayar < 0 ? 0 : sisaBayar).toLocaleString('id-ID');
+
+        let modalDesignPhotoArea = document.getElementById('modalDesignPhotoArea');
+        if (order.design_photo) {
+            modalDesignPhotoArea.innerHTML = `<a href="/storage/${order.design_photo}" target="_blank" class="inline-flex items-center gap-1.5 text-[10px] text-brand-blue font-bold px-2 py-1 rounded bg-indigo-50 border border-indigo-100"><i class="fa-solid fa-image"></i> Lihat Foto Desain</a>`;
+        } else {
+            modalDesignPhotoArea.innerHTML = `<span class="text-[10px] text-gray-400 italic">(Tanpa Foto Desain)</span>`;
+        }
 
         // Production Logs Gallery
         let logsContainer = document.getElementById('modalProductionLogs');

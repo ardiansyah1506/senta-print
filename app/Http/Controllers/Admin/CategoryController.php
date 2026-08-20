@@ -104,11 +104,18 @@ class CategoryController extends Controller
         $validated = $request->validate([
             'product_name' => 'required|string|max:255',
             'product_code' => 'required|string|max:50',
+            'photo' => 'nullable|image|max:2048'
         ]);
         
+        $photoPath = null;
+        if ($request->hasFile('photo')) {
+            $photoPath = $request->file('photo')->store('products', 'public');
+        }
+
         $category->products()->create([
             'product_code' => $validated['product_code'],
-            'product_name' => $validated['product_name']
+            'product_name' => $validated['product_name'],
+            'photo' => $photoPath
         ]);
 
         return back()->with('success', 'Produk ditambahkan. Silakan atur harga bertingkat untuk produk ini.');
@@ -116,7 +123,11 @@ class CategoryController extends Controller
 
     public function removeProduct(string $id, string $product_id) {
         $category = Category::findOrFail($id);
-        $category->products()->findOrFail($product_id)->delete();
+        $product = $category->products()->findOrFail($product_id);
+        if ($product->photo && \Illuminate\Support\Facades\Storage::disk('public')->exists($product->photo)) {
+            \Illuminate\Support\Facades\Storage::disk('public')->delete($product->photo);
+        }
+        $product->delete();
         return back()->with('success', 'Produk dihapus.');
     }
 

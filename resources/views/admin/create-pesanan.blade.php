@@ -13,25 +13,36 @@
 <div class="max-w-5xl mx-auto">
     <div class="flex items-center justify-between mb-6">
         <div>
-            <h1 class="text-2xl font-extrabold text-gray-900 mb-1">Input Data Pesanan: {{ $order->invoice_no }}</h1>
-            <p class="text-gray-500 text-sm font-medium">Customer: {{ $order->customer->name ?? '-' }} ({{ $order->customer->phone ?? '-' }})</p>
+            <h1 class="text-2xl font-extrabold text-gray-900 mb-1">Input Data Pesanan Baru</h1>
+            <p class="text-gray-500 text-sm font-medium">Buat Pesanan & Rekam Kustomer</p>
         </div>
         <a href="{{ route('admin.order.index') }}" class="bg-gray-100 text-gray-600 px-4 py-2 rounded-xl text-xs font-bold hover:bg-gray-200 transition">
             <i class="fa-solid fa-arrow-left mr-1"></i> Kembali
         </a>
     </div>
 
-    <!-- Notes Section from User -->
-    <div class="bg-indigo-50/50 border border-indigo-100 rounded-2xl p-6 mb-6">
-        <h3 class="text-sm font-extrabold text-indigo-900 mb-2 flex items-center gap-2"><i class="fa-solid fa-message text-brand-blue"></i> Instruksi Pesanan dari Customer</h3>
-        <p class="text-sm text-gray-700 font-medium whitespace-pre-wrap">{{ $order->notes ?? '(Tidak ada catatan)' }}</p>
-    </div>
-
-    <form action="{{ route('admin.order.update', $order->id) }}" method="POST" id="editOrderForm" enctype="multipart/form-data">
+    <form action="{{ route('admin.order.store') }}" method="POST" id="editOrderForm" enctype="multipart/form-data">
         @csrf
-        @method('PUT')
         
-        <input type="hidden" name="notes" value="{{ $order->notes }}">
+        <!-- Informasi Kustomer -->
+        <div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-8 mb-6">
+            <h3 class="text-lg font-extrabold text-gray-900 mb-4 border-b border-gray-100 pb-3">Informasi Kustomer & Catatan</h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-extrabold text-gray-500 uppercase tracking-wider mb-2">Nama Kustomer <span class="text-red-500">*</span></label>
+                    <input type="text" name="customer_name" required class="w-full text-sm border-gray-200 rounded-lg outline-none focus:border-brand-blue px-4 py-2.5 border font-semibold text-gray-800" placeholder="Masukkan Nama Kustomer">
+                </div>
+                <div>
+                    <label class="block text-xs font-extrabold text-gray-500 uppercase tracking-wider mb-2">Nomor WhatsApp <span class="text-red-500">*</span></label>
+                    <input type="text" name="customer_phone" required class="w-full text-sm border-gray-200 rounded-lg outline-none focus:border-brand-blue px-4 py-2.5 border font-semibold text-gray-800" placeholder="08xxxxxxxxxx">
+                </div>
+                <div class="md:col-span-2">
+                    <label class="block text-xs font-extrabold text-gray-500 uppercase tracking-wider mb-2">Instruksi / Catatan Pesanan</label>
+                    <textarea name="notes" rows="3" class="w-full text-sm border-gray-200 rounded-lg outline-none focus:border-brand-blue px-4 py-2.5 border font-medium text-gray-800 resize-none" placeholder="Isi catatan jika ada..."></textarea>
+                </div>
+            </div>
+        </div>
         
         <!-- Upload Foto Desain -->
         <div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-8 mb-6">
@@ -40,14 +51,7 @@
             </h3>
             
             <div class="space-y-4">
-                @if($order->design_photo)
-                <div class="mb-4">
-                    <p class="text-xs font-bold text-gray-500 mb-2">Foto Desain Saat Ini:</p>
-                    <a href="{{ asset('storage/' . $order->design_photo) }}" target="_blank" class="inline-block border rounded overflow-hidden shadow-sm">
-                        <img src="{{ asset('storage/' . $order->design_photo) }}" alt="Desain" class="h-32 object-contain">
-                    </a>
-                </div>
-                @endif
+
                 <div class="space-y-2 relative group w-full">
                     <label class="block text-[10px] font-extrabold text-gray-500 uppercase tracking-wider">Upload File Foto Baru (Maks 5MB)</label>
                     <div class="relative w-full border-2 border-dashed border-gray-300 group-hover:border-brand-blue group-hover:bg-indigo-50/50 rounded-xl p-3 flex items-center justify-start gap-3 transition">
@@ -73,7 +77,6 @@
 
             <!-- Dynamic Lines container -->
             <div id="itemsContainer" class="space-y-4 mb-6">
-                @if($order->items->count() === 0)
                 <div class="item-row flex items-start gap-3 bg-gray-50/50 p-4 rounded-xl border border-gray-100 relative">
                     <div class="flex-1 space-y-3">
                         <div class="grid grid-cols-12 gap-3">
@@ -127,67 +130,7 @@
                     </div>
                     <button type="button" onclick="removeRow(this)" class="mt-6 text-red-400 hover:text-red-600 p-2"><i class="fa-solid fa-trash-can"></i></button>
                 </div>
-                @else
-                <!-- Existing Rows -->
-                @foreach($order->items as $index => $item)
-                @php
-                    $isMasterProduct = collect($products)->where('name', $item->product_name)->isNotEmpty();
-                @endphp
-                <div class="item-row flex items-start gap-3 bg-gray-50/50 p-4 rounded-xl border border-gray-100 relative">
-                    <div class="flex-1 space-y-3">
-                        <div class="grid grid-cols-12 gap-3">
-                            <div class="col-span-12 md:col-span-3">
-                                <label class="block text-[10px] font-extrabold text-gray-500 uppercase tracking-wider mb-1">Kategori <span class="text-red-500">*</span></label>
-                                <select name="items[{{ $index }}][category_id]" required class="w-full text-sm border-gray-200 rounded-lg outline-none focus:border-brand-blue px-3 py-2 border font-semibold text-gray-800" onchange="window.dispatchEvent(new CustomEvent('category-changed', { detail: { index: {{ $index }}, id: this.value } }))">
-                                    <option value="">Pilih Kategori</option>
-                                    @foreach($categories as $cat)
-                                        <option value="{{ $cat->id }}" {{ $item->category_id == $cat->id ? 'selected' : '' }}>{{ $cat->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="col-span-12 md:col-span-3" x-data="productCombobox('{{ $item->category_id }}', '{{ addslashes($item->product_name) }}')" @category-changed.window="if ($event.detail.index == {{ $index }}) { categoryId = $event.detail.id; value = ''; }" @click.outside="open = false" class="relative">
-                                <label class="block text-[10px] font-extrabold text-gray-500 uppercase tracking-wider mb-1">Nama Produk <span class="text-red-500">*</span></label>
-                                <div class="relative">
-                                    <input type="text" name="items[{{ $index }}][product_name]" x-model="value" @focus="open = true" @click="open = true" autocomplete="off" required class="w-full text-sm border-gray-200 rounded-lg outline-none focus:border-brand-blue px-3 py-2 border font-semibold text-gray-800" placeholder="Pilih/Ketik...">
-                                    <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
-                                        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                                    </div>
-                                </div>
-                                <div x-show="open" x-transition class="absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-48 overflow-y-auto" style="display: none;">
-                                    <template x-for="opt in filtered" :key="opt">
-                                        <div @click="value = opt; open = false;" class="px-3 py-2 text-sm text-gray-800 hover:bg-indigo-50 cursor-pointer font-semibold" x-text="opt"></div>
-                                    </template>
-                                    <div x-show="filtered.length === 0 && Array.isArray(options) && options.length > 0" class="px-3 py-2 text-xs text-gray-400 italic">Tekan Enter manual</div>
-                                    <div x-show="!categoryId" class="px-3 py-2 text-xs text-gray-400 italic">Pilih kategori</div>
-                                </div>
-                            </div>
-                            <div class="col-span-6 md:col-span-2">
-                                <label class="block text-[10px] font-extrabold text-gray-500 uppercase tracking-wider mb-1">Ukuran</label>
-                                <input type="text" name="items[{{ $index }}][size_name]" value="{{ $item->size_name }}" class="w-full text-sm border-gray-200 rounded-lg outline-none focus:border-brand-blue px-3 py-2 border font-semibold text-gray-800">
-                            </div>
-                            <div class="col-span-6 md:col-span-1">
-                                <label class="block text-[10px] font-extrabold text-gray-500 uppercase tracking-wider mb-1">Qty <span class="text-red-500">*</span></label>
-                                <input type="number" name="items[{{ $index }}][qty]" min="1" value="{{ $item->qty }}" required class="qty-input w-full text-sm border-gray-200 rounded-lg outline-none focus:border-brand-blue px-3 py-2 border font-semibold text-gray-800" onchange="calculateRow(this); calculateGrandTotal()">
-                            </div>
-                            <div class="col-span-12 md:col-span-3">
-                                <label class="block text-[10px] font-extrabold text-gray-500 uppercase tracking-wider mb-1">Harga Satuan (Rp) <span class="text-red-500">*</span></label>
-                                <input type="number" name="items[{{ $index }}][unit_price]" min="0" value="{{ (int)($item->base_price > 0 ? $item->base_price : $item->unit_price) }}" required class="price-input w-full text-sm border-gray-200 rounded-lg outline-none focus:border-brand-blue px-3 py-2 border font-semibold text-gray-800" onchange="calculateRow(this); calculateGrandTotal()">
-                            </div>
-                        </div>
-                        <div class="grid grid-cols-12 gap-3 items-center">
-                            <div class="col-span-12 md:col-span-9">
-                                <input type="text" name="items[{{ $index }}][notes]" value="{{ $item->notes }}" class="w-full text-xs border-gray-200 rounded-lg outline-none focus:border-brand-blue px-3 py-2 border font-medium text-gray-600" placeholder="Catatan per item (opsional)">
-                            </div>
-                            <div class="col-span-12 md:col-span-3 text-right">
-                                <span class="text-[10px] text-gray-400 font-extrabold uppercase mr-2">Total:</span>
-                                <span class="row-total text-sm font-extrabold text-brand-blue">Rp {{ number_format($item->total_price, 0, ',', '.') }}</span>
-                            </div>
-                        </div>
-                    </div>
-                    <button type="button" onclick="removeRow(this)" class="mt-6 text-red-400 hover:text-red-600 p-2"><i class="fa-solid fa-trash-can"></i></button>
                 </div>
-                @endforeach
-                @endif
             </div>
 
             <!-- Summary Area -->
@@ -199,7 +142,7 @@
                     </div>
                     <div class="flex justify-between items-center text-sm">
                         <span class="font-bold text-gray-600">Diskon (Rp)</span>
-                        <input type="number" id="inputDiscount" name="discount" value="{{ (int)$order->discount }}" class="w-32 text-right border-gray-200 rounded-lg outline-none focus:border-brand-blue px-3 py-1 border font-semibold text-gray-800 text-sm" onchange="calculateGrandTotal()">
+                        <input type="number" id="inputDiscount" name="discount" value="0" class="w-32 text-right border-gray-200 rounded-lg outline-none focus:border-brand-blue px-3 py-1 border font-semibold text-gray-800 text-sm" onchange="calculateGrandTotal()">
                     </div>
                     <div class="flex justify-between items-center pt-3 border-t border-gray-200">
                         <span class="font-extrabold text-gray-900 uppercase tracking-wider text-xs">Grand Total</span>
@@ -209,7 +152,7 @@
                     <!-- Deposit & Sisa Pembayaran -->
                     <div class="flex justify-between items-center text-sm pt-3 border-t border-gray-200">
                         <span class="font-bold text-gray-600">Deposit / DP (Rp)</span>
-                        <input type="number" id="inputDeposit" name="deposit" value="{{ (int)$order->deposit }}" class="w-32 text-right border-gray-200 rounded-lg outline-none focus:border-brand-blue px-3 py-1 border font-semibold text-gray-800 text-sm" onchange="calculateGrandTotal()">
+                        <input type="number" id="inputDeposit" name="deposit" value="0" class="w-32 text-right border-gray-200 rounded-lg outline-none focus:border-brand-blue px-3 py-1 border font-semibold text-gray-800 text-sm" onchange="calculateGrandTotal()">
                     </div>
                     <div class="flex justify-between items-center pt-3 border-t border-gray-200 bg-indigo-50/50 p-2 -mx-2 rounded-lg">
                         <span class="font-extrabold text-red-600 uppercase tracking-wider text-xs">Sisa Pembayaran</span>
@@ -228,7 +171,7 @@
 </div>
 
 <script>
-    let rowIndex = {{ max($order->items->count(), 1) }};
+    let rowIndex = 1;
 
     document.addEventListener('alpine:init', () => {
         Alpine.data('productCombobox', (initialCategory, initialProduct) => ({
